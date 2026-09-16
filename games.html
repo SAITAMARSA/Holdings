@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Games · PixelPort</title>
+<meta name="description" content="Browse the PixelPort library — filter by genre, platform and score.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%F0%9F%8E%AE</text></svg>">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap nav">
+    <a class="brand" href="index.html"><span class="brand-mark">🎮</span> PixelPort</a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation">☰</button>
+    <nav class="nav-links" id="nav-links">
+      <a href="index.html">Home</a>
+      <a href="games.html" aria-current="page">Games</a>
+      <a href="arcade.html">Arcade</a>
+      <a href="index.html#news">News</a>
+    </nav>
+  </div>
+</header>
+<main>
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>Game library</h2>
+        <p>Every title we've scored. Filter it down to whatever you're in the mood for.</p>
+      </div>
+    </div>
+
+    <div class="filters">
+      <input id="f-search" type="search" placeholder="Search titles, tags or descriptions…" aria-label="Search games">
+      <select id="f-genre" aria-label="Filter by genre"><option value="">All genres</option></select>
+      <select id="f-platform" aria-label="Filter by platform"><option value="">All platforms</option></select>
+      <select id="f-sort" aria-label="Sort games">
+        <option value="rating">Top rated</option>
+        <option value="year">Newest</option>
+        <option value="title">A–Z</option>
+      </select>
+      <span class="result-count" id="result-count" aria-live="polite"></span>
+    </div>
+
+    <div class="grid" id="library-grid"></div>
+  </div>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <span>© <span id="year"></span> PixelPort — a demo gaming site. Titles shown are fictional.</span>
+    <span><a href="index.html">Home</a> · <a href="games.html">Games</a> · <a href="arcade.html">Arcade</a></span>
+  </div>
+</footer>
+<script src="assets/js/games.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

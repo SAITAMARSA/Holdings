@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home · PixelPort</title>
+<meta name="description" content="PixelPort — game reviews, a curated library, and a playable browser arcade.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%F0%9F%8E%AE</text></svg>">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap nav">
+    <a class="brand" href="index.html"><span class="brand-mark">🎮</span> PixelPort</a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation">☰</button>
+    <nav class="nav-links" id="nav-links">
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="games.html">Games</a>
+      <a href="arcade.html">Arcade</a>
+      <a href="index.html#news">News</a>
+    </nav>
+  </div>
+</header>
+<main>
+<section class="hero">
+  <div class="wrap hero-inner">
+    <span class="eyebrow">New season · Patch 4.2 live</span>
+    <h1>Your next favourite game is one click away.</h1>
+    <p>PixelPort tracks the titles worth your weekend — scored by people who actually finish them — and ships a browser arcade you can jump into right now.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="arcade.html">Play the arcade</a>
+      <a class="btn btn-ghost" href="games.html">Browse the library</a>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>8</b><span>curated titles</span></div>
+      <div class="stat"><b>120h</b><span>played for reviews</span></div>
+      <div class="stat"><b>1</b><span>game playable here</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="featured">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>Top rated right now</h2>
+        <p>The four highest-scoring titles in the library this month.</p>
+      </div>
+      <a class="btn btn-ghost" href="games.html">See all</a>
+    </div>
+    <div class="grid" id="featured-grid"></div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>Latest from the desk</h2>
+        <p>Patch notes, release dates and the occasional rant.</p>
+      </div>
+    </div>
+    <div class="news-list">
+      <article class="news-item">
+        <time datetime="2026-09-12">12 Sep 2026</time>
+        <div>
+          <h3>Bitforge Arena adds rollback to ranked</h3>
+          <p>Cross-region matches finally feel local. Early numbers put average rollback at four frames.</p>
+        </div>
+      </article>
+      <article class="news-item">
+        <time datetime="2026-09-04">04 Sep 2026</time>
+        <div>
+          <h3>Last Signal hits 9.4 in our review</h3>
+          <p>A horror game whose scariest mechanic is a radio dial. We finished it twice.</p>
+        </div>
+      </article>
+      <article class="news-item">
+        <time datetime="2026-08-27">27 Aug 2026</time>
+        <div>
+          <h3>Hollow Choir delays its siege expansion</h3>
+          <p>Six more weeks for the drone-command rework. The turn timer is getting rebuilt from scratch.</p>
+        </div>
+      </article>
+      <article class="news-item">
+        <time datetime="2026-08-19">19 Aug 2026</time>
+        <div>
+          <h3>Pixel Harbor's autumn update is its best yet</h3>
+          <p>Tides now shift the whole economy. Your dock layout from last season probably no longer works.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <span>© <span id="year"></span> PixelPort — a demo gaming site. Titles shown are fictional.</span>
+    <span><a href="index.html">Home</a> · <a href="games.html">Games</a> · <a href="arcade.html">Arcade</a></span>
+  </div>
+</footer>
+<script src="assets/js/games.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
