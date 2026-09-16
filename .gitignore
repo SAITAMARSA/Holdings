@@ -1,0 +1,7 @@
+# Locally downloaded product photos (fallback only - the CSV points at the
+# source URLs and WooCommerce sideloads them during import).
+exports/images/
+
+__pycache__/
+*.pyc
+.DS_Store
