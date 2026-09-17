@@ -18,8 +18,14 @@ All prices are ZAR, 9 products carry an active sale price, and 27 are marked out
 
 ## How to import
 
-1. In WordPress go to **Products → All Products → Import** (this is WooCommerce's
-   built-in *Product CSV Importer*; no plugin needed).
+1. In WordPress go to **Products → All Products** and click the **Import** button at
+   the top of the product list, next to *Add New*. This is WooCommerce's built-in
+   *Product CSV Importer*; no extra plugin is needed, but WooCommerce itself must be
+   installed and active or the Products menu won't exist.
+
+   Do **not** use *Plugins → Upload Plugin* (accepts only `.zip`), *Media → Add New*,
+   or *All-in-One WP Migration → Import* (accepts only `.wpress` and would replace
+   the whole site). All three reject this file.
 2. Choose `exports/woocommerce-products-import.csv` and click **Continue**.
 3. On the column-mapping screen every column should map automatically, because the
    headers match WooCommerce's own sample file. Leave the defaults and click
@@ -50,6 +56,10 @@ Categories, tags and brands are created automatically if they don't already exis
   the source shop doesn't publish quantities.
 - Every row keeps `meta:_source_product_id` and `meta:_source_url` so you can always
   trace a product back to its original listing.
+- **"Sorry, you are not allowed to upload this file type."** is WordPress's generic
+  message for a file that the current screen doesn't accept. Check you are on the
+  Products → Import screen described above. The file itself is built to pass
+  WordPress's content check (see below), so on that screen it should load.
 
 ## Re-running the export
 
@@ -76,3 +86,13 @@ Two source-side quirks are corrected on the way out:
   assignment, so nothing lands uncategorised.
 - 18 products list their featured image a second time inside the gallery. Those are
   de-duplicated per product, which is why the export has 172 image URLs rather than 190.
+- 26 products render emoji in their descriptions as `<img class="emoji">` tags served
+  from wordpress.org (171 of them). These are converted back into the characters
+  themselves, so the destination site renders them natively with no hot-linking.
+
+One WordPress quirk is designed around: before accepting an upload, WordPress sniffs
+the file's content, and its sniffer flags a file as a web page if the first 4 KB
+contain tags like `<table` or `<a href=`. A CSV that starts with such a product would
+be rejected as "not allowed" even on the correct screen. Products whose descriptions
+contain those tags are therefore written last, so the opening of the file always
+reads as plain CSV.

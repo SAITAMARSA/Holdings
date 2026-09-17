@@ -18,6 +18,7 @@ import csv
 import html
 import json
 import os
+import re
 import sys
 import time
 import urllib.error
@@ -134,6 +135,42 @@ def join_terms(names: list[str], field: str, product_name: str) -> str:
     return ", ".join(safe)
 
 
+IMG_TAG_RE = re.compile(r"<img\b[^>]*>", re.I)
+
+# Tags libmagic's HTML sniffer looks for in a file's first 4 KB. A CSV whose
+# opening rows contain one is classified as text/html, and WordPress then
+# refuses the upload with "Sorry, you are not allowed to upload this file type."
+HTML_SNIFF_TRIGGERS = (
+    "<!doctype html", "<html", "<head", "<title", "<script", "<style", "<table", "<a href=",
+)
+
+
+def inline_emoji(markup: str) -> str:
+    """Turn WordPress's emoji <img> tags back into the characters they stand for.
+
+    The source shop renders emoji in descriptions as <img class="emoji"> tags
+    served from wordpress.org. The character itself is in the alt attribute, so
+    restoring it lets the destination site render emoji natively instead of
+    hot-linking dozens of tiny images.
+    """
+
+    def restore(match: re.Match) -> str:
+        tag = match.group(0)
+        if not re.search(r"""\bclass=["'][^"']*\bemoji\b""", tag):
+            return tag
+        alt = re.search(r"""\balt=["']([^"']*)["']""", tag)
+        return alt.group(1) if alt else tag
+
+    return IMG_TAG_RE.sub(restore, markup or "")
+
+
+def trips_html_sniffer(product: dict) -> bool:
+    """True when the product's HTML contains a tag the sniffer treats as a web page."""
+    text = product.get("description", "") + product.get("short_description", "")
+    text = re.sub(r"\s+", " ", text.lower())
+    return any(trigger in text for trigger in HTML_SNIFF_TRIGGERS)
+
+
 def product_images(product: dict) -> list[str]:
     """Ordered, de-duplicated image URLs; the first one is the featured image.
 
@@ -173,8 +210,8 @@ def build_row(product: dict, categories: list[str], generate_sku: bool) -> dict:
         "Published": 1,
         "Is featured?": 0,
         "Visibility in catalog": "visible",
-        "Short description": product.get("short_description") or "",
-        "Description": product.get("description") or "",
+        "Short description": inline_emoji(product.get("short_description")),
+        "Description": inline_emoji(product.get("description")),
         "Date sale price starts": "",
         "Date sale price ends": "",
         "Tax status": "taxable",
@@ -284,10 +321,10 @@ def main() -> int:
     with open(args.raw_json, "w", encoding="utf-8") as fh:
         json.dump(products, fh, indent=1, ensure_ascii=False)
 
-    rows = [
-        build_row(p, category_map.get(p["id"], []), args.generate_sku)
-        for p in sorted(products, key=lambda p: p["id"])
-    ]
+    # Products whose HTML would trip the sniffer go last, so the first 4 KB of
+    # the file (all WordPress inspects) can never look like a web page.
+    ordered = sorted(products, key=lambda p: (trips_html_sniffer(p), p["id"]))
+    rows = [build_row(p, category_map.get(p["id"], []), args.generate_sku) for p in ordered]
 
     with open(args.out, "w", encoding="utf-8-sig", newline="") as fh:
         writer = csv.DictWriter(fh, fieldnames=COLUMNS, quoting=csv.QUOTE_ALL)
@@ -300,6 +337,7 @@ def main() -> int:
     print(f"  {len(rows)} products, {images} image URLs")
     print(f"  {uncategorised} products without a category")
     print(f"  {sum(1 for r in rows if not r['SKU'])} products without a SKU")
+    print(f"  {sum(trips_html_sniffer(p) for p in products)} products with sniffer-sensitive HTML moved to the end")
 
     if args.download_images:
         print(f"\nDownloading images to {args.image_dir} ...")

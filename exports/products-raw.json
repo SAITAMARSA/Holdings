@@ -1,5 +1,130 @@
 [
  {
+  "id": 4519,
+  "name": "Deye 5kW 48V Single Phase Hybrid Inverter",
+  "slug": "deye-5kw-48v-single-phase-hybrid-inverter",
+  "parent": 0,
+  "type": "simple",
+  "variation": "",
+  "permalink": "https://sasolarexperts.co.za/product/deye-5kw-48v-single-phase-hybrid-inverter/",
+  "sku": "",
+  "short_description": "",
+  "description": "<p>The Deye 5kW 48V Single Phase Hybrid Inverter</p>\n<p>versatile energy-management solution designed for residential solar installations requiring efficient integration of solar panels, battery storage and grid power. With a 5kW output capacity and 48V battery architecture, it can form the central component of a modern home solar and backup-power system.</p>\n<p>The hybrid design allows solar energy to be used to supply household loads while excess generation can be directed towards battery charging, depending on the system configuration and operating settings. Furthermore, stored battery energy can be used when solar production is unavailable, helping households improve the availability of backup power.</p>\n<p>The 48V battery platform is widely used in residential energy-storage systems and can be paired with compatible lithium battery solutions. As a result, the inverter provides flexibility for homeowners building or upgrading a battery-backed solar installation.</p>\n<p>The single-phase configuration makes this Deye inverter suitable for compatible residential electrical installations. It can be used for applications ranging from everyday solar self-consumption to backup power and energy-storage systems.</p>\n<p>For South African homes dealing with changing grid availability and increasing electricity costs, a properly designed hybrid solar system can provide greater control over when solar and stored energy are used. The Deye 5kW hybrid inverter can therefore serve as an important component in a complete residential energy solution.</p>\n<p>Key Benefits</p>\n<p>5kW power output for suitable residential applications<br />\n48V battery system for compatible lithium and battery-storage solutions<br />\nSingle-phase hybrid inverter<br />\nIntegrates solar generation, battery storage and grid power<br />\nSuitable for home solar and backup-power systems<br />\nSupports energy-storage applications<br />\nDesigned for use with compatible solar panels and batteries<br />\nSuitable for new solar installations or system upgrades<br />\nHelps maximise the use of available solar energy<br />\nIdeal Applications</p>\n<p>The Deye 5kW 48V Single Phase Hybrid Inverter can be used for:</p>\n<p>Residential solar systems<br />\nHome backup power<br />\nSolar-plus-battery installations<br />\nHybrid inverter systems<br />\nGrid-connected energy storage<br />\nSolar self-consumption systems<br />\nExisting-system upgrades where compatibility requirements are met</p>",
+  "on_sale": true,
+  "prices": {
+   "price": "1390000",
+   "regular_price": "1500000",
+   "sale_price": "1390000",
+   "price_range": null,
+   "currency_code": "ZAR",
+   "currency_symbol": "R",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ",",
+   "currency_thousand_separator": " ",
+   "currency_prefix": "R",
+   "currency_suffix": ""
+  },
+  "price_html": "<del aria-hidden=\"true\"><span class=\"woocommerce-Price-amount amount\"><span class=\"woocommerce-Price-currencySymbol\">&#082;</span>15 000,00</span></del> <span class=\"screen-reader-text\">Original price was: &#082;15 000,00.</span><ins aria-hidden=\"true\"><span class=\"woocommerce-Price-amount amount\"><span class=\"woocommerce-Price-currencySymbol\">&#082;</span>13 900,00</span></ins><span class=\"screen-reader-text\">Current price is: &#082;13 900,00.</span>",
+  "average_rating": "0",
+  "review_count": 0,
+  "images": [
+   {
+    "id": 4520,
+    "src": "https://sasolarexperts.co.za/wp-content/uploads/2026/09/5kw-deye.png",
+    "thumbnail": "https://sasolarexperts.co.za/wp-content/uploads/2026/09/5kw-deye-500x500.png",
+    "srcset": "https://sasolarexperts.co.za/wp-content/uploads/2026/09/5kw-deye-66x66.png 66w, https://sasolarexperts.co.za/wp-content/uploads/2026/09/5kw-deye-100x100.png 100w, https://sasolarexperts.co.za/wp-content/uploads/2026/09/5kw-deye-150x150.png 150w, https://sasolarexperts.co.za/wp-content/uploads/2026/09/5kw-deye-200x200.png 200w, https://sasolarexperts.co.za/wp-content/uploads/2026/09/5kw-deye-300x300.png 300w, https://sasolarexperts.co.za/wp-content/uploads/2026/09/5kw-deye-400x400.png 400w, https://sasolarexperts.co.za/wp-content/uploads/2026/09/5kw-deye-500x500.png 500w, https://sasolarexperts.co.za/wp-content/uploads/2026/09/5kw-deye-600x600.png 600w, https://sasolarexperts.co.za/wp-content/uploads/2026/09/5kw-deye-700x700.png 700w, https://sasolarexperts.co.za/wp-content/uploads/2026/09/5kw-deye-768x768.png 768w, https://sasolarexperts.co.za/wp-content/uploads/2026/09/5kw-deye.png 800w",
+    "sizes": "(max-width: 800px) 100vw, 800px",
+    "thumbnail_srcset": "https://sasolarexperts.co.za/wp-content/uploads/2026/09/5kw-deye-66x66.png 66w, https://sasolarexperts.co.za/wp-content/uploads/2026/09/5kw-deye-100x100.png 100w, https://sasolarexperts.co.za/wp-content/uploads/2026/09/5kw-deye-150x150.png 150w, https://sasolarexperts.co.za/wp-content/uploads/2026/09/5kw-deye-200x200.png 200w, https://sasolarexperts.co.za/wp-content/uploads/2026/09/5kw-deye-300x300.png 300w, https://sasolarexperts.co.za/wp-content/uploads/2026/09/5kw-deye-400x400.png 400w, https://sasolarexperts.co.za/wp-content/uploads/2026/09/5kw-deye-500x500.png 500w, https://sasolarexperts.co.za/wp-content/uploads/2026/09/5kw-deye-600x600.png 600w, https://sasolarexperts.co.za/wp-content/uploads/2026/09/5kw-deye-700x700.png 700w, https://sasolarexperts.co.za/wp-content/uploads/2026/09/5kw-deye-768x768.png 768w, https://sasolarexperts.co.za/wp-content/uploads/2026/09/5kw-deye.png 800w",
+    "thumbnail_sizes": "(max-width: 500px) 100vw, 500px",
+    "name": "5kw deye",
+    "alt": ""
+   }
+  ],
+  "categories": [
+   {
+    "id": 100,
+    "name": "Inverters",
+    "slug": "inverters",
+    "link": "https://sasolarexperts.co.za/product-category/inverters/"
+   }
+  ],
+  "tags": [],
+  "brands": [
+   {
+    "id": 130,
+    "name": "Deye",
+    "slug": "deye",
+    "link": "https://sasolarexperts.co.za/brand/deye/"
+   }
+  ],
+  "attributes": [],
+  "variations": [],
+  "grouped_products": [],
+  "has_options": false,
+  "is_purchasable": true,
+  "is_in_stock": true,
+  "is_on_backorder": false,
+  "low_stock_remaining": null,
+  "stock_availability": {
+   "text": "",
+   "class": "in-stock"
+  },
+  "sold_individually": false,
+  "weight": "",
+  "dimensions": {
+   "length": "",
+   "width": "",
+   "height": ""
+  },
+  "formatted_weight": "N/A",
+  "formatted_dimensions": "N/A",
+  "add_to_cart": {
+   "text": "Add to cart",
+   "description": "Add to cart: &ldquo;Deye 5kW 48V Single Phase Hybrid Inverter&rdquo;",
+   "url": "/wp-json/wc/store/v1/products?per_page=100&#038;page=1&#038;add-to-cart=4519",
+   "single_text": "Add to cart",
+   "minimum": 1,
+   "maximum": 9999,
+   "multiple_of": 1
+  },
+  "is_password_protected": false,
+  "extensions": {
+   "gtmkit": {
+    "item": {
+     "id": "4519",
+     "item_id": "4519",
+     "item_name": "Deye 5kW 48V Single Phase Hybrid Inverter",
+     "currency": "ZAR",
+     "price": 13900,
+     "item_category": "Inverters"
+    }
+   }
+  },
+  "_links": {
+   "self": [
+    {
+     "href": "https://sasolarexperts.co.za/wp-json/wc/store/v1/products/4519",
+     "targetHints": {
+      "allow": [
+       "GET"
+      ]
+     }
+    }
+   ],
+   "collection": [
+    {
+     "href": "https://sasolarexperts.co.za/wp-json/wc/store/v1/products"
+    }
+   ],
+   "related": [
+    {
+     "embeddable": true,
+     "href": "https://sasolarexperts.co.za/wp-json/wc/store/v1/products?related=4519&per_page=10"
+    }
+   ]
+  }
+ },
+ {
   "id": 4488,
   "name": "Volta Stage 1 (old gen) 5.12kwh lithium battery",
   "slug": "volta-stage-1-old-gen-5-12kwh-lithium-battery",
@@ -1857,11 +1982,11 @@
   "sku": "",
   "short_description": "<p>The <b data-path-to-node=\"0\" data-index-in-node=\"119\">Deye 125kW (125kVA) Three-Phase HV Hybrid Inverter</b> (often referenced as model <b data-path-to-node=\"0\" data-index-in-node=\"197\">SUN-125K-SG02HP3-EU-GM10</b>) is designed for large-scale commercial and industrial applications.</p>",
   "description": "<p data-path-to-node=\"0\"> The <b data-path-to-node=\"0\" data-index-in-node=\"119\">Deye 125kW (125kVA) Three-Phase HV Hybrid Inverter</b> (often referenced as model <b data-path-to-node=\"0\" data-index-in-node=\"197\">SUN-125K-SG02HP3-EU-GM10</b>) is designed for large-scale commercial and industrial applications.</p>\n<p data-path-to-node=\"1\">Below is a consolidated technical specification table suitable for your product page.</p>\n<h3 data-path-to-node=\"2\"><b data-path-to-node=\"2\" data-index-in-node=\"0\">Technical Specifications: Deye 125kW HV Hybrid Inverter</b></h3>\n<table data-path-to-node=\"3\">\n<thead>\n<tr>\n<td><strong>Category</strong></td>\n<td><strong>Specification</strong></td>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><span data-path-to-node=\"3,1,0,0\"><b data-path-to-node=\"3,1,0,0\" data-index-in-node=\"0\">Model</b></span></td>\n<td><span data-path-to-node=\"3,1,1,0\">SUN-125K-SG02HP3-EU-GM10</span></td>\n</tr>\n<tr>\n<td><span data-path-to-node=\"3,2,0,0\"><b data-path-to-node=\"3,2,0,0\" data-index-in-node=\"0\">Rated Output Power</b></span></td>\n<td><span data-path-to-node=\"3,2,1,0\">125,000 W (125 kW)</span></td>\n</tr>\n<tr>\n<td><span data-path-to-node=\"3,3,0,0\"><b data-path-to-node=\"3,3,0,0\" data-index-in-node=\"0\">Max. Apparent Power</b></span></td>\n<td><span data-path-to-node=\"3,3,1,0\">135,000 VA</span></td>\n</tr>\n<tr>\n<td><span data-path-to-node=\"3,4,0,0\"><b data-path-to-node=\"3,4,0,0\" data-index-in-node=\"0\">Battery Type</b></span></td>\n<td><span data-path-to-node=\"3,4,1,0\">High-Voltage Lithium-ion</span></td>\n</tr>\n<tr>\n<td><span data-path-to-node=\"3,5,0,0\"><b data-path-to-node=\"3,5,0,0\" data-index-in-node=\"0\">Battery Voltage Range</b></span></td>\n<td><span data-path-to-node=\"3,5,1,0\">160 – 1000 V</span></td>\n</tr>\n<tr>\n<td><span data-path-to-node=\"3,6,0,0\"><b data-path-to-node=\"3,6,0,0\" data-index-in-node=\"0\">Max. Charge/Discharge Current</b></span></td>\n<td><span data-path-to-node=\"3,6,1,0\">100 A + 100 A</span></td>\n</tr>\n<tr>\n<td><span data-path-to-node=\"3,7,0,0\"><b data-path-to-node=\"3,7,0,0\" data-index-in-node=\"0\">PV Input (Max. Power)</b></span></td>\n<td><span data-path-to-node=\"3,7,1,0\">Up to 200,000 W</span></td>\n</tr>\n<tr>\n<td><span data-path-to-node=\"3,8,0,0\"><b data-path-to-node=\"3,8,0,0\" data-index-in-node=\"0\">MPPT Trackers</b></span></td>\n<td><span data-path-to-node=\"3,8,1,0\">10 (2 strings per MPPT)</span></td>\n</tr>\n<tr>\n<td><span data-path-to-node=\"3,9,0,0\"><b data-path-to-node=\"3,9,0,0\" data-index-in-node=\"0\">MPPT Voltage Range</b></span></td>\n<td><span data-path-to-node=\"3,9,1,0\">150 – 850 V</span></td>\n</tr>\n<tr>\n<td><span data-path-to-node=\"3,10,0,0\"><b data-path-to-node=\"3,10,0,0\" data-index-in-node=\"0\">AC Output Voltage</b></span></td>\n<td><span data-path-to-node=\"3,10,1,0\">220/380V, 230/400V (3L+N+PE)</span></td>\n</tr>\n<tr>\n<td><span data-path-to-node=\"3,11,0,0\"><b data-path-to-node=\"3,11,0,0\" data-index-in-node=\"0\">Max. AC Passthrough</b></span></td>\n<td><span data-path-to-node=\"3,11,1,0\">250 A</span></td>\n</tr>\n<tr>\n<td><span data-path-to-node=\"3,12,0,0\"><b data-path-to-node=\"3,12,0,0\" data-index-in-node=\"0\">Max. Efficiency</b></span></td>\n<td><span data-path-to-node=\"3,12,1,0\">98.7%</span></td>\n</tr>\n<tr>\n<td><span data-path-to-node=\"3,13,0,0\"><b data-path-to-node=\"3,13,0,0\" data-index-in-node=\"0\">Protection Rating</b></span></td>\n<td><span data-path-to-node=\"3,13,1,0\">IP65 (Outdoor rated)</span></td>\n</tr>\n<tr>\n<td><span data-path-to-node=\"3,14,0,0\"><b data-path-to-node=\"3,14,0,0\" data-index-in-node=\"0\">Operating Temperature</b></span></td>\n<td><span data-path-to-node=\"3,14,1,0\">-40°C to +60°C</span></td>\n</tr>\n<tr>\n<td><span data-path-to-node=\"3,15,0,0\"><b data-path-to-node=\"3,15,0,0\" data-index-in-node=\"0\">Dimensions (W×H×D)</b></span></td>\n<td><span data-path-to-node=\"3,15,1,0\">734 × 1091 × 344 mm</span></td>\n</tr>\n<tr>\n<td><span data-path-to-node=\"3,16,0,0\"><b data-path-to-node=\"3,16,0,0\" data-index-in-node=\"0\">Weight</b></span></td>\n<td><span data-path-to-node=\"3,16,1,0\">~161.7 kg</span></td>\n</tr>\n</tbody>\n</table>\n<h3 data-path-to-node=\"5\"><b data-path-to-node=\"5\" data-index-in-node=\"0\">Key Features for Your Product Description</b></h3>\n<ul data-path-to-node=\"6\">\n<li>\n<p data-path-to-node=\"6,0,0\"><b data-path-to-node=\"6,0,0\" data-index-in-node=\"0\">Commercial Scale Power:</b> Delivers 125kW of reliable three-phase power, ideal for factories, farms, and industrial setups.</p>\n</li>\n<li>\n<p data-path-to-node=\"6,1,0\"><b data-path-to-node=\"6,1,0\" data-index-in-node=\"0\">High-Voltage Efficiency:</b> Supports high-voltage battery storage for improved efficiency and safer, more stable system operation.</p>\n</li>\n<li>\n<p data-path-to-node=\"6,2,0\"><b data-path-to-node=\"6,2,0\" data-index-in-node=\"0\">Maximum Harvest:</b> Features 10 independent MPPT trackers, allowing for complex solar array designs and optimal energy yield across different roof orientations.</p>\n</li>\n<li>\n<p data-path-to-node=\"6,3,0\"><b data-path-to-node=\"6,3,0\" data-index-in-node=\"0\">Intelligent Management:</b> Built-in Energy Management System (EMS) supports zero-export capability, peak shaving, and time-of-use (TOU) optimization.</p>\n</li>\n<li>\n<p data-path-to-node=\"6,4,0\"><b data-path-to-node=\"6,4,0\" data-index-in-node=\"0\">Scalability:</b> Supports parallel operation for large-scale energy projects.</p>\n</li>\n<li>\n<p data-path-to-node=\"6,5,0\"><b data-path-to-node=\"6,5,0\" data-index-in-node=\"0\">Rugged Reliability:</b> IP65-rated enclosure ensures protection against dust and moisture, making it suitable for demanding outdoor environments.</p>\n</li>\n</ul>",
-  "on_sale": false,
+  "on_sale": true,
   "prices": {
-   "price": "16590000",
+   "price": "13500000",
    "regular_price": "16590000",
-   "sale_price": "16590000",
+   "sale_price": "13500000",
    "price_range": null,
    "currency_code": "ZAR",
    "currency_symbol": "R",
@@ -1871,7 +1996,7 @@
    "currency_prefix": "R",
    "currency_suffix": ""
   },
-  "price_html": "<span class=\"woocommerce-Price-amount amount\"><span class=\"woocommerce-Price-currencySymbol\">&#082;</span>165 900,00</span>",
+  "price_html": "<del aria-hidden=\"true\"><span class=\"woocommerce-Price-amount amount\"><span class=\"woocommerce-Price-currencySymbol\">&#082;</span>165 900,00</span></del> <span class=\"screen-reader-text\">Original price was: &#082;165 900,00.</span><ins aria-hidden=\"true\"><span class=\"woocommerce-Price-amount amount\"><span class=\"woocommerce-Price-currencySymbol\">&#082;</span>135 000,00</span></ins><span class=\"screen-reader-text\">Current price is: &#082;135 000,00.</span>",
   "average_rating": "0",
   "review_count": 0,
   "images": [
@@ -1955,7 +2080,7 @@
      "item_id": "4330",
      "item_name": "Deye 125kW 3Ph HV Hybrid Inverter",
      "currency": "ZAR",
-     "price": 165900,
+     "price": 135000,
      "item_category": "Inverters"
     }
    }
@@ -11057,11 +11182,11 @@
   "sku": "17244",
   "short_description": "<p>12kW Deye 3-Phase 48V Hybrid Inverter – Efficient Power for Commercial &amp; Residential Solar Systems<br />\nThe 12kW Deye 3-Phase 48V Hybrid Inverter is designed to deliver consistent and powerful solar energy for homes, businesses, and light industrial sites. Because it supports 48V lithium battery banks, the inverter ensures efficient storage and energy management.</p>",
   "description": "<h2>Description</h2>\n<p>12kW Deye 3-Phase 48V Hybrid Inverter – Efficient Power for Commercial &amp; Residential Solar Systems<br />\nThe 12kW Deye 3-Phase 48V Hybrid Inverter is designed to deliver consistent and powerful solar energy for homes, businesses, and light industrial sites. Because it supports 48V lithium battery banks, the inverter ensures efficient storage and energy management.</p>\n<p>Moreover, this three-phase inverter balances power distribution across three lines. As a result, it reduces strain on appliances and improves system stability. This feature is crucial for commercial and industrial energy systems that demand reliable output.</p>\n<p>Thanks to its wide PV input voltage range, the inverter accepts more solar panels per string. This flexibility makes installation easier and reduces overall system costs. Additionally, the dual MPPT inputs optimize solar power harvest from different panel arrays or orientations.</p>\n<p>The inverter features a built-in Battery Management System (BMS), which protects battery health by monitoring voltage, temperature, and current. This intelligent system prevents overcharging and deep discharging, extending battery life.</p>\n<p>Furthermore, it supports seamless switching between solar, battery, and grid power. Therefore, your system can provide uninterrupted energy during outages or grid instability. Also, the inverter supports generator input for added backup reliability.</p>\n<p>Remote monitoring via Wi-Fi or wired communication lets users track system performance and energy usage easily. This functionality makes troubleshooting and system optimization straightforward.</p>\n<p>Due to growing energy needs and rising electricity costs, this inverter is ideal for those seeking energy independence and cost savings. It combines high performance, flexibility, and durability in a compact design.</p>\n<p><img class=\"emoji\" role=\"img\" src=\"https://s.w.org/images/core/emoji/17.0.2/svg/2705.svg\" alt=\"✅\" /> Key Benefits:<br />\n12kW three-phase hybrid inverter – stable power for homes and businesses</p>\n<p>Compatible with 48V lithium battery banks</p>\n<p>Wide PV input voltage range – flexible solar array design</p>\n<p>Dual MPPTs – maximize energy harvest throughout the day</p>\n<p>Intelligent BMS – protects battery health and extends lifespan</p>\n<p>Seamless switching – uninterrupted power supply during outages</p>\n<p>Generator input – enhances backup energy reliability</p>\n<p>Remote monitoring – control and monitor system remotely via app</p>\n<p>Compact, durable design – suitable for commercial and residential installations</p>",
-  "on_sale": false,
+  "on_sale": true,
   "prices": {
-   "price": "3430000",
+   "price": "3280000",
    "regular_price": "3430000",
-   "sale_price": "3430000",
+   "sale_price": "3280000",
    "price_range": null,
    "currency_code": "ZAR",
    "currency_symbol": "R",
@@ -11071,7 +11196,7 @@
    "currency_prefix": "R",
    "currency_suffix": ""
   },
-  "price_html": "<span class=\"woocommerce-Price-amount amount\"><span class=\"woocommerce-Price-currencySymbol\">&#082;</span>34 300,00</span>",
+  "price_html": "<del aria-hidden=\"true\"><span class=\"woocommerce-Price-amount amount\"><span class=\"woocommerce-Price-currencySymbol\">&#082;</span>34 300,00</span></del> <span class=\"screen-reader-text\">Original price was: &#082;34 300,00.</span><ins aria-hidden=\"true\"><span class=\"woocommerce-Price-amount amount\"><span class=\"woocommerce-Price-currencySymbol\">&#082;</span>32 800,00</span></ins><span class=\"screen-reader-text\">Current price is: &#082;32 800,00.</span>",
   "average_rating": "0",
   "review_count": 0,
   "images": [
@@ -11155,7 +11280,7 @@
      "item_id": "3864",
      "item_name": "Deye 12kw 3 Phase 48v Inverter",
      "currency": "ZAR",
-     "price": 34300,
+     "price": 32800,
      "item_category": "Inverters"
     }
    }
@@ -11781,12 +11906,12 @@
   "permalink": "https://sasolarexperts.co.za/product/deye-16kw-hybrid-inverter/",
   "sku": "19024",
   "short_description": "<h2>Deye 16KW Hybrid Inverter</h2>\n<p>Includes:  Wi-Fi Dongle + BMS Communication Cable</p>\n<p>Higer yields.</p>\n<ul>\n<li>Improve self-consumption ratio up to 80%, reducing your electricity bill.</li>\n<li>DC/AC ratio up to 1.3, completely suitable for double-side PV modular.</li>\n<li>Two MPPT design, Max. efficiency of 97.6%.</li>\n</ul>",
-  "description": "<div class=\"card__header\">\n<h2 class=\"card__title heading h3\">Description</h2>\n</div>\n<div class=\"card__section\">\n<div class=\"rte text--pull\">\n<h2>Deye 16KW Hybrid Inverter</h2>\n<p>Includes:  Wi-Fi Dongle + BMS Communication Cable</p>\n<p>Higer yields.</p>\n<ul>\n<li>Improve self-consumption ratio up to 80%, reducing your electricity bill.</li>\n<li>DC/AC ratio up to 1.3, completely suitable for double-side PV modular.</li>\n<li>Two MPPT design, Max. efficiency of 97.6%.</li>\n</ul>\n<p>User-friendly.</p>\n<ul>\n<li>LCD Touch screen and buttons, easy operation.</li>\n<li>Compatible with lithium-ion battery and lead acid battery.</li>\n<li>Web browser and mobile App monitoring supported.</li>\n</ul>\n<p>Reliable.</p>\n<ul>\n<li>PV lighting protection, Anti-islanding protection, Leakage current protection etc.</li>\n<li>Support store energy from DG when needed, ensure the system working within 7*24H.</li>\n<li>IP65 protection degree, adapt to indoor and outdoor using.</li>\n<li>Automatically switch from on-grid to off-grid mode within 5ms.</li>\n<li>Zero exporting function, fast reaction within 200ms in zero export mode.</li>\n</ul>\n<p>Smart.</p>\n<ul>\n<li>Programmable charging and discharging schedule.</li>\n<li>Both wind turbines and solar panels can be connected as DC input power.</li>\n<li>Max. 16 units can be paralleled for higher system power.</li>\n<li>Retrofitting of existing solar system to energy storage system.</li>\n</ul>\n</div>\n</div>",
-  "on_sale": false,
+  "description": "<p>The Deye 16kW Hybrid Inverter</p>\n<p> is a high-capacity solar energy inverter designed for large residential properties, commercial installations, farms and advanced battery-storage systems. It combines solar PV generation, battery storage, grid electricity and generator integration into a single intelligent energy-management solution.</p>\n<p>With a substantial 16kW AC output, the Deye 16kW Hybrid Inverter is designed for installations with higher electrical loads and greater energy requirements. Furthermore, its hybrid architecture allows solar energy to be used directly by connected loads, stored in batteries for later use, or supplemented by the utility grid when additional power is required.</p>\n<p>The inverter is suitable for 48V low-voltage battery systems, making it compatible with a wide range of modern lithium battery solutions. In addition, intelligent battery management and communication capabilities allow compatible batteries to communicate with the inverter&#8217;s BMS for coordinated charging, discharging and protection.</p>\n<p>For South African solar installations, the Deye 16kW Hybrid Inverter can be used to build systems capable of handling substantial household or business loads while maintaining battery backup during grid interruptions. This makes it suitable for applications where dependable energy availability and effective solar utilisation are important.</p>\n<p>Moreover, Deye&#8217;s hybrid platform provides multiple operating modes, allowing system owners to prioritise solar production, battery storage, grid power or backup operation according to their energy requirements. Programmable charging and discharging periods can also help optimise when batteries are charged and when stored energy is used.</p>\n<p>The inverter can support generator integration, providing another energy source for larger off-grid and backup installations. As a result, it can form part of a multi-source energy system combining solar panels, batteries, the electrical grid and a standby generator.</p>\n<p>Another important advantage is its scalability. Multiple compatible Deye hybrid inverters can be configured in parallel for larger installations, allowing system capacity to be expanded as energy requirements increase. The platform can also support AC-coupled solar configurations, which can be useful when upgrading an existing solar installation.</p>\n<p>In addition, advanced protection functions help safeguard the inverter and connected solar system against electrical faults and abnormal operating conditions. Depending on the installation configuration, protection features include overcurrent, overvoltage, reverse-polarity, anti-islanding, surge and temperature protection.</p>\n<p>The Deye 16kW Hybrid Inverter is therefore suited to customers looking for a powerful energy-management platform for larger solar and battery systems. Whether installed in a high-consumption home, commercial property, agricultural operation or backup-power application, it provides the flexibility to combine solar generation and battery storage with other available energy sources.</p>\n<p>Key Benefits</p>\n<p>16kW high-capacity hybrid inverter<br />\nDesigned for large solar and battery installations<br />\n48V low-voltage battery architecture<br />\nCompatible with lithium battery storage systems<br />\nSolar PV and battery energy management in one system<br />\nSupports grid-connected hybrid operation<br />\nSuitable for backup-power applications<br />\nGenerator integration support<br />\nProgrammable battery charging and discharging<br />\nIntelligent battery management through BMS communication<br />\nSuitable for solar-system expansion<br />\nParallel operation capability for larger systems<br />\nSupports AC-coupled solar configurations<br />\nAdvanced electrical protection functions<br />\nDesigned for residential, commercial and agricultural applications<br />\nSuitable for South African solar installations<br />\nIdeal Applications</p>\n<p>The Deye 16kW Hybrid Inverter is suitable for:</p>\n<p>Large residential solar systems<br />\nHigh-energy homes<br />\nCommercial properties<br />\nOffices and retail premises<br />\nFarms and agricultural installations<br />\nSolar backup systems<br />\nHybrid grid-connected systems<br />\nOff-grid energy systems<br />\nBattery energy-storage installations<br />\nExisting solar-system upgrades<br />\nGenerator-supported solar systems</p>",
+  "on_sale": true,
   "prices": {
-   "price": "4040000",
+   "price": "3570000",
    "regular_price": "4040000",
-   "sale_price": "4040000",
+   "sale_price": "3570000",
    "price_range": null,
    "currency_code": "ZAR",
    "currency_symbol": "R",
@@ -11796,7 +11921,7 @@
    "currency_prefix": "R",
    "currency_suffix": ""
   },
-  "price_html": "<span class=\"woocommerce-Price-amount amount\"><span class=\"woocommerce-Price-currencySymbol\">&#082;</span>40 400,00</span>",
+  "price_html": "<del aria-hidden=\"true\"><span class=\"woocommerce-Price-amount amount\"><span class=\"woocommerce-Price-currencySymbol\">&#082;</span>40 400,00</span></del> <span class=\"screen-reader-text\">Original price was: &#082;40 400,00.</span><ins aria-hidden=\"true\"><span class=\"woocommerce-Price-amount amount\"><span class=\"woocommerce-Price-currencySymbol\">&#082;</span>35 700,00</span></ins><span class=\"screen-reader-text\">Current price is: &#082;35 700,00.</span>",
   "average_rating": "0",
   "review_count": 0,
   "images": [
@@ -11891,7 +12016,7 @@
      "item_id": "3846",
      "item_name": "Deye 16kW Hybrid Inverter",
      "currency": "ZAR",
-     "price": 40400,
+     "price": 35700,
      "item_category": "Inverters"
     }
    }
@@ -12671,11 +12796,11 @@
   "sku": "17240",
   "short_description": "<p>8kW Deye Hybrid 48V Inverter – Reliable Solar Power with Smart Backup and Battery Support<br />\nThe 8kW Deye Hybrid 48V Inverter offers advanced power management for both homes and small commercial setups. First of all, it supports 48V lithium battery systems, which ensures safe and consistent energy storage.</p>",
   "description": "<h2>Description</h2>\n<h2>8kW Deye Hybrid 48V Inverter – Smart Solar Backup and Power Management for Homes and Businesses remotely</h2>\n<p>8kW Deye Hybrid 48V Inverter – Reliable Solar Power with Smart Backup and Battery Support<br />\nThe 8kW Deye Hybrid 48V Inverter offers advanced power management for both homes and small commercial setups. First of all, it supports 48V lithium battery systems, which ensures safe and consistent energy storage.</p>\n<p>Furthermore, the inverter operates in grid-tied, off-grid, and hybrid modes, depending on your energy strategy. Because of this flexibility, you can adapt your system to changing load or backup needs.</p>\n<p>In addition, the dual MPPT trackers allow for better solar energy harvesting, even in partially shaded conditions. As a result, your solar panel system performs efficiently throughout the day.</p>\n<p>Not only does it support a wide PV input voltage range, but it also simplifies installation. Therefore, installers can design systems with greater flexibility and efficiency.</p>\n<p>Also, the inverter is compatible with multiple battery brands, including Deye-approved lithium options. Due to this compatibility, system expansion and replacement become easier over time.</p>\n<p>Moreover, the built-in BMS communication safeguards the battery from overcharge, over-discharge, and high temperature. Consequently, your battery lifespan and performance are extended.</p>\n<p>During power outages, the inverter switches seamlessly to backup mode. So, your essential appliances stay powered without delay or disruption.</p>\n<p>Thanks to its generator input support, you can connect an external backup generator when needed. This ensures reliable energy even during extended outages.</p>\n<p>Besides that, the inverter supports Wi-Fi and remote monitoring, so you can track performance from your mobile device. This gives you full control and insight into your energy usage.</p>\n<p>Because of the rising cost of electricity and unreliable power grids, more users are turning to hybrid systems like this. Ultimately, the Deye 8kW Hybrid Inverter helps you achieve lower energy bills and energy independence.</p>\n<p><img class=\"emoji\" role=\"img\" src=\"https://s.w.org/images/core/emoji/17.0.2/svg/2705.svg\" alt=\"✅\" /> Key Benefits:<br />\n8kW hybrid inverter – reliable energy for homes and businesses</p>\n<p>Dual MPPT inputs – maximize solar panel performance</p>\n<p>Wide PV input range – easier and flexible system design</p>\n<p>Works in grid-tied, off-grid, and hybrid modes</p>\n<p>Supports lithium batteries – safe and stable storage</p>\n<p>Generator input – additional backup when needed</p>\n<p>Seamless switching – continuous power during outages</p>\n<p>Built-in BMS communication – protects and extends battery life</p>\n<p>Remote monitoring – track and control via app or Wi-Fi</p>\n<p>Expandable system – future-ready for growing energy needs</p>",
-  "on_sale": false,
+  "on_sale": true,
   "prices": {
-   "price": "2300000",
+   "price": "2110000",
    "regular_price": "2300000",
-   "sale_price": "2300000",
+   "sale_price": "2110000",
    "price_range": null,
    "currency_code": "ZAR",
    "currency_symbol": "R",
@@ -12685,7 +12810,7 @@
    "currency_prefix": "R",
    "currency_suffix": ""
   },
-  "price_html": "<span class=\"woocommerce-Price-amount amount\"><span class=\"woocommerce-Price-currencySymbol\">&#082;</span>23 000,00</span>",
+  "price_html": "<del aria-hidden=\"true\"><span class=\"woocommerce-Price-amount amount\"><span class=\"woocommerce-Price-currencySymbol\">&#082;</span>23 000,00</span></del> <span class=\"screen-reader-text\">Original price was: &#082;23 000,00.</span><ins aria-hidden=\"true\"><span class=\"woocommerce-Price-amount amount\"><span class=\"woocommerce-Price-currencySymbol\">&#082;</span>21 100,00</span></ins><span class=\"screen-reader-text\">Current price is: &#082;21 100,00.</span>",
   "average_rating": "0",
   "review_count": 0,
   "images": [
@@ -12791,7 +12916,7 @@
      "item_id": "3824",
      "item_name": "Deye 8kW Hybrid 48v Inverter",
      "currency": "ZAR",
-     "price": 23000,
+     "price": 21100,
      "item_category": "Inverters"
     }
    }
@@ -12833,9 +12958,9 @@
   "description": "<h2>Description</h2>\n<h1 data-start=\"336\" data-end=\"379\">Deye 15kW Three Phase Hybrid Inverter</h1>\n<h3 data-start=\"773\" data-end=\"821\"><img class=\"emoji\" role=\"img\" src=\"https://s.w.org/images/core/emoji/17.0.2/svg/1f50b.svg\" alt=\"🔋\" /> High-Performance Solar Power Conversion</h3>\n<p data-start=\"822\" data-end=\"1117\">The <strong data-start=\"826\" data-end=\"867\">Deye 15kW Three Phase Hybrid Inverter</strong> delivers powerful energy conversion for both residential and commercial projects. Since it offers 15kW output, it supports heavy loads and large-scale systems with efficiency. Therefore, users enjoy continuous power and reliable solar utilization.</p>\n<h3 data-start=\"1119\" data-end=\"1168\"><img class=\"emoji\" role=\"img\" src=\"https://s.w.org/images/core/emoji/17.0.2/svg/26a1.svg\" alt=\"⚡\" /> Hybrid Technology for Maximum Flexibility</h3>\n<p data-start=\"1169\" data-end=\"1493\">Unlike standard inverters, the <strong data-start=\"1200\" data-end=\"1241\">Deye 15kW Three Phase Hybrid </strong>combines solar, grid, and battery power in one intelligent system. Because of this design, it allows seamless switching between energy sources. Consequently, users reduce energy costs, maximize solar energy, and maintain backup power during outages.</p>\n<h3 data-start=\"1495\" data-end=\"1533\"><img class=\"emoji\" role=\"img\" src=\"https://s.w.org/images/core/emoji/17.0.2/svg/1f504.svg\" alt=\"🔄\" /> Intelligent Energy Management</h3>\n<p data-start=\"1534\" data-end=\"1863\">The <strong data-start=\"1538\" data-end=\"1579\">Deye 15kW Three Phase Hybrid </strong>features advanced MPPT tracking that ensures maximum solar efficiency throughout the day. Furthermore, it balances energy between solar panels, batteries, and the grid with smart control. As a result, energy distribution remains smooth and efficient even in demanding applications.</p>\n<h3 data-start=\"1865\" data-end=\"1910\"><img class=\"emoji\" role=\"img\" src=\"https://s.w.org/images/core/emoji/17.0.2/svg/1f6e1.svg\" alt=\"🛡️\" /> Built-In Protection and Reliability</h3>\n<p data-start=\"1911\" data-end=\"2198\">With integrated safety features, the <strong data-start=\"1948\" data-end=\"1989\">Deye 15kW Three Phase Hybrid </strong> protects against over-voltage, overload, short-circuits, and temperature fluctuations. Because of its durable construction and advanced protection, it guarantees long-lasting operation and system stability.</p>\n<h3 data-start=\"2200\" data-end=\"2265\"><img class=\"emoji\" role=\"img\" src=\"https://s.w.org/images/core/emoji/17.0.2/svg/1f30d.svg\" alt=\"🌍\" /> Designed for Residential, Commercial, and Industrial Use</h3>\n<p data-start=\"2266\" data-end=\"2562\">The <strong data-start=\"2270\" data-end=\"2311\">Deye 15kW Three Phase Hybrid Inverter</strong> is versatile and scalable, making it ideal for households, businesses, and industrial applications. During grid failures or load-shedding, it switches seamlessly to battery backup. Therefore, users gain peace of mind and uninterrupted productivity.</p>\n<hr data-start=\"2564\" data-end=\"2567\" />\n<h2 data-start=\"2569\" data-end=\"2630\"><img class=\"emoji\" role=\"img\" src=\"https://s.w.org/images/core/emoji/17.0.2/svg/1f31f.svg\" alt=\"🌟\" /> Key Benefits of Deye 15kW Three Phase Hybrid Inverter</h2>\n<ul data-start=\"2631\" data-end=\"3212\">\n<li data-start=\"2631\" data-end=\"2723\">\n<p data-start=\"2633\" data-end=\"2723\"><img class=\"emoji\" role=\"img\" src=\"https://s.w.org/images/core/emoji/17.0.2/svg/26a1.svg\" alt=\"⚡\" /> <strong data-start=\"2635\" data-end=\"2664\">15kW high-capacity output</strong> supports residential, commercial, and industrial systems</p>\n</li>\n<li data-start=\"2724\" data-end=\"2797\">\n<p data-start=\"2726\" data-end=\"2797\"><img class=\"emoji\" role=\"img\" src=\"https://s.w.org/images/core/emoji/17.0.2/svg/1f50b.svg\" alt=\"🔋\" /> <strong data-start=\"2729\" data-end=\"2753\">Hybrid functionality</strong> integrates solar, grid, and battery power</p>\n</li>\n<li data-start=\"2798\" data-end=\"2873\">\n<p data-start=\"2800\" data-end=\"2873\"><img class=\"emoji\" role=\"img\" src=\"https://s.w.org/images/core/emoji/17.0.2/svg/1f31e.svg\" alt=\"🌞\" /> <strong data-start=\"2803\" data-end=\"2829\">Advanced MPPT tracking</strong> maximizes solar harvesting and efficiency</p>\n</li>\n<li data-start=\"2874\" data-end=\"2964\">\n<p data-start=\"2876\" data-end=\"2964\"><img class=\"emoji\" role=\"img\" src=\"https://s.w.org/images/core/emoji/17.0.2/svg/1f6e1.svg\" alt=\"🛡️\" /> <strong data-start=\"2880\" data-end=\"2912\">Built-in protection features</strong> safeguard the system against faults and overloads</p>\n</li>\n<li data-start=\"2965\" data-end=\"3037\">\n<p data-start=\"2967\" data-end=\"3037\"><img class=\"emoji\" role=\"img\" src=\"https://s.w.org/images/core/emoji/17.0.2/svg/1f504.svg\" alt=\"🔄\" /> <strong data-start=\"2970\" data-end=\"2993\">Seamless switchover</strong> ensures backup power during grid failures</p>\n</li>\n<li data-start=\"3038\" data-end=\"3124\">\n<p data-start=\"3040\" data-end=\"3124\"><img class=\"emoji\" role=\"img\" src=\"https://s.w.org/images/core/emoji/17.0.2/svg/2705.svg\" alt=\"✅\" /> <strong data-start=\"3042\" data-end=\"3071\">Three-phase compatibility</strong> supports balanced and efficient power distribution</p>\n</li>\n<li data-start=\"3125\" data-end=\"3212\">\n<p data-start=\"3127\" data-end=\"3212\"><img class=\"emoji\" role=\"img\" src=\"https://s.w.org/images/core/emoji/17.0.2/svg/1f4ca.svg\" alt=\"📊\" /> <strong data-start=\"3130\" data-end=\"3149\">Scalable design</strong> allows integration into larger systems and future expansions</p>\n</li>\n</ul>",
   "on_sale": false,
   "prices": {
-   "price": "4130000",
-   "regular_price": "4130000",
-   "sale_price": "4130000",
+   "price": "3980000",
+   "regular_price": "3980000",
+   "sale_price": "3980000",
    "price_range": null,
    "currency_code": "ZAR",
    "currency_symbol": "R",
@@ -12845,7 +12970,7 @@
    "currency_prefix": "R",
    "currency_suffix": ""
   },
-  "price_html": "<span class=\"woocommerce-Price-amount amount\"><span class=\"woocommerce-Price-currencySymbol\">&#082;</span>41 300,00</span>",
+  "price_html": "<span class=\"woocommerce-Price-amount amount\"><span class=\"woocommerce-Price-currencySymbol\">&#082;</span>39 800,00</span>",
   "average_rating": "0",
   "review_count": 0,
   "images": [
@@ -12929,7 +13054,7 @@
      "item_id": "3820",
      "item_name": "Deye 15kW Three Phase Hybrid Inverter",
      "currency": "ZAR",
-     "price": 41300,
+     "price": 39800,
      "item_category": "Inverters"
     }
    }
@@ -14002,7 +14127,7 @@
   "add_to_cart": {
    "text": "Add to cart",
    "description": "Add to cart: &ldquo;11kw ecco Hybrid Inverter&rdquo;",
-   "url": "/wp-json/wc/store/v1/products?per_page=100&#038;page=1&#038;add-to-cart=568",
+   "url": "/wp-json/wc/store/v1/products?per_page=100&#038;page=2&#038;add-to-cart=568",
    "single_text": "Add to cart",
    "minimum": 1,
    "maximum": 9999,
@@ -14047,7 +14172,7 @@
  },
  {
   "id": 574,
-  "name": "Inverters Deye 12kW 1-Phase 48V Hybrid Inverter",
+  "name": "Deye 12kW 1-Phase 48V Hybrid Inverter",
   "slug": "inverters-deye-12kw-1-phase-48v-hybrid-inverter",
   "parent": 0,
   "type": "simple",
@@ -14056,11 +14181,11 @@
   "sku": "17242",
   "short_description": "<p>12kW Deye 1-Phase 48V Hybrid Inverter – Reliable Solar Power for Homes and Small Businesses<br />\nThe 12kW Deye 1-Phase 48V Hybrid Inverter is designed for homes and small commercial installations that need powerful and flexible solar energy solutions. Because it supports 48V lithium battery banks, this inverter ensures efficient energy storage and management.</p>",
   "description": "<h2>Description</h2>\n<p>12kW Deye 1-Phase 48V Hybrid Inverter – Reliable Solar Power for Homes and Small Businesses<br />\nThe 12kW Deye 1-Phase 48V Hybrid Inverter is designed for homes and small commercial installations that need powerful and flexible solar energy solutions. Because it supports 48V lithium battery banks, this inverter ensures efficient energy storage and management.</p>\n<p>Moreover, the inverter features a wide PV input voltage range, allowing more solar panels per string. This flexibility helps reduce installation costs while maximizing solar energy production. Thanks to its dual MPPT inputs, it optimizes power from different solar panel arrays.</p>\n<p>This inverter operates in grid-tied, off-grid, and hybrid modes. Therefore, it suits diverse energy needs and ensures backup power during outages. Additionally, it supports generator input, adding further reliability for locations with unstable grids.</p>\n<p>Because it includes an intelligent Battery Management System (BMS), the inverter safeguards battery health. It continuously monitors voltage, temperature, and current, preventing overcharge or deep discharge. This protection extends battery life significantly.</p>\n<p>The 12kW Deye inverter also offers seamless switching between energy sources. As a result, your home or business experiences uninterrupted power supply even during grid failures.</p>\n<p>Thanks to its built-in Wi-Fi and remote monitoring capabilities, you can track energy production and consumption from anywhere. This feature simplifies system management and troubleshooting.</p>\n<p>Due to rising electricity costs and frequent load shedding, this inverter provides an excellent solution for energy independence. Its compact and durable design fits well into residential or commercial setups.</p>\n<p><img class=\"emoji\" role=\"img\" src=\"https://s.w.org/images/core/emoji/17.0.2/svg/2705.svg\" alt=\"✅\" /> Key Benefits:<br />\n12kW single-phase hybrid inverter – powerful enough for homes and small businesses</p>\n<p>Compatible with 48V lithium battery systems</p>\n<p>Wide PV input voltage range – flexible solar array design</p>\n<p>Dual MPPTs – maximize solar energy harvest</p>\n<p>Intelligent BMS – protects battery life and performance</p>\n<p>Supports grid-tied, off-grid, and hybrid systems</p>\n<p>Generator input – reliable backup power</p>\n<p>Seamless source switching – uninterrupted electricity supply</p>\n<p>Remote monitoring – manage your system via mobile app or web</p>",
-  "on_sale": false,
+  "on_sale": true,
   "prices": {
-   "price": "3380000",
+   "price": "2110000",
    "regular_price": "3380000",
-   "sale_price": "3380000",
+   "sale_price": "2110000",
    "price_range": null,
    "currency_code": "ZAR",
    "currency_symbol": "R",
@@ -14070,7 +14195,7 @@
    "currency_prefix": "R",
    "currency_suffix": ""
   },
-  "price_html": "<span class=\"woocommerce-Price-amount amount\"><span class=\"woocommerce-Price-currencySymbol\">&#082;</span>33 800,00</span>",
+  "price_html": "<del aria-hidden=\"true\"><span class=\"woocommerce-Price-amount amount\"><span class=\"woocommerce-Price-currencySymbol\">&#082;</span>33 800,00</span></del> <span class=\"screen-reader-text\">Original price was: &#082;33 800,00.</span><ins aria-hidden=\"true\"><span class=\"woocommerce-Price-amount amount\"><span class=\"woocommerce-Price-currencySymbol\">&#082;</span>21 100,00</span></ins><span class=\"screen-reader-text\">Current price is: &#082;21 100,00.</span>",
   "average_rating": "0",
   "review_count": 0,
   "images": [
@@ -14139,7 +14264,7 @@
   "formatted_dimensions": "N/A",
   "add_to_cart": {
    "text": "Add to cart",
-   "description": "Add to cart: &ldquo;Inverters Deye 12kW 1-Phase 48V Hybrid Inverter&rdquo;",
+   "description": "Add to cart: &ldquo;Deye 12kW 1-Phase 48V Hybrid Inverter&rdquo;",
    "url": "/wp-json/wc/store/v1/products?per_page=100&#038;page=2&#038;add-to-cart=574",
    "single_text": "Add to cart",
    "minimum": 1,
@@ -14152,9 +14277,9 @@
     "item": {
      "id": "574",
      "item_id": "574",
-     "item_name": "Inverters Deye 12kW 1-Phase 48V Hybrid Inverter",
+     "item_name": "Deye 12kW 1-Phase 48V Hybrid Inverter",
      "currency": "ZAR",
-     "price": 33800,
+     "price": 21100,
      "item_category": "Inverters"
     }
    }
