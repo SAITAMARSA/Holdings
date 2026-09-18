@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Products · Green Home Systems</title>
+<meta name="description" content="Browse solar panels, hybrid inverters, lithium batteries and accessories with prices, filters and search.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%E2%9A%A1</text></svg>">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="topbar">
+    <div class="wrap">
+      <span>☀️ Load-shedding proof solar, installed nationwide — Mon–Fri 8am–5pm</span>
+      <span><a href="tel:+27713959721">071 395 9721</a> · <a href="mailto:info@greenihomesystems.co.za">info@greenihomesystems.co.za</a></span>
+    </div>
+  </div>
+  <div class="wrap nav">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">⚡</span>
+      <span>Green Home Systems<small>Powering homes. Empowering tomorrow.</small></span>
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation">☰</button>
+    <nav class="nav-links" id="nav-links">
+      <a href="index.html">Home</a>
+      <a href="products.html" aria-current="page">Products</a>
+      <a href="index.html#why">Why solar</a>
+      <a href="index.html#process">How it works</a>
+      <a href="index.html#faq">FAQ</a>
+      <a class="btn btn-primary" href="contact.html">Get a quote</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section style="padding-bottom:28px">
+  <div class="wrap">
+    <span class="eyebrow">Catalogue</span>
+    <h1 style="font-size:clamp(1.8rem,4vw,2.6rem)">Solar products and pricing</h1>
+    <p class="lead">Panels, hybrid inverters, lithium storage and accessories from the brands we install every week. Prices exclude VAT and installation; stock moves quickly, so confirm availability when you enquire.</p>
+
+    <div class="filters">
+      <div class="field">
+        <label for="f-search">Search</label>
+        <input id="f-search" type="search" placeholder="Try “Deye 8kW” or “bifacial”" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="f-category">Category</label>
+        <select id="f-category"></select>
+      </div>
+      <div class="field">
+        <label for="f-brand">Brand</label>
+        <select id="f-brand"></select>
+      </div>
+      <div class="field">
+        <label for="f-sort">Sort by</label>
+        <select id="f-sort">
+          <option value="featured">Featured</option>
+          <option value="price-asc">Price: low to high</option>
+          <option value="price-desc">Price: high to low</option>
+          <option value="name">Name A–Z</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="result-line">
+      <span id="result-line"></span>
+      <button class="chip" type="button" id="f-reset">Clear filters</button>
+    </div>
+    <div class="chips" id="quick-chips"></div>
+    <div class="grid" id="product-grid"></div>
+  </div>
+</section>
+
+<section class="soft">
+  <div class="wrap">
+    <div class="band">
+      <div>
+        <h2>Need it sized and installed?</h2>
+        <p>We quote the full system — panels, inverter, battery, mounting and labour — as one fixed price.</p>
+      </div>
+      <a class="btn btn-light" href="contact.html">Request a quote</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-cols">
+      <div>
+        <h4>Green Home Systems</h4>
+        <p>Solar, battery backup and hybrid power systems for South African homes and businesses. Johannesburg based, installing in all nine provinces.</p>
+      </div>
+      <div>
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="products.html?category=Inverters">Inverters</a></li>
+          <li><a href="products.html?category=Lithium%20Batteries">Lithium batteries</a></li>
+          <li><a href="products.html?category=Solar%20Panels">Solar panels</a></li>
+          <li><a href="products.html?category=Accessories">Accessories</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="index.html#why">Why solar</a></li>
+          <li><a href="index.html#process">How it works</a></li>
+          <li><a href="index.html#testimonials">Testimonials</a></li>
+          <li><a href="index.html#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li>📞 <a href="tel:+27713959721">071 395 9721</a></li>
+          <li>✉️ <a href="mailto:info@greenihomesystems.co.za">info@greenihomesystems.co.za</a></li>
+          <li>📍 Johannesburg, South Africa</li>
+          <li>🕗 Mon–Fri, 8am–5pm</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> Green Home Systems. All rights reserved.</span>
+      <span>Prices exclude VAT and installation and may change without notice.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/catalog.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

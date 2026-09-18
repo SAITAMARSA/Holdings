@@ -39,3 +39,8 @@ card artwork gradient; `rating` is a number out of 10. Both pages pick it up
 automatically.
 
 All titles, scores and news items are fictional demo content.
+
+## Other sites in this repo
+
+- [`greenhome-systems/`](greenhome-systems/) — marketing and catalogue site for
+  Green Home Systems (solar, batteries, hybrid inverters).
