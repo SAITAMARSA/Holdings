@@ -36,9 +36,15 @@ each with `name`, `category`, `brand`, `spec`, `price` (ZAR, excl. VAT), `blurb`
 `image` and `link` back to the product page on greenhomesystems.co.za.
 
 To refresh it, re-read `https://greenhomesystems.co.za/wp-json/wc/store/v1/products`
-and rewrite the `window.PRODUCTS` array in the same shape. Product images are
-hotlinked from the live site; each card falls back to a category icon if an
-image fails to load, so swapping in locally hosted images is a drop-in change.
+and rewrite the `window.PRODUCTS` array in the same shape.
+
+Product images are stored locally in `assets/img/` (downscaled to 900px), so the
+site works offline and does not depend on the live store staying up. Each entry
+also keeps the original URL in `imageRemote`: if a local file is missing the card
+retries the live store, and falls back to a category icon only if that fails too.
+
+Stock flags (`inStock`, shown as the "On order" badge) come from the store's own
+WooCommerce stock status.
 
 Prices come from the live store as of the scrape date. Testimonials and the FAQ copy are
 placeholder marketing text and should be reviewed before this goes live.

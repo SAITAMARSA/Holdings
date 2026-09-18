@@ -43,9 +43,8 @@
     var node = el(
       '<article class="product">' +
         '<div class="product-media">' +
-          (p.inStock
-            ? (p.spec ? '<span class="badge">' + escapeHtml(p.spec) + '</span>' : '')
-            : '<span class="badge out">On order</span>') +
+          (p.spec ? '<span class="badge">' + escapeHtml(p.spec) + '</span>' : '') +
+          (p.inStock ? '' : '<span class="badge out">On order</span>') +
           (p.image
             ? '<img loading="lazy" alt="' + escapeHtml(p.name) + '" src="' + escapeHtml(p.image) + '">'
             : '<div class="fallback">' + icon + '</div>') +
@@ -63,7 +62,12 @@
     );
     var img = node.querySelector('img');
     if (img) {
+      // Local copy first; if it is missing, try the live store, then a plain icon.
       img.addEventListener('error', function () {
+        if (p.imageRemote && img.src.indexOf(p.imageRemote) === -1) {
+          img.src = p.imageRemote;
+          return;
+        }
         img.replaceWith(el('<div class="fallback">' + icon + '</div>'));
       });
     }
