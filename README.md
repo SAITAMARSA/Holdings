@@ -39,3 +39,9 @@ card artwork gradient; `rating` is a number out of 10. Both pages pick it up
 automatically.
 
 All titles, scores and news items are fictional demo content.
+
+## Also in this repo
+
+`solar/` — **Helios Solar**, a home-solar site with an equipment catalog and a
+25-year savings estimator. Same approach: static HTML, CSS and vanilla JS, no
+build step. See `solar/README.md`.

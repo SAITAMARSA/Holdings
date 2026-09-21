@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Equipment · Helios Solar</title>
+<meta name="description" content="Panels, batteries, inverters and EV charging — filter the Helios catalog by category, brand and price.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%E2%98%80%EF%B8%8F</text></svg>">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap nav">
+    <a class="brand" href="index.html"><span class="brand-mark">☀️</span> Helios Solar</a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation">☰</button>
+    <nav class="nav-links" id="nav-links">
+      <a href="index.html">Home</a>
+      <a href="systems.html" aria-current="page">Equipment</a>
+      <a href="calculator.html">Savings estimator</a>
+      <a href="index.html#how">How it works</a>
+    </nav>
+  </div>
+</header>
+<main>
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>Equipment catalog</h2>
+        <p>Everything we fit, with the specs that actually differ between them. Prices are per unit, installed.</p>
+      </div>
+    </div>
+
+    <div class="filters">
+      <input id="f-search" type="search" placeholder="Search names, specs or tags…" aria-label="Search equipment">
+      <select id="f-category" aria-label="Filter by category"><option value="">All categories</option></select>
+      <select id="f-brand" aria-label="Filter by brand"><option value="">All brands</option></select>
+      <select id="f-sort" aria-label="Sort equipment">
+        <option value="price-asc">Price: low to high</option>
+        <option value="price-desc">Price: high to low</option>
+        <option value="warranty">Longest warranty</option>
+        <option value="name">A–Z</option>
+      </select>
+      <span class="result-count" id="result-count" aria-live="polite"></span>
+    </div>
+
+    <div class="grid" id="catalog-grid"></div>
+  </div>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <span>© <span id="year"></span> Helios Solar — a demo site. The company, prices and testimonials are fictional.</span>
+    <span><a href="index.html">Home</a> · <a href="systems.html">Equipment</a> · <a href="calculator.html">Estimator</a></span>
+  </div>
+</footer>
+<script src="assets/js/products.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

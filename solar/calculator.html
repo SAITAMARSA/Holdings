@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Savings estimator · Helios Solar</title>
+<meta name="description" content="Size a solar system from your power bill and see 25 years of cumulative spend with and without it.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%E2%98%80%EF%B8%8F</text></svg>">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap nav">
+    <a class="brand" href="index.html"><span class="brand-mark">☀️</span> Helios Solar</a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation">☰</button>
+    <nav class="nav-links" id="nav-links">
+      <a href="index.html">Home</a>
+      <a href="systems.html">Equipment</a>
+      <a href="calculator.html" aria-current="page">Savings estimator</a>
+      <a href="index.html#how">How it works</a>
+    </nav>
+  </div>
+</header>
+<main>
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>Savings estimator</h2>
+        <p>Tell it what you pay and where you live. It sizes the array, applies the 30% credit and projects 25 years. Nothing is sent anywhere.</p>
+      </div>
+    </div>
+
+    <div class="calc-layout">
+      <form class="panel" id="calc-form">
+        <h3>Your place</h3>
+        <p class="panel-note">Five inputs. Everything updates as you move them.</p>
+
+        <div class="field">
+          <label for="bill">Monthly power bill <span class="field-value" id="bill-value">$180/mo</span></label>
+          <input type="range" id="bill" name="bill" min="60" max="600" step="5" value="180">
+        </div>
+
+        <div class="field">
+          <label for="rate">What you pay per kWh</label>
+          <input type="number" id="rate" name="rate" min="0.05" max="0.60" step="0.01" value="0.17">
+          <span class="hint">On the bill, often as "energy charge". US average is around $0.17.</span>
+        </div>
+
+        <div class="field">
+          <label for="region">Region</label>
+          <select id="region" name="region">
+            <option data-sun="6.0">Southwest — Phoenix, Las Vegas</option>
+            <option data-sun="5.5">West coast — Los Angeles, San Diego</option>
+            <option data-sun="5.2" selected>South — Dallas, Atlanta</option>
+            <option data-sun="4.5">Mountain &amp; Midwest — Denver, Chicago</option>
+            <option data-sun="4.2">Northeast — New York, Boston</option>
+            <option data-sun="3.6">Pacific Northwest — Seattle, Portland</option>
+          </select>
+          <span class="hint">Sets peak sun hours per day, 3.6 to 6.0.</span>
+        </div>
+
+        <div class="field">
+          <label for="exposure">Roof exposure</label>
+          <select id="exposure" name="exposure">
+            <option data-factor="1.0" selected>Unshaded, south-facing</option>
+            <option data-factor="0.90">Mostly clear, east or west</option>
+            <option data-factor="0.78">Partial shade through the day</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="roof">Usable roof space</label>
+          <select id="roof" name="roof">
+            <option data-panels="10">Small — about 10 panels</option>
+            <option data-panels="18" selected>Medium — about 18 panels</option>
+            <option data-panels="28">Large — about 28 panels</option>
+            <option data-panels="44">Very large — about 44 panels</option>
+          </select>
+          <span class="hint">Caps the array. If your bill wants more than the roof holds, the system is sized to the roof.</span>
+        </div>
+      </form>
+
+      <div>
+        <div class="tiles">
+          <div class="tile" data-tile="system">
+            <span class="tile-label">System size</span>
+            <span class="tile-value">—</span>
+            <span class="tile-sub"></span>
+          </div>
+          <div class="tile" data-tile="offset">
+            <span class="tile-label">Usage covered</span>
+            <span class="tile-value">—</span>
+            <span class="tile-sub"></span>
+          </div>
+          <div class="tile" data-tile="cost">
+            <span class="tile-label">Net cost</span>
+            <span class="tile-value">—</span>
+            <span class="tile-sub"></span>
+          </div>
+          <div class="tile is-lead" data-tile="payback">
+            <span class="tile-label">Payback</span>
+            <span class="tile-value">—</span>
+            <span class="tile-sub"></span>
+          </div>
+          <div class="tile" data-tile="savings">
+            <span class="tile-label">25-yr saving</span>
+            <span class="tile-value">—</span>
+            <span class="tile-sub"></span>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-head">
+            <h3>Cumulative spend, 25 years</h3>
+            <p>Everything you hand the utility, plus the system itself. Where the lines cross, solar has paid for itself.</p>
+          </div>
+
+          <div class="legend">
+            <span class="legend-item"><span class="legend-key" style="background: var(--series-grid)"></span>Grid only</span>
+            <span class="legend-item"><span class="legend-key" style="background: var(--series-solar)"></span>With solar</span>
+          </div>
+
+          <figure class="chart-figure" id="chart-figure">
+            <div class="chart-tip" id="chart-tip" role="presentation"></div>
+          </figure>
+          <div class="visually-hidden" id="chart-announce" aria-live="polite"></div>
+
+          <details class="table-toggle">
+            <summary>View as a table</summary>
+            <div class="table-scroll">
+              <table class="data">
+                <caption class="visually-hidden">Cumulative spend by year, with and without solar</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Year</th>
+                    <th scope="col">Grid only</th>
+                    <th scope="col">With solar</th>
+                    <th scope="col">Difference</th>
+                  </tr>
+                </thead>
+                <tbody id="data-body"></tbody>
+              </table>
+            </div>
+          </details>
+        </div>
+
+        <details class="assumptions">
+          <summary>How this is calculated</summary>
+          <ul>
+            <li>Annual usage is your bill &divide; your rate, held flat across the 25 years.</li>
+            <li>The array is sized to cover that usage, then capped at what the roof holds. Panels are 440 W.</li>
+            <li>Production is system size &times; 365 &times; peak sun hours &times; 0.8, and the 0.8 is scaled again by roof exposure. That 0.8 covers inverter, temperature, soiling and wiring losses.</li>
+            <li>Installed cost is $2.80 per watt before incentives, less a 30% federal clean energy credit.</li>
+            <li>Retail rates rise 3.5% a year; panel output falls 0.5% a year.</li>
+            <li>Generation offsets usage at the retail rate. Anything generated beyond what you use in a year earns nothing — real export tariffs vary too much to guess at.</li>
+            <li>No finance costs, no maintenance, no inverter replacement, and no state or utility incentives beyond the federal credit. A real quote will differ; this is a demo.</li>
+          </ul>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <span>© <span id="year"></span> Helios Solar — a demo site. The company, prices and testimonials are fictional.</span>
+    <span><a href="index.html">Home</a> · <a href="systems.html">Equipment</a> · <a href="calculator.html">Estimator</a></span>
+  </div>
+</footer>
+<script src="assets/js/products.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/calculator.js"></script>
+</body>
+</html>
