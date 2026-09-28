@@ -87,7 +87,7 @@ function Lesson({ concept, onExit }: { concept: Concept; onExit: () => void }) {
       <div className="mb-2 flex items-center justify-between">
         <button className="text-sm text-slate-400" onClick={finish}>← Done</button>
         <div className="text-sm font-semibold">{concept.title}</div>
-        {mode === "mock" ? <span className="text-[10px] text-amber-400">mock</span> : <span />}
+        {mode === "mock" || mode === "offline" ? <span className="text-[10px] text-amber-400">{mode}</span> : <span />}
       </div>
       <div className="flex-1 space-y-3 overflow-y-auto">
         {turns.slice(1).map((t, i) => (

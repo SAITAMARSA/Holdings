@@ -18,7 +18,7 @@ await page.click("text=Start learning");
 await page.waitForSelector("text=Integers");
 await page.screenshot({ path: `${shots}/3-learn.png` });
 await page.click("text=Integers >> nth=0");
-await page.waitForSelector("text=Mock mode", { timeout: 10000 });
+await page.waitForSelector("text=Offline Twin", { timeout: 10000 });
 await page.fill('input[placeholder^="Ask"]', "Negative numbers are below zero");
 await page.click("text=Send");
 await page.waitForSelector("text=build on that");

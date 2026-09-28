@@ -1,6 +1,7 @@
 // Tutor prompt construction. The learner model (mastery, weak spots,
 // preferences) is passed as structured data, not as a chat transcript.
 import { LANGUAGE_NAMES } from "../shared/content";
+export { mockTutorReply } from "../shared/mock";
 
 interface TutorInput {
   profile: { displayName: string; grade: number; homeLanguage: string; goal: string; twin: { name: string; personality: string; explainStyle: string; motivation: string } };
@@ -36,14 +37,4 @@ export function buildTutorSystemPrompt(input: TutorInput): string {
     `You are talking to a minor. Stay on learning topics, be kind, never collect personal information, and if the learner raises something unsafe, tell them to speak to a trusted adult.`,
     `Do not include internal or system XML tags in your response.`,
   ].filter(Boolean).join("\n");
-}
-
-// Deterministic offline reply so the loop is testable without inference.
-export function mockTutorReply(input: TutorInput): string {
-  const last = input.history.at(-1)?.content ?? "";
-  const { concept, profile } = input;
-  if (input.history.length <= 1) {
-    return `Hi ${profile.displayName}, I'm ${profile.twin.name}. Let's work on ${concept.title}. ${concept.summary}\n\nIn your own words, what do you already know about this? (Mock mode: set ANTHROPIC_API_KEY on the server for a real Twin.)`;
-  }
-  return `Good, you said: "${last.slice(0, 80)}". Let's build on that. Try this: pick one example from ${concept.title} and explain it step by step. Where do you get stuck?`;
 }
