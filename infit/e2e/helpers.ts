@@ -7,10 +7,7 @@ import { completeOnboarding, createEmptyData, type OnboardingAnswers } from "../
 
 export const USER_KEY = "infit:user:v1";
 
-export async function onboard(
-  page: Page,
-  opts: { name?: string; experienced?: boolean; skipLimitations?: boolean } = {},
-) {
+export async function onboard(page: Page, opts: { name?: string; experienced?: boolean; skipLimitations?: boolean } = {}) {
   await page.goto("/welcome");
   await page.getByRole("button", { name: "Let's get started" }).click();
   await page.getByLabel("Your preferred name").fill(opts.name ?? "Sam");
@@ -85,7 +82,10 @@ export function returningUser(): AppData {
 
 export async function completeSets(page: Page, count: number) {
   for (let i = 0; i < count; i++) {
-    await page.getByRole("button", { name: /^Complete set \d+$/ }).first().click();
+    await page
+      .getByRole("button", { name: /^Complete set \d+$/ })
+      .first()
+      .click();
     // A rest timer starts after each set; skip it to keep the test fast.
     const skip = page.getByRole("button", { name: "Skip", exact: true });
     if (await skip.isVisible()) await skip.click();

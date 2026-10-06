@@ -47,17 +47,7 @@ export const Equipment = z.enum([
 ]);
 export type Equipment = z.infer<typeof Equipment>;
 
-export const Pattern = z.enum([
-  "squat",
-  "hinge",
-  "lunge",
-  "push-h",
-  "push-v",
-  "pull-h",
-  "pull-v",
-  "core",
-  "conditioning",
-]);
+export const Pattern = z.enum(["squat", "hinge", "lunge", "push-h", "push-v", "pull-h", "pull-v", "core", "conditioning"]);
 export type Pattern = z.infer<typeof Pattern>;
 
 export const TwinColor = z.enum(["violet", "aqua", "coral", "sunshine", "mint", "sky", "berry", "slate"]);
@@ -350,13 +340,7 @@ export type Twin = z.infer<typeof Twin>;
 
 // ---------------------------------------------------------------- coach
 
-export const CheckInKind = z.enum([
-  "shorter-sessions",
-  "too-hard-streak",
-  "too-easy-streak",
-  "welcome-back",
-  "meal-setup",
-]);
+export const CheckInKind = z.enum(["shorter-sessions", "too-hard-streak", "too-easy-streak", "welcome-back", "meal-setup"]);
 export type CheckInKind = z.infer<typeof CheckInKind>;
 
 export const CheckInRecord = z.object({

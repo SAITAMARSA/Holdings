@@ -216,11 +216,7 @@ export interface FinishFeedback {
  * explicitly completed are stored. Returns null if nothing was completed —
  * the caller should offer to discard instead of saving an empty session.
  */
-export function buildCompletedSession(
-  data: AppData,
-  feedback: FinishFeedback,
-  now: number,
-): CompletedSession | null {
+export function buildCompletedSession(data: AppData, feedback: FinishFeedback, now: number): CompletedSession | null {
   const s = data.activeSession;
   if (!s) return null;
   const { planned, done } = sessionCounts(s);
@@ -255,7 +251,11 @@ export function buildCompletedSession(
   };
 }
 
-export function finishSession(data: AppData, feedback: FinishFeedback, now: number): {
+export function finishSession(
+  data: AppData,
+  feedback: FinishFeedback,
+  now: number,
+): {
   data: AppData;
   completed: CompletedSession | null;
 } {

@@ -9,7 +9,18 @@ import { ALLERGEN_LABEL, CURRENCY, DIET_LABEL } from "@/domain/meals";
 import { type Allergen, type Currency, type Diet, MealPreferences } from "@/domain/schema";
 import { now, useAppStore } from "@/store/appStore";
 
-const COMMON_PANTRY = ["Rice", "Pasta", "Oats", "Olive oil", "Onion", "Chopped tomatoes", "Eggs", "Frozen peas", "Potatoes", "Soy sauce"];
+const COMMON_PANTRY = [
+  "Rice",
+  "Pasta",
+  "Oats",
+  "Olive oil",
+  "Onion",
+  "Chopped tomatoes",
+  "Eggs",
+  "Frozen peas",
+  "Potatoes",
+  "Soy sauce",
+];
 
 export default function MealPreferencesPage() {
   const router = useRouter();
@@ -121,7 +132,8 @@ export default function MealPreferencesPage() {
             ))}
           </div>
           <p className="mt-2 text-sm text-muted">
-            We filter our small recipe set by these, but we can&apos;t guarantee products are free from allergens. Always check labels.
+            We filter our small recipe set by these, but we can&apos;t guarantee products are free from allergens. Always check
+            labels.
           </p>
         </fieldset>
       </Card>
@@ -137,7 +149,13 @@ export default function MealPreferencesPage() {
                 ["relaxed", "Relaxed", "Any"],
               ] as const
             ).map(([v, l, d]) => (
-              <Chip key={v} role="radio" selected={cookingTime === v} className="min-h-14 flex-col gap-0" onClick={() => setCookingTime(v)}>
+              <Chip
+                key={v}
+                role="radio"
+                selected={cookingTime === v}
+                className="min-h-14 flex-col gap-0"
+                onClick={() => setCookingTime(v)}
+              >
                 {l}
                 <span className="text-xs font-bold text-muted">{d}</span>
               </Chip>
@@ -206,7 +224,12 @@ export default function MealPreferencesPage() {
 
       <Card>
         <label className="flex items-start gap-3">
-          <input type="checkbox" checked={nutrition} onChange={(e) => setNutrition(e.target.checked)} className="mt-1 size-5 accent-brand-600" />
+          <input
+            type="checkbox"
+            checked={nutrition}
+            onChange={(e) => setNutrition(e.target.checked)}
+            className="mt-1 size-5 accent-brand-600"
+          />
           <span>
             <span className="block font-extrabold">Show approximate calories and protein</span>
             <span className="block text-sm text-muted">Optional. Estimates only — Infit doesn&apos;t require tracking.</span>

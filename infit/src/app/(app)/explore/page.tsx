@@ -30,8 +30,8 @@ export default function ExplorePage() {
       <PageHeader title="Explore" subtitle="Clubs, classes and events to try alongside your plan." />
 
       <Notice tone="demo" title="Sample listings">
-        These are made-up examples that show how Explore will work. They aren&apos;t real, current or near you, and no listing data source is
-        connected yet.
+        These are made-up examples that show how Explore will work. They aren&apos;t real, current or near you, and no listing
+        data source is connected yet.
       </Notice>
 
       <Button variant="secondary" onClick={() => setLocalOpen(true)}>
@@ -129,7 +129,10 @@ export default function ExplorePage() {
         </ul>
       )}
 
-      <Link href="/explore/camera" className="flex items-center gap-3 rounded-3xl border-2 border-dashed border-line p-4 hover:border-brand-300">
+      <Link
+        href="/explore/camera"
+        className="flex items-center gap-3 rounded-3xl border-2 border-dashed border-line p-4 hover:border-brand-300"
+      >
         <Camera className="size-6 text-brand-700" aria-hidden />
         <span className="flex-1">
           <span className="block font-extrabold">Camera coaching</span>
@@ -140,8 +143,9 @@ export default function ExplorePage() {
 
       <Sheet open={localOpen} onOpenChange={setLocalOpen} title="Local search isn't connected yet">
         <p className="text-muted">
-          We don&apos;t have a real source of local clubs and events yet, so we haven&apos;t asked for your location. When local search is
-          available, we&apos;ll only ask for your location when you choose to search, and you&apos;ll be able to type a town instead.
+          We don&apos;t have a real source of local clubs and events yet, so we haven&apos;t asked for your location. When local
+          search is available, we&apos;ll only ask for your location when you choose to search, and you&apos;ll be able to type a
+          town instead.
         </p>
         <Button className="mt-4 w-full" onClick={() => setLocalOpen(false)}>
           Got it

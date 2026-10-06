@@ -5,7 +5,16 @@ import { useState } from "react";
 import { toast } from "@/components/toast";
 import { Badge, Card, EmptyState, LinkButton, Notice, PageHeader, SectionTitle } from "@/components/ui";
 import Link from "next/link";
-import { ALLERGEN_LABEL, CURRENCY, DIET_LABEL, formatMoney, formatQty, servingBudgetUsd, shoppingList, suggestMeals } from "@/domain/meals";
+import {
+  ALLERGEN_LABEL,
+  CURRENCY,
+  DIET_LABEL,
+  formatMoney,
+  formatQty,
+  servingBudgetUsd,
+  shoppingList,
+  suggestMeals,
+} from "@/domain/meals";
 import { useAppStore } from "@/store/appStore";
 
 export default function MealsPage() {
@@ -54,7 +63,8 @@ export default function MealsPage() {
           </p>
           <p className="mt-1 text-sm text-muted">
             About {money(servingBudgetUsd(prefs))} per serving (assuming ~14 main meals a week) · {DIET_LABEL[prefs.diet]}
-            {prefs.allergies.length > 0 && ` · avoiding ${prefs.allergies.map((a) => ALLERGEN_LABEL[a].toLowerCase()).join(", ")}`}
+            {prefs.allergies.length > 0 &&
+              ` · avoiding ${prefs.allergies.map((a) => ALLERGEN_LABEL[a].toLowerCase()).join(", ")}`}
           </p>
         </Card>
       ) : (
@@ -68,16 +78,16 @@ export default function MealsPage() {
       )}
 
       <Notice tone="info">
-        Costs are rough estimates from typical supermarket prices, not live store prices. Nutrition figures are approximate and not verified.
-        Always check labels for allergens.
+        Costs are rough estimates from typical supermarket prices, not live store prices. Nutrition figures are approximate and
+        not verified. Always check labels for allergens.
       </Notice>
 
       <section aria-labelledby="ideas-title">
         <SectionTitle id="ideas-title">Ideas for this week</SectionTitle>
         {meals.length === 0 ? (
           <EmptyState title="No curated meals match">
-            Our small starter set can&apos;t safely meet every combination of preferences yet. Try a longer cooking time, or adjust your
-            preferences.
+            Our small starter set can&apos;t safely meet every combination of preferences yet. Try a longer cooking time, or
+            adjust your preferences.
           </EmptyState>
         ) : (
           <ul className="grid gap-3 sm:grid-cols-2">
@@ -113,7 +123,9 @@ export default function MealsPage() {
                         {m.substitutions.map((s) => `${s.from} → ${s.to}`).join("; ")}
                       </p>
                     )}
-                    {m.pantryMatches > 0 && <p className="mt-1 text-sm text-mint-700">Uses {m.pantryMatches} thing(s) you already have</p>}
+                    {m.pantryMatches > 0 && (
+                      <p className="mt-1 text-sm text-mint-700">Uses {m.pantryMatches} thing(s) you already have</p>
+                    )}
                     {showNutrition && (
                       <p className="mt-1 text-sm text-muted">
                         Approx. {m.meal.kcal} kcal · {m.meal.proteinG} g protein per serving (estimate)
@@ -150,11 +162,14 @@ export default function MealsPage() {
           </span>
         </SectionTitle>
         {list.items.length === 0 ? (
-          <EmptyState title="Your list is empty">Add meals to this week with the bookmark button and we&apos;ll combine the ingredients.</EmptyState>
+          <EmptyState title="Your list is empty">
+            Add meals to this week with the bookmark button and we&apos;ll combine the ingredients.
+          </EmptyState>
         ) : (
           <>
             <p className="text-sm text-muted">
-              For {list.meals.map((m) => m.meal.name).join(", ")} × {prefs?.people ?? 1} {prefs?.people === 1 || !prefs ? "serving" : "servings"} each.
+              For {list.meals.map((m) => m.meal.name).join(", ")} × {prefs?.people ?? 1}{" "}
+              {prefs?.people === 1 || !prefs ? "serving" : "servings"} each.
               {list.skipped > 0 && ` ${list.skipped} saved meal(s) no longer fit your preferences and were left out.`}
             </p>
             {Object.entries(
@@ -179,7 +194,9 @@ export default function MealsPage() {
                         <span className={i.inPantry || checked.includes(i.id) ? "text-muted line-through" : ""}>
                           {formatQty(i.qty, i.unit)} {i.name}
                         </span>
-                        <span className="ml-auto text-sm text-muted">{i.inPantry ? "have it" : prefs ? `~${money(i.costUsd)}` : ""}</span>
+                        <span className="ml-auto text-sm text-muted">
+                          {i.inPantry ? "have it" : prefs ? `~${money(i.costUsd)}` : ""}
+                        </span>
                       </label>
                     </li>
                   ))}
@@ -196,8 +213,8 @@ export default function MealsPage() {
             )}
             {prefs && (
               <p className="mt-2 text-sm text-muted">
-                That&apos;s about {Math.round((list.totalUsd * 100) / (prefs.weeklyBudget / CURRENCY[currency].rate))}% of your weekly budget
-                (estimate). Quantities are per recipe, not pack sizes.
+                That&apos;s about {Math.round((list.totalUsd * 100) / (prefs.weeklyBudget / CURRENCY[currency].rate))}% of your
+                weekly budget (estimate). Quantities are per recipe, not pack sizes.
               </p>
             )}
             <p className="mt-2 text-xs text-muted">Ticks on this list aren&apos;t saved.</p>

@@ -167,14 +167,10 @@ function prescription(
   pattern: Pattern,
 ): Prescription {
   if (pattern === "conditioning") {
-    return experience === "new"
-      ? { sets: 4, min: 30, max: 30, restSec: 45 }
-      : { sets: 6, min: 40, max: 40, restSec: 40 };
+    return experience === "new" ? { sets: 4, min: 30, max: 30, restSec: 45 } : { sets: 6, min: 40, max: 40, restSec: 40 };
   }
   if (unit === "seconds") {
-    return experience === "new"
-      ? { sets: 2, min: 20, max: 30, restSec: 45 }
-      : { sets: 3, min: 30, max: 45, restSec: 45 };
+    return experience === "new" ? { sets: 2, min: 20, max: 30, restSec: 45 } : { sets: 3, min: 30, max: 45, restSec: 45 };
   }
   if (experience === "new") return { sets: 2, min: 8, max: 12, restSec: 60 };
   const table: Record<Goal, Record<1 | 2 | 3, Prescription>> = {
@@ -376,9 +372,7 @@ export function planForDate(data: Pick<AppData, "plan" | "planHistory">, date: I
   if (!data.plan) return null;
   if (date >= data.plan.effectiveFrom) return data.plan;
   // Nothing was planned before the user's first plan existed.
-  return (
-    [...data.planHistory].filter((p) => p.effectiveFrom <= date).sort((a, b) => b.version - a.version)[0] ?? null
-  );
+  return [...data.planHistory].filter((p) => p.effectiveFrom <= date).sort((a, b) => b.version - a.version)[0] ?? null;
 }
 
 export function sessionFromTemplate(plan: Plan, template: SessionTemplate, date: ISODate): PlannedSession {
@@ -401,9 +395,7 @@ export function easeSession(session: PlannedSession, data: Pick<AppData, "equipm
   const exercises = session.exercises.map((pe) => {
     const ex = getExercise(pe.exerciseId);
     const easier =
-      ex && ex.level > 1
-        ? pickExercise({ pattern: pe.pattern, equipment, limitations, targetLevel: ex.level - 1 })
-        : undefined;
+      ex && ex.level > 1 ? pickExercise({ pattern: pe.pattern, equipment, limitations, targetLevel: ex.level - 1 }) : undefined;
     return {
       ...pe,
       exerciseId: easier?.id ?? pe.exerciseId,

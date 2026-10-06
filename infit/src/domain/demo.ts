@@ -1,5 +1,6 @@
 import { applyProposal, proposeAdjustment } from "./adjust";
 import { addDays, fromISODate, type ISODate, startOfWeek, todayISO } from "./dates";
+import { getExercise } from "./exercises";
 import { plannedSessionFor } from "./plan";
 import type { AppData, Difficulty } from "./schema";
 import { completeSet, finishSession, startSession, updateSetValues } from "./session";
@@ -29,9 +30,8 @@ function train(data: AppData, date: ISODate, sets: number | "all", difficulty: D
     ex.sets.forEach((_, j) => {
       if (done >= target) return;
       t += 90_000;
-      if (s.exercises[i].sets[j].loadKg === null && i < 2) {
-        s = updateSetValues(s, i, j, { loadKg: 8 + loadBump });
-      } else if (i < 2) {
+      // Only exercises that use external load get a weight recorded.
+      if (getExercise(ex.exerciseId)?.loaded) {
         s = updateSetValues(s, i, j, { loadKg: (s.exercises[i].sets[j].loadKg ?? 8) + loadBump });
       }
       s = completeSet(s, i, j, t);

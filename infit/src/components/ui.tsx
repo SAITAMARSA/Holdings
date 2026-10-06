@@ -51,12 +51,7 @@ export function LinkButton({
   return <Link className={clsx(base, variants[variant], sizes[size], className)} {...props} />;
 }
 
-export function IconButton({
-  label,
-  className,
-  type = "button",
-  ...props
-}: ComponentProps<"button"> & { label: string }) {
+export function IconButton({ label, className, type = "button", ...props }: ComponentProps<"button"> & { label: string }) {
   return (
     <button
       type={type}
@@ -95,20 +90,16 @@ export function Badge({
     neutral: "bg-sunken text-muted",
   };
   return (
-    <span className={clsx("inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-extrabold", tones[tone], className)}>
+    <span
+      className={clsx("inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-extrabold", tones[tone], className)}
+    >
       {children}
     </span>
   );
 }
 
 /** A toggle chip. Use for single or multi-select option groups. */
-export function Chip({
-  selected,
-  className,
-  children,
-  role,
-  ...props
-}: ComponentProps<"button"> & { selected: boolean }) {
+export function Chip({ selected, className, children, role, ...props }: ComponentProps<"button"> & { selected: boolean }) {
   return (
     <button
       type="button"
@@ -187,7 +178,10 @@ export function Notice({
     demo: "bg-brand-50 border-brand-200 text-brand-800",
   };
   return (
-    <div role={tone === "safety" ? "alert" : undefined} className={clsx("rounded-2xl border-2 p-4 text-sm", tones[tone], className)}>
+    <div
+      role={tone === "safety" ? "alert" : undefined}
+      className={clsx("rounded-2xl border-2 p-4 text-sm", tones[tone], className)}
+    >
       {title && <p className="font-extrabold">{title}</p>}
       {children && <div className={clsx(title && "mt-1")}>{children}</div>}
     </div>

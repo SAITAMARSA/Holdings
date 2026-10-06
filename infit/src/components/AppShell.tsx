@@ -107,7 +107,10 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
         )}
         {notice && (
-          <div role="status" className="flex items-start justify-between gap-3 bg-sun-100 px-4 py-3 text-sm font-bold text-sun-800">
+          <div
+            role="status"
+            className="flex items-start justify-between gap-3 bg-sun-100 px-4 py-3 text-sm font-bold text-sun-800"
+          >
             <span>{notice}</span>
             <button type="button" className="underline" onClick={dismissNotice}>
               Dismiss
@@ -118,6 +121,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           id="main"
           className={clsx(
             "mx-auto w-full max-w-2xl px-4 pt-5 sm:px-6 lg:pt-10",
+            pathname === "/today" && "xl:max-w-5xl",
             focusMode ? "pb-10" : "pb-28 lg:pb-12",
           )}
         >

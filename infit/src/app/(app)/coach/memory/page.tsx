@@ -30,7 +30,8 @@ export default function MemoryPage() {
   const p = data.profile!;
   const home = equipmentProfileFor(data, "home");
   const gym = equipmentProfileFor(data, "gym");
-  const eq = (list: string[]) => (list.length ? list.map((e) => EQUIPMENT_LABEL[e as keyof typeof EQUIPMENT_LABEL]).join(", ") : "Bodyweight only");
+  const eq = (list: string[]) =>
+    list.length ? list.map((e) => EQUIPMENT_LABEL[e as keyof typeof EQUIPMENT_LABEL]).join(", ") : "Bodyweight only";
 
   const facts: [string, string][] = [
     ["Name", p.name],
@@ -77,7 +78,14 @@ export default function MemoryPage() {
       />
 
       <Card aria-labelledby="profile-title">
-        <SectionTitle id="profile-title" action={<LinkButton href="/settings" size="sm" variant="secondary">Edit</LinkButton>}>
+        <SectionTitle
+          id="profile-title"
+          action={
+            <LinkButton href="/settings" size="sm" variant="secondary">
+              Edit
+            </LinkButton>
+          }
+        >
           From your profile
         </SectionTitle>
         <dl className="divide-y divide-line">
@@ -94,7 +102,14 @@ export default function MemoryPage() {
         <SectionTitle
           id="notes-title"
           action={
-            <Button size="sm" variant="secondary" onClick={() => { setText(""); setAdding(true); }}>
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={() => {
+                setText("");
+                setAdding(true);
+              }}
+            >
               <Plus className="size-4" aria-hidden /> Add
             </Button>
           }
@@ -103,8 +118,8 @@ export default function MemoryPage() {
         </SectionTitle>
         {data.memory.length === 0 ? (
           <EmptyState title="Nothing remembered yet">
-            Your coach only remembers things you confirm — like choosing “from now on” in Adjust today, accepting a check-in, or saying
-            “remember that…” in chat.
+            Your coach only remembers things you confirm — like choosing “from now on” in Adjust today, accepting a check-in, or
+            saying “remember that…” in chat.
           </EmptyState>
         ) : (
           <ul className="divide-y divide-line">
@@ -117,7 +132,13 @@ export default function MemoryPage() {
                     {SOURCE_LABEL[m.source]} · {formatShortDate(new Date(m.updatedAt).toISOString().slice(0, 10))}
                   </p>
                 </div>
-                <IconButton label={`Edit “${m.text}”`} onClick={() => { setEditing(m); setText(m.text); }}>
+                <IconButton
+                  label={`Edit “${m.text}”`}
+                  onClick={() => {
+                    setEditing(m);
+                    setText(m.text);
+                  }}
+                >
                   <Pencil className="size-5" />
                 </IconButton>
                 <IconButton
@@ -142,12 +163,27 @@ export default function MemoryPage() {
       <Card aria-labelledby="chat-title">
         <SectionTitle id="chat-title">Chat history</SectionTitle>
         <p className="text-sm text-muted">{data.coachMessages.length} messages stored in this browser.</p>
-        <Button size="sm" variant="secondary" className="mt-3" disabled={!data.coachMessages.length} onClick={() => setConfirmClear(true)}>
+        <Button
+          size="sm"
+          variant="secondary"
+          className="mt-3"
+          disabled={!data.coachMessages.length}
+          onClick={() => setConfirmClear(true)}
+        >
           Clear chat history
         </Button>
       </Card>
 
-      <Sheet open={Boolean(editing) || adding} onOpenChange={(o) => { if (!o) { setEditing(null); setAdding(false); } }} title={adding ? "Add a note for your coach" : "Edit note"}>
+      <Sheet
+        open={Boolean(editing) || adding}
+        onOpenChange={(o) => {
+          if (!o) {
+            setEditing(null);
+            setAdding(false);
+          }
+        }}
+        title={adding ? "Add a note for your coach" : "Edit note"}
+      >
         <label htmlFor="mem-text" className="font-bold">
           Note
         </label>
@@ -159,13 +195,17 @@ export default function MemoryPage() {
           className="mt-1 min-h-12 w-full rounded-2xl border-2 border-line px-4 outline-none focus:border-brand-500"
           placeholder="e.g. Prefers morning workouts"
         />
-        <p className="mt-2 text-xs text-muted">Please don&apos;t add medical details. Use profile limitations for areas to go easy on.</p>
+        <p className="mt-2 text-xs text-muted">
+          Please don&apos;t add medical details. Use profile limitations for areas to go easy on.
+        </p>
         <Button
           className="mt-4 w-full"
           disabled={!text.trim()}
           onClick={() => {
             if (adding) {
-              update((d) => addMemory(d, { text: text.trim().slice(0, 200), category: "other", source: "you-told-coach" }, now()));
+              update((d) =>
+                addMemory(d, { text: text.trim().slice(0, 200), category: "other", source: "you-told-coach" }, now()),
+              );
               setAdding(false);
               toast("Note added");
             } else saveEdit();

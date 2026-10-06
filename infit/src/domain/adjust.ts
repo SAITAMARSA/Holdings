@@ -1,13 +1,5 @@
 import { addDays, formatLongDate, type ISODate, WEEKDAY_SHORT } from "./dates";
-import {
-  alternativesFor,
-  easierVariant,
-  EQUIPMENT_LABEL,
-  getExercise,
-  isAvailable,
-  isSuitable,
-  pickExercise,
-} from "./exercises";
+import { alternativesFor, easierVariant, EQUIPMENT_LABEL, getExercise, isAvailable, isSuitable, pickExercise } from "./exercises";
 import {
   easeSession,
   equipmentProfileFor,
@@ -331,9 +323,7 @@ export function proposeAdjustment(ctx: ProposeContext, input: AdjustInput): Prop
           });
           return { ...pe, sets, target: t };
         });
-        const scopes: ScopeOption[] = [
-          { scope: "today", label: "Just today", description: "Try it again next time." },
-        ];
+        const scopes: ScopeOption[] = [{ scope: "today", label: "Just today", description: "Try it again next time." }];
         if (easier) {
           scopes.push({
             scope: "future",
@@ -371,9 +361,7 @@ export function proposeAdjustment(ctx: ProposeContext, input: AdjustInput): Prop
       changes.push({ kind: "reduced", text: "One fewer set per exercise, with longer rests" });
       const gentler: Intensity | null =
         profile.intensity === "challenging" ? "standard" : profile.intensity === "standard" ? "gentle" : null;
-      const scopes: ScopeOption[] = [
-        { scope: "today", label: "Just today", description: "Some days are harder than others." },
-      ];
+      const scopes: ScopeOption[] = [{ scope: "today", label: "Just today", description: "Some days are harder than others." }];
       if (gentler) {
         scopes.push({
           scope: "future",
@@ -581,13 +569,7 @@ export interface ApplyOptions {
   freshBaseline?: boolean;
 }
 
-export function applyProposal(
-  data: AppData,
-  proposal: Proposal,
-  scope: Scope,
-  now: number,
-  options: ApplyOptions = {},
-): AppData {
+export function applyProposal(data: AppData, proposal: Proposal, scope: Scope, now: number, options: ApplyOptions = {}): AppData {
   if (!proposal.scopes.some((s) => s.scope === scope)) throw new Error(`Scope ${scope} not offered`);
   if (!data.profile || !data.plan) return data;
   const revisionId = uid("rev");
@@ -600,9 +582,7 @@ export function applyProposal(
 
   // 1. Day overrides — today's revised session (and any other moved days).
   const isChangeDays = input.reason === "schedule-changed" && input.action === "change-days";
-  const affected = isChangeDays
-    ? []
-    : [{ date: proposal.date, session: proposal.after }, ...proposal.extraOverrides];
+  const affected = isChangeDays ? [] : [{ date: proposal.date, session: proposal.after }, ...proposal.extraOverrides];
   const stamp = (s: PlannedSession | null) => (s ? { ...s, revisionId, source: "adjusted" as const } : null);
   next = {
     ...next,

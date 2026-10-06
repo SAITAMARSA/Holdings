@@ -92,7 +92,10 @@ export function twinMood(data: AppData, today: ISODate): TwinMood {
     return {
       expression: "determined",
       message: pick(
-        [`I'm warming up for ${day.planned.name}. Race you to the last set? 🏁`, "Neck and neck this week. Let's see who finishes first today!"],
+        [
+          `I'm warming up for ${day.planned.name}. Race you to the last set? 🏁`,
+          "Neck and neck this week. Let's see who finishes first today!",
+        ],
         today,
       ),
     };

@@ -10,15 +10,7 @@ export type ISODate = string;
 export type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
 export const WEEKDAY_SHORT = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const;
-export const WEEKDAY_LONG = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-] as const;
+export const WEEKDAY_LONG = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] as const;
 
 const pad = (n: number) => String(n).padStart(2, "0");
 

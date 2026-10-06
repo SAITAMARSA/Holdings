@@ -818,11 +818,7 @@ export function alternativesFor(
   const ex = getExercise(exerciseId);
   if (!ex) return [];
   return EXERCISES.filter(
-    (e) =>
-      e.id !== ex.id &&
-      e.pattern === ex.pattern &&
-      isAvailable(e, equipment) &&
-      isSuitable(e, limitations),
+    (e) => e.id !== ex.id && e.pattern === ex.pattern && isAvailable(e, equipment) && isSuitable(e, limitations),
   ).sort((a, b) => a.level - b.level);
 }
 

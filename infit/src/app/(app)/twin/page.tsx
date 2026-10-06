@@ -114,7 +114,8 @@ export default function TwinPage() {
             : "No sessions planned this week — enjoy the rest."}
         </p>
         <p className="mt-1 text-sm text-muted">
-          Rest days never count against you. Shortened or adjusted sessions count when you finish the agreed version; partial sessions count as showing up and are recorded as partial.
+          Rest days never count against you. Shortened or adjusted sessions count when you finish the agreed version; partial
+          sessions count as showing up and are recorded as partial.
         </p>
         <div className="mt-4">
           <WeekStrip days={week.days} today={today} />
@@ -132,12 +133,19 @@ export default function TwinPage() {
 
       {/* Points */}
       <Card aria-labelledby="points-title">
-        <SectionTitle id="points-title" action={<Badge tone="sun"><Sparkles className="size-3.5" aria-hidden /> {points} points</Badge>}>
+        <SectionTitle
+          id="points-title"
+          action={
+            <Badge tone="sun">
+              <Sparkles className="size-3.5" aria-hidden /> {points} points
+            </Badge>
+          }
+        >
           Twin points
         </SectionTitle>
         <p className="text-sm text-muted">
-          Points are just for fun. They unlock accessories and are kept separate from your real fitness progress. They never go down,
-          and each achievement can only be earned once.
+          Points are just for fun. They unlock accessories and are kept separate from your real fitness progress. They never go
+          down, and each achievement can only be earned once.
         </p>
         <ul className="mt-3 divide-y divide-line">
           {POINT_RULES.map((r) => (
@@ -218,7 +226,13 @@ export default function TwinPage() {
 
       <Sheet open={editing} onOpenChange={setEditing} title="Customise your Twin">
         <div className="flex justify-center">
-          <TwinAvatar color={color} expression="happy" accessories={twin.equipped} size={130} label={`Preview in ${TWIN_COLORS[color].name}`} />
+          <TwinAvatar
+            color={color}
+            expression="happy"
+            accessories={twin.equipped}
+            size={130}
+            label={`Preview in ${TWIN_COLORS[color].name}`}
+          />
         </div>
         <fieldset className="mt-3">
           <legend className="mb-2 font-bold">Colour</legend>
@@ -284,7 +298,10 @@ function ProgressRow({ label, value, max, tone }: { label: string; value: number
         aria-valuemin={0}
         aria-valuemax={max}
       >
-        <div className={clsx("h-full rounded-full", tone === "brand" ? "bg-brand-600" : "bg-aqua-500")} style={{ width: `${pct}%` }} />
+        <div
+          className={clsx("h-full rounded-full", tone === "brand" ? "bg-brand-600" : "bg-aqua-500")}
+          style={{ width: `${pct}%` }}
+        />
       </div>
     </div>
   );

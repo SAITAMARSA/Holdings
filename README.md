@@ -39,3 +39,9 @@ card artwork gradient; `rating` is a number out of 10. Both pages pick it up
 automatically.
 
 All titles, scores and news items are fictional demo content.
+
+---
+
+## Also in this repository: Infit
+
+[`infit/`](infit/) contains **Infit**, a separate Next.js prototype of an adaptive fitness app with a coach and an AI Fitness Twin. It has its own dependencies and setup — see [`infit/README.md`](infit/README.md).

@@ -176,7 +176,11 @@ export function acceptCheckIn(data: AppData, kind: CheckInKind, today: ISODate, 
     const minutes = suggestedMinutes(shortened);
     next = { ...next, profile: { ...p, sessionMinutes: minutes } };
     next = regeneratePlan(next, `Sessions shortened to about ${minutes} minutes (check-in).`, today, now);
-    next = addMemory(next, { text: `Prefers sessions of about ${minutes} minutes`, category: "schedule", source: "check-in" }, now);
+    next = addMemory(
+      next,
+      { text: `Prefers sessions of about ${minutes} minutes`, category: "schedule", source: "check-in" },
+      now,
+    );
   } else if (kind === "too-hard-streak") {
     const intensity = p.intensity === "challenging" ? "standard" : "gentle";
     next = { ...next, profile: { ...p, intensity } };

@@ -73,8 +73,8 @@ export default function CoachPage() {
       />
 
       <div className="rounded-2xl bg-brand-50 px-4 py-3 text-sm text-brand-800">
-        <span className="font-extrabold">Demo coach:</span> replies are scripted examples, not live AI. Any change to your plan is shown as a
-        preview first — nothing is applied without your OK.{" "}
+        <span className="font-extrabold">Demo coach:</span> replies are scripted examples, not live AI. Any change to your plan is
+        shown as a preview first — nothing is applied without your OK.{" "}
         <Link href="/explore/camera" className="inline-flex items-center gap-1 font-extrabold underline">
           <Camera className="size-4" aria-hidden /> Camera coaching preview
         </Link>
@@ -86,8 +86,8 @@ export default function CoachPage() {
             <CoachIcon />
             <div className="max-w-[85%] rounded-3xl rounded-tl-md bg-surface px-4 py-3 shadow-card">
               <p>
-                Hi {data.profile?.name}! I&apos;m your coach. I can explain today&apos;s workout, adjust your week, swap exercises, help with
-                meals, or ease you back in after a break. Pick a suggestion below or type a question.
+                Hi {data.profile?.name}! I&apos;m your coach. I can explain today&apos;s workout, adjust your week, swap
+                exercises, help with meals, or ease you back in after a break. Pick a suggestion below or type a question.
               </p>
             </div>
           </li>
@@ -167,7 +167,6 @@ export default function CoachPage() {
           </Button>
         </form>
       </div>
-
     </div>
   );
 }

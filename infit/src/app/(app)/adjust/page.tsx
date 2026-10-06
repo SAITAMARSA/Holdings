@@ -106,7 +106,11 @@ function AdjustFlow() {
       <div className="flex flex-col gap-5">
         <PageHeader
           back={
-            <button type="button" onClick={() => setProposal(null)} className="flex min-h-11 items-center gap-1 font-extrabold text-brand-700">
+            <button
+              type="button"
+              onClick={() => setProposal(null)}
+              className="flex min-h-11 items-center gap-1 font-extrabold text-brand-700"
+            >
               <ArrowLeft className="size-5" aria-hidden /> Back
             </button>
           }
@@ -131,7 +135,10 @@ function AdjustFlow() {
           <ul className="mt-2 space-y-2">
             {proposal.changes.map((c, i) => (
               <li key={i} className="flex items-start gap-2">
-                <Badge tone={c.kind === "removed" || c.kind === "rest" ? "neutral" : c.kind === "kept" ? "mint" : "brand"} className="mt-0.5 shrink-0 capitalize">
+                <Badge
+                  tone={c.kind === "removed" || c.kind === "rest" ? "neutral" : c.kind === "kept" ? "mint" : "brand"}
+                  className="mt-0.5 shrink-0 capitalize"
+                >
                   {c.kind.replace("-", " ")}
                 </Badge>
                 <span>{c.text}</span>
@@ -254,7 +261,8 @@ function AdjustFlow() {
         />
         {data.activeSession?.date === today && (
           <Notice tone="warning" title="Workout in progress">
-            Finish or discard your current workout before adjusting today. In a workout you can replace exercises or report pain directly.
+            Finish or discard your current workout before adjusting today. In a workout you can replace exercises or report pain
+            directly.
           </Notice>
         )}
         <div className="flex flex-col gap-3">
@@ -282,7 +290,11 @@ function AdjustFlow() {
     <div className="flex flex-col gap-5">
       <PageHeader
         back={
-          <button type="button" onClick={backFromDetails} className="flex min-h-11 items-center gap-1 font-extrabold text-brand-700">
+          <button
+            type="button"
+            onClick={backFromDetails}
+            className="flex min-h-11 items-center gap-1 font-extrabold text-brand-700"
+          >
             <ArrowLeft className="size-5" aria-hidden /> All reasons
           </button>
         }
@@ -420,7 +432,9 @@ function Details({
   if (reason === "different-gym" && session) {
     return (
       <>
-        <Question hint="Select everything this gym has. Bodyweight exercises are always available.">What does this gym have?</Question>
+        <Question hint="Select everything this gym has. Bodyweight exercises are always available.">
+          What does this gym have?
+        </Question>
         <EquipmentPicker options={ALL_EQUIPMENT} value={gymEq} onChange={setGymEq} label="Gym equipment" />
         <Button size="lg" onClick={() => onSubmit({ reason, equipment: gymEq })}>
           Rebuild today for this gym
@@ -446,8 +460,18 @@ function Details({
       <>
         <Question>What feels too difficult?</Question>
         <div className="flex flex-col gap-3">
-          <OptionCard selected={hardKind === "overall"} title="The whole session" description="Easier variations, fewer sets, more rest" onClick={() => setHardKind("overall")} />
-          <OptionCard selected={hardKind === "exercise"} title="One exercise" description="Swap it for an easier version" onClick={() => setHardKind("exercise")} />
+          <OptionCard
+            selected={hardKind === "overall"}
+            title="The whole session"
+            description="Easier variations, fewer sets, more rest"
+            onClick={() => setHardKind("overall")}
+          />
+          <OptionCard
+            selected={hardKind === "exercise"}
+            title="One exercise"
+            description="Swap it for an easier version"
+            onClick={() => setHardKind("exercise")}
+          />
           <OptionCard
             selected={hardKind === "pain"}
             title="I feel pain or discomfort"
@@ -481,7 +505,12 @@ function Details({
         <div className="flex flex-col gap-3">
           {session ? (
             <>
-              <OptionCard selected={scheduleAction === "rest-today"} title="Make today a rest day" description="No guilt — your Twin rests too" onClick={() => setScheduleAction("rest-today")} />
+              <OptionCard
+                selected={scheduleAction === "rest-today"}
+                title="Make today a rest day"
+                description="No guilt — your Twin rests too"
+                onClick={() => setScheduleAction("rest-today")}
+              />
               <OptionCard
                 selected={scheduleAction === "move"}
                 title="Move today's workout to another day"
@@ -492,9 +521,19 @@ function Details({
               />
             </>
           ) : (
-            <OptionCard selected={scheduleAction === "train-today"} title="Do my next workout today" description="Bring your next session forward" onClick={() => setScheduleAction("train-today")} />
+            <OptionCard
+              selected={scheduleAction === "train-today"}
+              title="Do my next workout today"
+              description="Bring your next session forward"
+              onClick={() => setScheduleAction("train-today")}
+            />
           )}
-          <OptionCard selected={scheduleAction === "change-days"} title="Change my regular training days" description="Updates your plan from today" onClick={() => setScheduleAction("change-days")} />
+          <OptionCard
+            selected={scheduleAction === "change-days"}
+            title="Change my regular training days"
+            description="Updates your plan from today"
+            onClick={() => setScheduleAction("change-days")}
+          />
         </div>
         {scheduleAction === "move" && (
           <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Move to">
@@ -540,7 +579,9 @@ function Details({
   if (reason === "returning" && session) {
     return (
       <>
-        <Question hint="Welcome back! Coming back is the hardest part, and you're doing it.">How long have you been away?</Question>
+        <Question hint="Welcome back! Coming back is the hardest part, and you're doing it.">
+          How long have you been away?
+        </Question>
         <div className="flex flex-col gap-3">
           <OptionCard title="1–2 weeks" onClick={() => onSubmit({ reason, away: "1-2w" })} />
           <OptionCard title="2–4 weeks" onClick={() => onSubmit({ reason, away: "2-4w" })} />
@@ -554,7 +595,12 @@ function Details({
     const alternatives = exerciseId ? replacementOptions(data, session, exerciseId) : [];
     return (
       <>
-        <ExerciseChooser session={session} value={exerciseId} onChange={setExerciseId} label="Which exercise would you like to replace?" />
+        <ExerciseChooser
+          session={session}
+          value={exerciseId}
+          onChange={setExerciseId}
+          label="Which exercise would you like to replace?"
+        />
         {exerciseId && (
           <div>
             <p className="mb-2 font-bold">Choose a replacement (same movement)</p>
@@ -601,7 +647,13 @@ function ExerciseChooser({
       <legend className="mb-2 font-bold">{label}</legend>
       <div className="flex flex-col gap-2" role="radiogroup">
         {session.exercises.map((pe) => (
-          <Chip key={pe.slotId} role="radio" selected={value === pe.exerciseId} className="justify-start" onClick={() => onChange(pe.exerciseId)}>
+          <Chip
+            key={pe.slotId}
+            role="radio"
+            selected={value === pe.exerciseId}
+            className="justify-start"
+            onClick={() => onChange(pe.exerciseId)}
+          >
             {exerciseOrStub(pe.exerciseId).name}
           </Chip>
         ))}

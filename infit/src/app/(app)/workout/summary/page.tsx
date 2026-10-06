@@ -53,7 +53,7 @@ function Summary() {
                 className="absolute size-2.5 animate-pop rounded-sm"
                 style={{
                   background: c,
-                  left: `${8 + ((i * 2 + k) * 37) % 84}%`,
+                  left: `${8 + (((i * 2 + k) * 37) % 84)}%`,
                   top: `${(i * 13 + k * 29) % 60}%`,
                   animationDelay: `${(i + k) * 60}ms`,
                   transform: `rotate(${i * 30}deg)`,
@@ -107,8 +107,8 @@ function Summary() {
         </ul>
         {session.source !== "plan" && (
           <p className="mt-3 text-center text-sm text-muted">
-            This was {session.source === "ramp" ? "an eased-in" : "an adjusted"} session (about {session.plannedMinutes} min planned). It
-            counts as your session today; your progress stats use the work you actually did.
+            This was {session.source === "ramp" ? "an eased-in" : "an adjusted"} session (about {session.plannedMinutes} min
+            planned). It counts as your session today; your progress stats use the work you actually did.
           </p>
         )}
       </Card>
@@ -131,7 +131,9 @@ function Summary() {
             No new points — you&apos;ve already earned today&apos;s session points. Points are just for fun and never decrease.
           </p>
         )}
-        <p className="mt-3 text-sm text-muted">Total: {totalPoints(data)} points · cosmetic only, separate from your fitness progress.</p>
+        <p className="mt-3 text-sm text-muted">
+          Total: {totalPoints(data)} points · cosmetic only, separate from your fitness progress.
+        </p>
       </Card>
 
       <div className="flex flex-col gap-2 sm:flex-row">

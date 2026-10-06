@@ -59,7 +59,10 @@ export default function ProgressPage() {
 
   return (
     <div className="flex flex-col gap-5">
-      <PageHeader title="Progress" subtitle="Showing up, getting stronger and how it felt — kept separate so each one is honest." />
+      <PageHeader
+        title="Progress"
+        subtitle="Showing up, getting stronger and how it felt — kept separate so each one is honest."
+      />
 
       {/* Weekly review */}
       <Card className="border-2 border-brand-200 bg-brand-50" aria-labelledby="review-title">
@@ -90,8 +93,16 @@ export default function ProgressPage() {
         ) : (
           <>
             <dl className="grid grid-cols-3 gap-3">
-              <Stat label="Sessions" value={stats.totalSessions} hint={stats.partialSessions ? `${stats.partialSessions} partly` : undefined} />
-              <Stat label="Active weeks" value={stats.activeWeeks} hint={stats.currentActiveWeekRun > 1 ? `${stats.currentActiveWeekRun} in a row` : undefined} />
+              <Stat
+                label="Sessions"
+                value={stats.totalSessions}
+                hint={stats.partialSessions ? `${stats.partialSessions} partly` : undefined}
+              />
+              <Stat
+                label="Active weeks"
+                value={stats.activeWeeks}
+                hint={stats.currentActiveWeekRun > 1 ? `${stats.currentActiveWeekRun} in a row` : undefined}
+              />
               <Stat label="Comebacks" value={stats.comebacks} />
             </dl>
             {visibleWeeks.length >= 2 ? (
@@ -123,13 +134,21 @@ export default function ProgressPage() {
                 <div className="flex items-start justify-between gap-3">
                   <p className="font-extrabold">{h.name}</p>
                   <Badge tone={h.trend.kind === "up" ? "mint" : "neutral"}>
-                    {h.trend.kind === "up" ? "Improving" : h.trend.kind === "insufficient" ? "1 session" : h.trend.kind === "down" ? "Lower" : "Steady"}
+                    {h.trend.kind === "up"
+                      ? "Improving"
+                      : h.trend.kind === "insufficient"
+                        ? "1 session"
+                        : h.trend.kind === "down"
+                          ? "Lower"
+                          : "Steady"}
                   </Badge>
                 </div>
                 <p className="mt-0.5 text-sm text-muted">{h.trend.text}</p>
                 {h.points.length > 0 && (
                   <details className="mt-1 text-sm">
-                    <summary className="cursor-pointer font-bold text-brand-700">History ({h.points.length + h.earlier.length})</summary>
+                    <summary className="cursor-pointer font-bold text-brand-700">
+                      History ({h.points.length + h.earlier.length})
+                    </summary>
                     <ul className="tabular mt-1 space-y-0.5">
                       {[...h.points].reverse().map((p) => (
                         <li key={p.sessionId}>
@@ -158,7 +177,8 @@ export default function ProgressPage() {
         <SectionTitle id="feedback-title">How it felt</SectionTitle>
         {fb.rated === 0 && fb.energyRated === 0 ? (
           <EmptyState icon={<MessageSquareHeart className="size-6" />} title="No feedback yet">
-            After each workout you can tell us how hard it felt. It&apos;s optional, and it helps your coach suggest the right next step.
+            After each workout you can tell us how hard it felt. It&apos;s optional, and it helps your coach suggest the right
+            next step.
           </EmptyState>
         ) : (
           <>
@@ -171,7 +191,9 @@ export default function ProgressPage() {
                 Energy: {fb.energyGood} good · {fb.energyOkay} okay · {fb.energyLow} low
               </p>
             )}
-            {fb.painReports > 0 && <p className="mt-2 text-sm font-bold text-coral-700">Pain reported in {fb.painReports} session(s).</p>}
+            {fb.painReports > 0 && (
+              <p className="mt-2 text-sm font-bold text-coral-700">Pain reported in {fb.painReports} session(s).</p>
+            )}
           </>
         )}
       </Card>
@@ -215,11 +237,14 @@ export default function ProgressPage() {
                 <span>
                   <span className="block font-bold">{s.name}</span>
                   <span className="block text-sm text-muted">
-                    {formatShortDate(s.date)} · {s.completedSets}/{s.plannedSets} sets · {Math.max(1, Math.round(s.activeSeconds / 60))} min
+                    {formatShortDate(s.date)} · {s.completedSets}/{s.plannedSets} sets ·{" "}
+                    {Math.max(1, Math.round(s.activeSeconds / 60))} min
                   </span>
                 </span>
                 <span className="flex shrink-0 flex-wrap justify-end gap-1">
-                  <Badge tone={s.status === "completed" ? "mint" : "aqua"}>{s.status === "completed" ? "Completed" : "Partly"}</Badge>
+                  <Badge tone={s.status === "completed" ? "mint" : "aqua"}>
+                    {s.status === "completed" ? "Completed" : "Partly"}
+                  </Badge>
                   {s.source !== "plan" && <Badge tone="neutral">{s.source === "ramp" ? "Eased" : "Adjusted"}</Badge>}
                   {s.isReturn && <Badge tone="sun">Comeback</Badge>}
                 </span>
@@ -236,14 +261,17 @@ export default function ProgressPage() {
           </span>
         </SectionTitle>
         {revisions.length === 0 && planVersions.length <= 1 ? (
-          <p className="text-sm text-muted">No changes yet. Every adjustment you accept is listed here, with the original kept.</p>
+          <p className="text-sm text-muted">
+            No changes yet. Every adjustment you accept is listed here, with the original kept.
+          </p>
         ) : (
           <ul className="divide-y divide-line">
             {revisions.map((r) => (
               <li key={r.id} className="py-2.5">
                 <p className="font-bold">{r.title}</p>
                 <p className="text-sm text-muted">
-                  {formatShortDate(r.date)} · {REASON_LABEL[r.reason]} · {r.scope === "today" ? "just that day" : "lasting change"}
+                  {formatShortDate(r.date)} · {REASON_LABEL[r.reason]} ·{" "}
+                  {r.scope === "today" ? "just that day" : "lasting change"}
                   {r.beforeMinutes !== null && r.afterMinutes !== null && ` · ${r.beforeMinutes} → ${r.afterMinutes} min`}
                 </p>
               </li>
@@ -252,7 +280,11 @@ export default function ProgressPage() {
               <li key={p.id} className="py-2.5">
                 <p className="font-bold">
                   Plan version {p.version}
-                  {p.id === data.plan?.id && <Badge tone="brand" className="ml-2">Current</Badge>}
+                  {p.id === data.plan?.id && (
+                    <Badge tone="brand" className="ml-2">
+                      Current
+                    </Badge>
+                  )}
                 </p>
                 <p className="text-sm text-muted">
                   From {formatShortDate(p.effectiveFrom)} · {p.reason}
@@ -265,8 +297,8 @@ export default function ProgressPage() {
 
       <Sheet open={confirmBaseline} onOpenChange={setConfirmBaseline} title="Start a fresh baseline?">
         <p className="text-muted">
-          Useful after a break or a big change. Performance comparisons will start from today. Your history, milestones and points are all
-          kept.
+          Useful after a break or a big change. Performance comparisons will start from today. Your history, milestones and points
+          are all kept.
         </p>
         <div className="mt-4 flex flex-col gap-2">
           <Button

@@ -19,9 +19,21 @@ export const POINTS = {
 } as const;
 
 export const POINT_RULES: { label: string; points: number; detail: string }[] = [
-  { label: "Finish a planned session", points: POINTS.complete, detail: "Including a shortened or adjusted version you agreed to." },
-  { label: "Partly finish a session", points: POINTS.partial, detail: "Every set you complete counts. Finish later that day to top up." },
-  { label: "Complete this week's plan", points: POINTS.weekly, detail: "Train on every day you planned. Rest days don't count against you." },
+  {
+    label: "Finish a planned session",
+    points: POINTS.complete,
+    detail: "Including a shortened or adjusted version you agreed to.",
+  },
+  {
+    label: "Partly finish a session",
+    points: POINTS.partial,
+    detail: "Every set you complete counts. Finish later that day to top up.",
+  },
+  {
+    label: "Complete this week's plan",
+    points: POINTS.weekly,
+    detail: "Train on every day you planned. Rest days don't count against you.",
+  },
   { label: "Come back after a break", points: POINTS.comeback, detail: "Returning after 10+ days is worth celebrating." },
   { label: "Your first session", points: POINTS.first, detail: "A one-time welcome bonus." },
 ];

@@ -15,16 +15,41 @@ import { TWIN_COLORS } from "@/domain/twin";
 const STEPS = ["intro", "name", "experience", "goal", "location", "days", "minutes", "limitations", "twin", "review"] as const;
 
 const GOALS: { id: Goal; title: string; description: string; icon: ReactNode }[] = [
-  { id: "habit", title: "Build a steady habit", description: "Show up regularly without it taking over", icon: <Repeat className="size-5" /> },
-  { id: "strength", title: "Get stronger", description: "Lift, push and pull more over time", icon: <Dumbbell className="size-5" /> },
-  { id: "muscle", title: "Build muscle", description: "More training volume, steady progression", icon: <TrendingUp className="size-5" /> },
-  { id: "fitness", title: "Feel fitter and more energetic", description: "Strength plus some heart-and-lungs work", icon: <HeartPulse className="size-5" /> },
+  {
+    id: "habit",
+    title: "Build a steady habit",
+    description: "Show up regularly without it taking over",
+    icon: <Repeat className="size-5" />,
+  },
+  {
+    id: "strength",
+    title: "Get stronger",
+    description: "Lift, push and pull more over time",
+    icon: <Dumbbell className="size-5" />,
+  },
+  {
+    id: "muscle",
+    title: "Build muscle",
+    description: "More training volume, steady progression",
+    icon: <TrendingUp className="size-5" />,
+  },
+  {
+    id: "fitness",
+    title: "Feel fitter and more energetic",
+    description: "Strength plus some heart-and-lungs work",
+    icon: <HeartPulse className="size-5" />,
+  },
 ];
 
 const LOCATIONS: { id: TrainingLocation; title: string; description: string; icon: ReactNode }[] = [
   { id: "home", title: "At home", description: "We'll start with no equipment", icon: <Home className="size-5" /> },
   { id: "gym", title: "At a gym", description: "We'll assume a typical gym", icon: <Building2 className="size-5" /> },
-  { id: "both", title: "A bit of both", description: "Gym plan, easy to switch on home days", icon: <Sparkles className="size-5" /> },
+  {
+    id: "both",
+    title: "A bit of both",
+    description: "Gym plan, easy to switch on home days",
+    icon: <Sparkles className="size-5" />,
+  },
 ];
 
 const LIMITS: { id: Limitation; label: string }[] = [
@@ -259,7 +284,9 @@ export default function WelcomePage() {
 
         {kind === "location" && (
           <>
-            <CoachBubble sub="I'll ask about specific equipment later, only when it matters.">Where will you usually train?</CoachBubble>
+            <CoachBubble sub="I'll ask about specific equipment later, only when it matters.">
+              Where will you usually train?
+            </CoachBubble>
             <div className="flex flex-col gap-3">
               {LOCATIONS.map((l) => (
                 <OptionCard
@@ -359,12 +386,18 @@ export default function WelcomePage() {
                       twinColor === c ? "border-brand-600 bg-brand-50" : "border-line bg-surface hover:border-brand-300",
                     )}
                   >
-                    <span className="size-7 rounded-full border-2 border-white shadow" style={{ background: TWIN_COLORS[c].body }} aria-hidden />
+                    <span
+                      className="size-7 rounded-full border-2 border-white shadow"
+                      style={{ background: TWIN_COLORS[c].body }}
+                      aria-hidden
+                    />
                     {TWIN_COLORS[c].name}
                   </button>
                 ))}
               </div>
-              <p className="mt-2 text-sm text-muted">Colours are just for fun — they don&apos;t say anything about you or your ability.</p>
+              <p className="mt-2 text-sm text-muted">
+                Colours are just for fun — they don&apos;t say anything about you or your ability.
+              </p>
             </fieldset>
             <div className="flex flex-col gap-2">
               <label htmlFor="nick" className="font-bold">
@@ -456,8 +489,8 @@ function LimitationsStep({
         ))}
       </div>
       <Notice tone="info" title="What this does — and doesn't do">
-        We&apos;ll avoid exercises that tend to load these areas heavily. We can&apos;t account for specific injuries, conditions or pain
-        — if you&apos;re unsure what&apos;s safe for you, check with a health professional.
+        We&apos;ll avoid exercises that tend to load these areas heavily. We can&apos;t account for specific injuries, conditions
+        or pain — if you&apos;re unsure what&apos;s safe for you, check with a health professional.
       </Notice>
       <div className="flex flex-col gap-3">
         <Button size="lg" onClick={() => onDone(selected)}>
@@ -467,7 +500,8 @@ function LimitationsStep({
           Skip for now
         </Button>
         <p className="text-center text-sm text-muted">
-          If you skip, we&apos;ll use standard exercises and can&apos;t tailor around any limitations. You can add them later in Settings.
+          If you skip, we&apos;ll use standard exercises and can&apos;t tailor around any limitations. You can add them later in
+          Settings.
         </p>
       </div>
     </>

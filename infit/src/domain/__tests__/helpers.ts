@@ -41,11 +41,7 @@ export function onboarded(answers: OnboardingAnswers = beginnerAnswers, date = M
 }
 
 /** Start the planned session for `date` and complete `sets` sets (all if omitted). */
-export function doWorkout(
-  data: AppData,
-  date: string,
-  opts: { sets?: number; feedback?: FinishFeedback } = {},
-): AppData {
+export function doWorkout(data: AppData, date: string, opts: { sets?: number; feedback?: FinishFeedback } = {}): AppData {
   const planned = plannedSessionFor(data, date);
   if (!planned) throw new Error(`No session planned on ${date}`);
   let t = at(date, 18);
@@ -61,6 +57,10 @@ export function doWorkout(
       done++;
     }
   }
-  const result = finishSession({ ...data, activeSession: active }, opts.feedback ?? { difficulty: "about-right", energy: null }, t + 60_000);
+  const result = finishSession(
+    { ...data, activeSession: active },
+    opts.feedback ?? { difficulty: "about-right", energy: null },
+    t + 60_000,
+  );
   return result.data;
 }

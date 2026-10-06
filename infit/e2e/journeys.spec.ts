@@ -165,8 +165,7 @@ test.describe("workouts and rewards", () => {
     await page.getByRole("button", { name: "Save workout" }).click();
     await expect(page.getByText("Finished the session (top-up)")).toBeVisible();
     data = await stored(page);
-    const sessionPoints = (d: typeof data) =>
-      d.rewards.filter((r) => r.kind !== "weekly-goal").reduce((n, r) => n + r.points, 0);
+    const sessionPoints = (d: typeof data) => d.rewards.filter((r) => r.kind !== "weekly-goal").reduce((n, r) => n + r.points, 0);
     expect(sessionPoints(data)).toBe(20);
     expect(new Set(data.rewards.map((r) => r.key)).size).toBe(data.rewards.length);
     await page.goto("/today");
@@ -397,7 +396,10 @@ test.describe("data, accessibility and layout", () => {
     const ctx = await browser.newContext({ reducedMotion: "reduce" });
     const page = await ctx.newPage();
     await page.goto("/welcome");
-    const anim = await page.locator("svg g[class*='animate-bob']").first().evaluate((el) => getComputedStyle(el).animationName);
+    const anim = await page
+      .locator("svg g[class*='animate-bob']")
+      .first()
+      .evaluate((el) => getComputedStyle(el).animationName);
     expect(anim).toBe("none");
     await ctx.close();
 
@@ -427,7 +429,10 @@ test.describe("data, accessibility and layout", () => {
     }
     for (const name of ["Twin", "Coach", "Progress", "Explore", "Today"]) {
       await page.getByRole("link", { name, exact: true }).filter({ visible: true }).first().click();
-      await expect(page.getByRole("link", { name, exact: true }).filter({ visible: true }).first()).toHaveAttribute("aria-current", "page");
+      await expect(page.getByRole("link", { name, exact: true }).filter({ visible: true }).first()).toHaveAttribute(
+        "aria-current",
+        "page",
+      );
     }
     // No horizontal overflow on any main screen.
     for (const path of ["/today", "/twin", "/coach", "/progress", "/explore", "/meals", "/settings", "/adjust"]) {

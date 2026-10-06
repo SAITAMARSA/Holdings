@@ -135,8 +135,12 @@ export function TwinAvatar({
 
         {expression === "sleepy" && (
           <g fill={INK} opacity="0.55" fontFamily="inherit" fontWeight="800">
-            <text x="150" y="58" fontSize="16">z</text>
-            <text x="162" y="42" fontSize="12">z</text>
+            <text x="150" y="58" fontSize="16">
+              z
+            </text>
+            <text x="162" y="42" fontSize="12">
+              z
+            </text>
           </g>
         )}
       </g>
@@ -157,7 +161,12 @@ function Dumbbell({ x, y }: { x: number; y: number }) {
 function Sneaker({ x }: { x: number }) {
   return (
     <g>
-      <path d={`M${x - 17} 178 Q${x - 17} 164 ${x} 164 Q${x + 17} 164 ${x + 18} 178 Z`} fill="#fff" stroke="#2A2340" strokeWidth="2.5" />
+      <path
+        d={`M${x - 17} 178 Q${x - 17} 164 ${x} 164 Q${x + 17} 164 ${x + 18} 178 Z`}
+        fill="#fff"
+        stroke="#2A2340"
+        strokeWidth="2.5"
+      />
       <path d={`M${x - 10} 172 L${x + 10} 168`} stroke="#14A99F" strokeWidth="4" strokeLinecap="round" />
     </g>
   );

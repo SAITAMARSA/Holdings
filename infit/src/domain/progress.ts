@@ -142,9 +142,7 @@ export interface ExerciseHistory {
 
 function bestSet(sets: CompletedSet[], loaded: boolean): CompletedSet | null {
   if (sets.length === 0) return null;
-  return [...sets].sort((a, b) =>
-    loaded ? (b.loadKg ?? 0) - (a.loadKg ?? 0) || b.reps - a.reps : b.reps - a.reps,
-  )[0];
+  return [...sets].sort((a, b) => (loaded ? (b.loadKg ?? 0) - (a.loadKg ?? 0) || b.reps - a.reps : b.reps - a.reps))[0];
 }
 
 export function latestBaseline(data: Pick<AppData, "baselines">): ISODate | null {
@@ -288,7 +286,8 @@ export function weeklyReview(data: AppData, anyDate: ISODate, today: ISODate): W
 
   let nextStep: string;
   if (fb.painReports) {
-    nextStep = "You reported pain this week. Keep things comfortable and consider checking in with a health professional before pushing harder.";
+    nextStep =
+      "You reported pain this week. Keep things comfortable and consider checking in with a health professional before pushing harder.";
   } else if (fb.tooHard >= 2) {
     nextStep = "Two sessions felt too hard. Keep next week the same, or make your plan gentler from Adjust today.";
   } else if (week.plannedCount > 0 && week.showedUp < week.plannedCount / 2 && remaining === 0) {

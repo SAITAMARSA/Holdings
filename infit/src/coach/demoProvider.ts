@@ -7,10 +7,12 @@ import type { CoachProvider, CoachReply, CoachRequest } from "./types";
  * from the user's actual plan. Replies are labelled "demo" in the UI.
  */
 
-const PAIN = /\b(pain|painful|hurts?|hurting|injur\w*|sprain\w*|strain(ed)?|sharp|swollen|swelling|pulled|tweaked|chest pain|dizz\w*|faint\w*|numb\w*)\b/i;
+const PAIN =
+  /\b(pain|painful|hurts?|hurting|injur\w*|sprain\w*|strain(ed)?|sharp|swollen|swelling|pulled|tweaked|chest pain|dizz\w*|faint\w*|numb\w*)\b/i;
 const URGENT = /\b(chest pain|can'?t breathe|trouble breathing|faint\w*|passed out)\b/i;
 const MEDICAL = /\b(diagnos\w*|is it (torn|broken)|should i (ice|take)|medication|physio(therapy)?|treat(ment)?)\b/i;
-const SENSITIVE = /\b(pregnan\w*|medication|diabet\w*|heart condition|depress\w*|anxiety|eating disorder|bulimi\w*|anorexi\w*|surgery|cancer|blood pressure)\b/i;
+const SENSITIVE =
+  /\b(pregnan\w*|medication|diabet\w*|heart condition|depress\w*|anxiety|eating disorder|bulimi\w*|anorexi\w*|surgery|cancer|blood pressure)\b/i;
 
 const rx = {
   explain: /\b(explain|why|what('?s| is) (today|this)|today'?s (workout|session)|how do i do)\b/i,
@@ -40,7 +42,8 @@ function explainToday(req: CoachRequest): CoachReply {
   }
   const s = today.session;
   const lines = s.exercises.map((e) => {
-    const amount = e.unit === "seconds" ? `${e.min}–${e.max} seconds` : e.min === e.max ? `${e.max} reps` : `${e.min}–${e.max} reps`;
+    const amount =
+      e.unit === "seconds" ? `${e.min}–${e.max} seconds` : e.min === e.max ? `${e.max} reps` : `${e.min}–${e.max} reps`;
     if (displayDetail === "detailed") {
       return `• ${e.name}: ${e.sets} × ${amount}, rest ${e.restSec}s`;
     }
@@ -97,7 +100,13 @@ export function demoReply(req: CoachRequest): CoachReply {
     }
     const text = remember[4].replace(/[.!]+$/, "").slice(0, 180);
     const cleaned = text.charAt(0).toUpperCase() + text.slice(1);
-    const category = rx.meals.test(text) ? "food" : rx.equipment.test(text) ? "equipment" : rx.week.test(text) ? "schedule" : "other";
+    const category = rx.meals.test(text)
+      ? "food"
+      : rx.equipment.test(text)
+        ? "equipment"
+        : rx.week.test(text)
+          ? "schedule"
+          : "other";
     return reply(
       `Want me to remember: "${cleaned}"? I'll only save it if you confirm, and you can edit or delete it anytime in What your coach knows.`,
       [{ type: "propose-memory", text: cleaned, category, label: "Save to coach memory" }],
@@ -179,7 +188,9 @@ export function demoReply(req: CoachRequest): CoachReply {
     );
   }
   if (rx.greeting.test(msg)) {
-    return reply(`Hi ${name}! I can explain today's workout, adjust your week, swap exercises, help with meals or ease you back after a break. What would help?`);
+    return reply(
+      `Hi ${name}! I can explain today's workout, adjust your week, swap exercises, help with meals or ease you back after a break. What would help?`,
+    );
   }
   return reply(
     "I'm the demo coach, so I can only handle a set of common requests. Try one of these: explain today's workout, adjust my week, replace an exercise, help with meals, or “remember that …” to save a preference.",

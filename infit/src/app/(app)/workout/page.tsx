@@ -53,8 +53,14 @@ export default function WorkoutPage() {
       {planned && done?.status !== "completed" ? (
         <Card>
           <h1 className="text-2xl font-black">Ready for {planned.name}?</h1>
-          <p className="mt-1 text-muted">About {planned.estMinutes} minutes · {planned.exercises.length} exercises</p>
-          <Button size="lg" className="mt-4 w-full" onClick={() => update((d) => ({ ...d, activeSession: startSession(d, planned, now()) }))}>
+          <p className="mt-1 text-muted">
+            About {planned.estMinutes} minutes · {planned.exercises.length} exercises
+          </p>
+          <Button
+            size="lg"
+            className="mt-4 w-full"
+            onClick={() => update((d) => ({ ...d, activeSession: startSession(d, planned, now()) }))}
+          >
             <Play className="size-5" aria-hidden /> Start workout
           </Button>
         </Card>
@@ -167,7 +173,11 @@ function ActiveWorkout({ session }: { session: ActiveSession }) {
                 i === idx ? "border-brand-600 bg-brand-50 text-brand-800" : "border-line bg-surface text-muted",
               )}
             >
-              {complete ? <Check className="size-4 text-aqua-600" strokeWidth={3} aria-hidden /> : <span aria-hidden>{i + 1}</span>}
+              {complete ? (
+                <Check className="size-4 text-aqua-600" strokeWidth={3} aria-hidden />
+              ) : (
+                <span aria-hidden>{i + 1}</span>
+              )}
               <span className="max-w-28 truncate">{exerciseOrStub(e.exerciseId).name}</span>
             </button>
           );
@@ -222,10 +232,10 @@ function ActiveWorkout({ session }: { session: ActiveSession }) {
 
         {previous && (
           <p className="mt-3 text-sm text-muted">
-            Last time: {previous.length} set{previous.length > 1 ? "s" : ""} · best{" "}
-            {Math.max(...previous.map((p) => p.reps))}
+            Last time: {previous.length} set{previous.length > 1 ? "s" : ""} · best {Math.max(...previous.map((p) => p.reps))}
             {ex.unit === "seconds" ? "s" : " reps"}
-            {previous.some((p) => p.loadKg !== null) &&
+            {ex.loaded &&
+              previous.some((p) => p.loadKg !== null) &&
               ` @ ${loadText(Math.max(...previous.map((p) => p.loadKg ?? 0)), units)}`}
             . Values below start from last time — edit before you tick.
           </p>
@@ -250,7 +260,12 @@ function ActiveWorkout({ session }: { session: ActiveSession }) {
                   </span>
                 </p>
                 {s.completed ? (
-                  <Button size="sm" variant="ghost" onClick={() => set((x) => uncompleteSet(x, idx, j))} aria-label={`Undo set ${j + 1}`}>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => set((x) => uncompleteSet(x, idx, j))}
+                    aria-label={`Undo set ${j + 1}`}
+                  >
                     <Undo2 className="size-4" aria-hidden /> Undo
                   </Button>
                 ) : (
@@ -294,7 +309,9 @@ function ActiveWorkout({ session }: { session: ActiveSession }) {
                       placeholder="—"
                       disabled={s.completed}
                       allowEmpty
-                      onChange={(v) => set((x) => updateSetValues(x, idx, j, { loadKg: v === null ? null : fromDisplayLoad(v, units) }))}
+                      onChange={(v) =>
+                        set((x) => updateSetValues(x, idx, j, { loadKg: v === null ? null : fromDisplayLoad(v, units) }))
+                      }
                     />
                   </div>
                 )}
@@ -340,7 +357,9 @@ function ActiveWorkout({ session }: { session: ActiveSession }) {
             {restMs > 0 ? (
               <>
                 <div className="min-w-0 flex-1">
-                  <p className="text-xs font-extrabold uppercase tracking-wide text-aqua-300">{paused ? "Rest (paused)" : "Rest"}</p>
+                  <p className="text-xs font-extrabold uppercase tracking-wide text-aqua-300">
+                    {paused ? "Rest (paused)" : "Rest"}
+                  </p>
                   <p className="tabular text-3xl font-black" role="timer" aria-label={`Rest remaining ${clockText(restMs)}`}>
                     {clockText(restMs)}
                   </p>
@@ -386,7 +405,8 @@ function ActiveWorkout({ session }: { session: ActiveSession }) {
 
       <Sheet open={sheet === "discard"} onOpenChange={(o) => !o && setSheet(null)} title="Discard this workout?">
         <p className="text-muted">
-          Nothing from this workout will be recorded{doneSets ? ` — including the ${doneSets} set${doneSets > 1 ? "s" : ""} you completed` : ""}. This can&apos;t be undone.
+          Nothing from this workout will be recorded
+          {doneSets ? ` — including the ${doneSets} set${doneSets > 1 ? "s" : ""} you completed` : ""}. This can&apos;t be undone.
         </p>
         <div className="mt-4 flex flex-col gap-2">
           <Button
@@ -406,10 +426,13 @@ function ActiveWorkout({ session }: { session: ActiveSession }) {
 
       <Sheet open={sheet === "pain"} onOpenChange={(o) => !o && setSheet(null)} title="Let's stop and check in">
         <Notice tone="safety" title="Pain is a signal to stop, not to push through">
-          Stop the exercise that hurts. If pain is sharp, severe or doesn&apos;t settle, stop exercising and speak to a qualified health
-          professional. For chest pain, dizziness or trouble breathing, seek urgent medical help. Infit can&apos;t assess injuries.
+          Stop the exercise that hurts. If pain is sharp, severe or doesn&apos;t settle, stop exercising and speak to a qualified
+          health professional. For chest pain, dizziness or trouble breathing, seek urgent medical help. Infit can&apos;t assess
+          injuries.
         </Notice>
-        <p className="mt-3 text-sm text-muted">Your Twin has paused any competition for today. Whatever you choose, nothing counts against you.</p>
+        <p className="mt-3 text-sm text-muted">
+          Your Twin has paused any competition for today. Whatever you choose, nothing counts against you.
+        </p>
         <div className="mt-4 flex flex-col gap-2">
           <Button
             onClick={() => {
@@ -431,7 +454,12 @@ function ActiveWorkout({ session }: { session: ActiveSession }) {
         </div>
       </Sheet>
 
-      <Sheet open={sheet === "replace"} onOpenChange={(o) => !o && setSheet(null)} title={`Replace ${ex.name}`} description="Alternatives train the same movement and fit your equipment and limitations.">
+      <Sheet
+        open={sheet === "replace"}
+        onOpenChange={(o) => !o && setSheet(null)}
+        title={`Replace ${ex.name}`}
+        description="Alternatives train the same movement and fit your equipment and limitations."
+      >
         {alternatives.length ? (
           <div className="flex flex-col gap-2">
             {alternatives.map((alt) => (
@@ -446,14 +474,19 @@ function ActiveWorkout({ session }: { session: ActiveSession }) {
               >
                 <span className="block font-extrabold">{alt.name}</span>
                 <span className="block text-sm text-muted">
-                  {alt.summary} {alt.equipment.length ? `· ${alt.equipment.map((e) => EQUIPMENT_LABEL[e]).join(", ")}` : "· No equipment"}
+                  {alt.summary}{" "}
+                  {alt.equipment.length ? `· ${alt.equipment.map((e) => EQUIPMENT_LABEL[e]).join(", ")}` : "· No equipment"}
                 </span>
               </button>
             ))}
-            <p className="mt-1 text-xs text-muted">This only changes today&apos;s workout. To change future plans, use Adjust today or ask your coach.</p>
+            <p className="mt-1 text-xs text-muted">
+              This only changes today&apos;s workout. To change future plans, use Adjust today or ask your coach.
+            </p>
           </div>
         ) : (
-          <EmptyState title="No alternatives available">Nothing else fits your equipment and limitations for this movement. You can skip it instead.</EmptyState>
+          <EmptyState title="No alternatives available">
+            Nothing else fits your equipment and limitations for this movement. You can skip it instead.
+          </EmptyState>
         )}
       </Sheet>
 
@@ -489,7 +522,11 @@ function FinishSheet({
   const partial = done < planned;
 
   return (
-    <Sheet open={open} onOpenChange={(o) => !o && onClose()} title={done === 0 ? "No sets completed yet" : partial ? "Finish early?" : "Workout complete! 🎉"}>
+    <Sheet
+      open={open}
+      onOpenChange={(o) => !o && onClose()}
+      title={done === 0 ? "No sets completed yet" : partial ? "Finish early?" : "Workout complete! 🎉"}
+    >
       {done === 0 ? (
         <>
           <p className="text-muted">Nothing will be saved because no sets are ticked off. Keep going, or discard this workout.</p>
@@ -508,7 +545,9 @@ function FinishSheet({
               : `All ${planned} sets done. Nice work!`}
           </p>
           <fieldset className="mt-4">
-            <legend className="font-extrabold">How did it feel? <span className="font-normal text-muted">(optional)</span></legend>
+            <legend className="font-extrabold">
+              How did it feel? <span className="font-normal text-muted">(optional)</span>
+            </legend>
             <div className="mt-2 grid grid-cols-3 gap-2" role="radiogroup">
               {(
                 [
@@ -524,7 +563,9 @@ function FinishSheet({
             </div>
           </fieldset>
           <fieldset className="mt-4">
-            <legend className="font-extrabold">Energy today? <span className="font-normal text-muted">(optional)</span></legend>
+            <legend className="font-extrabold">
+              Energy today? <span className="font-normal text-muted">(optional)</span>
+            </legend>
             <div className="mt-2 grid grid-cols-3 gap-2" role="radiogroup">
               {(
                 [

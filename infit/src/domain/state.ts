@@ -36,13 +36,13 @@ export type OnboardingAnswers = OnboardingDraft["answers"];
 export function isOnboardingComplete(a: OnboardingAnswers): boolean {
   return Boolean(
     a.name?.trim() &&
-      a.experience &&
-      a.goal &&
-      a.location &&
-      a.daysPerWeek &&
-      a.sessionMinutes &&
-      a.limitationsStatus &&
-      a.twinColor,
+    a.experience &&
+    a.goal &&
+    a.location &&
+    a.daysPerWeek &&
+    a.sessionMinutes &&
+    a.limitationsStatus &&
+    a.twinColor,
   );
 }
 
@@ -102,11 +102,7 @@ export function regeneratePlan(data: AppData, reason: string, effectiveFrom: ISO
   };
 }
 
-export function addMemory(
-  data: AppData,
-  item: Pick<MemoryItem, "text" | "category" | "source">,
-  now: number,
-): AppData {
+export function addMemory(data: AppData, item: Pick<MemoryItem, "text" | "category" | "source">, now: number): AppData {
   // Replace an existing note with identical text rather than duplicating it.
   const existing = data.memory.find((m) => m.text.toLowerCase() === item.text.toLowerCase());
   if (existing) {

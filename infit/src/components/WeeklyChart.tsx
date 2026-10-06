@@ -37,7 +37,11 @@ export function WeeklyChart({ weeks }: { weeks: WeekBar[] }) {
         {/* y-axis ticks */}
         <div className="absolute inset-y-0 left-0 w-6" aria-hidden style={{ height: H }}>
           {ticks.map((t) => (
-            <span key={t} className="tabular absolute left-0 -translate-y-1/2 text-[11px] text-muted" style={{ top: H - (t / max) * H }}>
+            <span
+              key={t}
+              className="tabular absolute left-0 -translate-y-1/2 text-[11px] text-muted"
+              style={{ top: H - (t / max) * H }}
+            >
               {t}
             </span>
           ))}
@@ -92,7 +96,7 @@ export function WeeklyChart({ weeks }: { weeks: WeekBar[] }) {
       <div className="mt-1 flex justify-between gap-2 pl-6 text-[11px] text-muted" aria-hidden>
         {weeks.map((w) => (
           <span key={w.start} className="flex-1 text-center">
-            {w.current ? "Now" : formatShortDate(w.start).split(" ")[0]}
+            {w.current ? "Now" : formatShortDate(w.start)}
           </span>
         ))}
       </div>

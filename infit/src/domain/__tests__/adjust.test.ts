@@ -97,7 +97,10 @@ describe("adjust today", () => {
     expect(plannedSessionFor(next, MONDAY)).toBeNull();
     expect(plannedSessionFor(next, wed)!.name).toBe(plannedSessionFor(d, MONDAY)!.name);
     // Can't move onto a day that already has training.
-    const r = proposeAdjustment({ data: d, date: MONDAY }, { reason: "schedule-changed", action: "move", toDate: addDays(MONDAY, 1) });
+    const r = proposeAdjustment(
+      { data: d, date: MONDAY },
+      { reason: "schedule-changed", action: "move", toDate: addDays(MONDAY, 1) },
+    );
     expect(r.ok).toBe(false);
   });
 

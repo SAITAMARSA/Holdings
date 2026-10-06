@@ -13,7 +13,15 @@ import { regeneratePlan } from "@/domain/state";
 import { exportJSON } from "@/storage/repository";
 import { now, useAppStore } from "@/store/appStore";
 
-const PLAN_FIELDS: (keyof Profile)[] = ["experience", "goal", "location", "sessionMinutes", "trainingDays", "limitations", "intensity"];
+const PLAN_FIELDS: (keyof Profile)[] = [
+  "experience",
+  "goal",
+  "location",
+  "sessionMinutes",
+  "trainingDays",
+  "limitations",
+  "intensity",
+];
 
 function Field({ label, children, hint }: { label: string; children: ReactNode; hint?: ReactNode }) {
   return (
@@ -105,12 +113,23 @@ export default function SettingsPage() {
             />
           </div>
           <Field label="Experience">
-            <Chip selected={draft.experience === "new"} onClick={() => set("experience", "new")}>New to fitness</Chip>
-            <Chip selected={draft.experience === "experienced"} onClick={() => set("experience", "experienced")}>I already train</Chip>
+            <Chip selected={draft.experience === "new"} onClick={() => set("experience", "new")}>
+              New to fitness
+            </Chip>
+            <Chip selected={draft.experience === "experienced"} onClick={() => set("experience", "experienced")}>
+              I already train
+            </Chip>
           </Field>
-          <Field label="Detail shown" hint="Separate from experience: beginners can see full detail, and experienced lifters can keep it simple.">
-            <Chip selected={draft.displayDetail === "simple"} onClick={() => set("displayDetail", "simple")}>Simple</Chip>
-            <Chip selected={draft.displayDetail === "detailed"} onClick={() => set("displayDetail", "detailed")}>Detailed (sets, reps, loads)</Chip>
+          <Field
+            label="Detail shown"
+            hint="Separate from experience: beginners can see full detail, and experienced lifters can keep it simple."
+          >
+            <Chip selected={draft.displayDetail === "simple"} onClick={() => set("displayDetail", "simple")}>
+              Simple
+            </Chip>
+            <Chip selected={draft.displayDetail === "detailed"} onClick={() => set("displayDetail", "detailed")}>
+              Detailed (sets, reps, loads)
+            </Chip>
           </Field>
           <Field label="Main goal">
             {(
@@ -121,7 +140,9 @@ export default function SettingsPage() {
                 ["fitness", "Fitter & more energy"],
               ] as const
             ).map(([v, l]) => (
-              <Chip key={v} selected={draft.goal === v} onClick={() => set("goal", v)}>{l}</Chip>
+              <Chip key={v} selected={draft.goal === v} onClick={() => set("goal", v)}>
+                {l}
+              </Chip>
             ))}
           </Field>
           <Field label="Where you train">
@@ -132,13 +153,20 @@ export default function SettingsPage() {
                 ["both", "Both"],
               ] as const
             ).map(([v, l]) => (
-              <Chip key={v} selected={draft.location === v} onClick={() => set("location", v)}>{l}</Chip>
+              <Chip key={v} selected={draft.location === v} onClick={() => set("location", v)}>
+                {l}
+              </Chip>
             ))}
           </Field>
           <Field label="Training days">
             <div className="grid w-full grid-cols-7 gap-1.5">
               {WEEKDAY_SHORT.map((l, i) => (
-                <Chip key={l} selected={draft.trainingDays.includes(i)} className="px-0" onClick={() => set("trainingDays", toggle(draft.trainingDays, i))}>
+                <Chip
+                  key={l}
+                  selected={draft.trainingDays.includes(i)}
+                  className="px-0"
+                  onClick={() => set("trainingDays", toggle(draft.trainingDays, i))}
+                >
                   {l}
                 </Chip>
               ))}
@@ -146,7 +174,9 @@ export default function SettingsPage() {
           </Field>
           <Field label="Session length">
             {[15, 20, 30, 45, 60].map((m) => (
-              <Chip key={m} selected={draft.sessionMinutes === m} onClick={() => set("sessionMinutes", m)}>{m} min</Chip>
+              <Chip key={m} selected={draft.sessionMinutes === m} onClick={() => set("sessionMinutes", m)}>
+                {m} min
+              </Chip>
             ))}
           </Field>
           <Field label="Intensity">
@@ -157,7 +187,9 @@ export default function SettingsPage() {
                 ["challenging", "Challenging"],
               ] as const
             ).map(([v, l]) => (
-              <Chip key={v} selected={draft.intensity === v} onClick={() => set("intensity", v)}>{l}</Chip>
+              <Chip key={v} selected={draft.intensity === v} onClick={() => set("intensity", v)}>
+                {l}
+              </Chip>
             ))}
           </Field>
           <Field
@@ -186,8 +218,12 @@ export default function SettingsPage() {
             ))}
           </Field>
           <Field label="Weight units">
-            <Chip selected={draft.units === "kg"} onClick={() => set("units", "kg")}>kg</Chip>
-            <Chip selected={draft.units === "lb"} onClick={() => set("units", "lb")}>lb</Chip>
+            <Chip selected={draft.units === "kg"} onClick={() => set("units", "kg")}>
+              kg
+            </Chip>
+            <Chip selected={draft.units === "lb"} onClick={() => set("units", "lb")}>
+              lb
+            </Chip>
           </Field>
         </div>
       </Card>
@@ -196,12 +232,16 @@ export default function SettingsPage() {
         <SectionTitle id="eq-title">Equipment</SectionTitle>
         <Field label="At home" hint={home.length ? undefined : "Bodyweight only"}>
           {ALL_EQUIPMENT.map((e) => (
-            <Chip key={e} selected={home.includes(e)} onClick={() => setHome((h) => toggle(h, e))}>{EQUIPMENT_LABEL[e]}</Chip>
+            <Chip key={e} selected={home.includes(e)} onClick={() => setHome((h) => toggle(h, e))}>
+              {EQUIPMENT_LABEL[e]}
+            </Chip>
           ))}
         </Field>
         <Field label="At your gym">
           {ALL_EQUIPMENT.map((e) => (
-            <Chip key={e} selected={gym.includes(e)} onClick={() => setGym((g) => toggle(g, e))}>{EQUIPMENT_LABEL[e]}</Chip>
+            <Chip key={e} selected={gym.includes(e)} onClick={() => setGym((g) => toggle(g, e))}>
+              {EQUIPMENT_LABEL[e]}
+            </Chip>
           ))}
         </Field>
       </Card>
@@ -215,7 +255,9 @@ export default function SettingsPage() {
               : "You have unsaved changes."}
           </p>
           <div className="flex gap-2">
-            <Button className="flex-1" onClick={save}>Save changes</Button>
+            <Button className="flex-1" onClick={save}>
+              Save changes
+            </Button>
             <Button
               variant="secondary"
               onClick={() => {
@@ -241,7 +283,9 @@ export default function SettingsPage() {
           />
           <span>
             <span className="block font-extrabold">Reduce motion</span>
-            <span className="block text-sm text-muted">Turns off animations. Infit also follows your device&apos;s reduced-motion setting.</span>
+            <span className="block text-sm text-muted">
+              Turns off animations. Infit also follows your device&apos;s reduced-motion setting.
+            </span>
           </span>
         </label>
       </Card>
@@ -250,7 +294,8 @@ export default function SettingsPage() {
         <SectionTitle id="data-title">Your data</SectionTitle>
         <p className="text-sm">{storageDescription}</p>
         <p className="mt-1 text-sm text-muted">
-          Clearing your browser data removes it. There&apos;s no account or cloud backup in this version, so export a copy if you want one.
+          Clearing your browser data removes it. There&apos;s no account or cloud backup in this version, so export a copy if you
+          want one.
         </p>
         {data.mode === "demo" && (
           <Notice tone="demo" className="mt-3">
@@ -289,7 +334,11 @@ export default function SettingsPage() {
         </ul>
       </Card>
 
-      <Sheet open={confirmReset} onOpenChange={setConfirmReset} title={data.mode === "demo" ? "Reset the demo?" : "Reset everything?"}>
+      <Sheet
+        open={confirmReset}
+        onOpenChange={setConfirmReset}
+        title={data.mode === "demo" ? "Reset the demo?" : "Reset everything?"}
+      >
         <p className="text-muted">
           {data.mode === "demo"
             ? "The demo returns to its starting sample data. Your own data isn't affected."
