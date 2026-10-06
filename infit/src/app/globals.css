@@ -1,0 +1,159 @@
+@import "tailwindcss";
+
+/*
+ * Infit design tokens. Soft violet primary, aqua accents, warm off-white
+ * canvas, dark readable ink. Text colours meet WCAG AA on the canvas.
+ */
+@theme {
+  --font-sans: "Nunito Variable", ui-rounded, "SF Pro Rounded", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --color-canvas: #fbf8f3;
+  --color-surface: #ffffff;
+  --color-sunken: #f4efe7;
+  --color-line: #e8e1d6;
+  --color-ink: #1f1a2e;
+  --color-muted: #5b5470;
+
+  --color-brand-50: #f4f0ff;
+  --color-brand-100: #eae3ff;
+  --color-brand-200: #d6c9ff;
+  --color-brand-300: #b9a3ff;
+  --color-brand-400: #9b7dff;
+  --color-brand-500: #8061f5;
+  --color-brand-600: #6a48e8;
+  --color-brand-700: #5734cc;
+  --color-brand-800: #4527a3;
+  --color-brand-900: #2f1b70;
+
+  --color-aqua-50: #e8fbfa;
+  --color-aqua-100: #c9f5f2;
+  --color-aqua-200: #97ebe5;
+  --color-aqua-300: #5fdcd3;
+  --color-aqua-400: #2ec7bd;
+  --color-aqua-500: #14a99f;
+  --color-aqua-600: #0e8780;
+  --color-aqua-700: #0b6b65;
+  --color-aqua-800: #0a514d;
+
+  --color-sun-100: #fff3cc;
+  --color-sun-300: #ffd866;
+  --color-sun-500: #f2b01e;
+  --color-sun-800: #7a5300;
+
+  --color-coral-100: #ffe4de;
+  --color-coral-500: #e5654d;
+  --color-coral-700: #a63a26;
+
+  --color-mint-100: #dcf7e8;
+  --color-mint-700: #1d7046;
+
+  --radius-4xl: 2rem;
+
+  --shadow-card: 0 1px 0 rgb(31 26 46 / 0.04), 0 8px 24px -12px rgb(31 26 46 / 0.12);
+  --shadow-lift: 0 12px 32px -12px rgb(87 52 204 / 0.35);
+
+  --animate-bob: bob 3.2s ease-in-out infinite;
+  --animate-pop: pop 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+  --animate-rise: rise 0.35s ease-out both;
+  --animate-wave: wave 1.6s ease-in-out 2;
+
+  @keyframes bob {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-4px);
+    }
+  }
+  @keyframes pop {
+    0% {
+      transform: scale(0.6);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  @keyframes rise {
+    0% {
+      transform: translateY(8px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  @keyframes wave {
+    0%,
+    100% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(-14deg);
+    }
+    75% {
+      transform: rotate(10deg);
+    }
+  }
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  background: var(--color-canvas);
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "tnum" 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Clear, consistent focus indicator for keyboard users. */
+:focus-visible {
+  outline: 3px solid var(--color-brand-700);
+  outline-offset: 2px;
+  border-radius: 0.75rem;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Respect reduced-motion both from the OS and the in-app setting. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+html.reduce-motion *,
+html.reduce-motion *::before,
+html.reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Number inputs: hide spinners, we provide our own steppers. */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
