@@ -13,7 +13,7 @@ const useToasts = create<{ toasts: Toast[]; push: (text: string) => void; remove
   push: (text) => {
     const id = Date.now() + Math.random();
     set((s) => ({ toasts: [...s.toasts.slice(-2), { id, text }] }));
-    setTimeout(() => set((s) => ({ toasts: s.toasts.filter((t) => t.id !== id) })), 4000);
+    setTimeout(() => set((s) => ({ toasts: s.toasts.filter((t) => t.id !== id) })), 3000);
   },
   remove: (id) => set((s) => ({ toasts: s.toasts.filter((t) => t.id !== id) })),
 }));
@@ -28,7 +28,7 @@ export function Toaster() {
       {toasts.map((t) => (
         <div
           key={t.id}
-          className="pointer-events-auto flex animate-rise items-center gap-2 rounded-2xl bg-ink px-4 py-3 text-sm font-bold text-white shadow-lg"
+          className="flex animate-rise items-center gap-2 rounded-2xl bg-ink px-4 py-3 text-sm font-bold text-white shadow-lg"
         >
           <CheckCircle2 className="size-5 text-aqua-300" aria-hidden />
           {t.text}
