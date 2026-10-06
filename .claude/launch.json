@@ -1,0 +1,16 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      // Infit lives in a subfolder of this repo. Run `npm install` in infit/ once first.
+      "name": "infit",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "infit",
+      "port": 3000,
+      "autoPort": true,
+      // Scripted demo coach; no credentials needed.
+      "env": { "COACH_PROVIDER": "demo" }
+    }
+  ]
+}

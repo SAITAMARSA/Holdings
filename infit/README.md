@@ -25,6 +25,10 @@ npm run dev          # http://localhost:3000
 
 From the welcome screen you can either set up your own plan (about a minute) or choose **Explore the demo first**. The demo loads sample data, stored separately from your own.
 
+### Preview in Claude Desktop
+
+The repo root has a [`.claude/launch.json`](../.claude/launch.json) entry named `infit`. In a Claude Desktop (local) session on this repo, run `npm install` in `infit/` once, then start the `infit` preview to get a live, interactive app in the Browser pane. Cloud sessions can't show this preview.
+
 ### Scripts
 
 | Command             | What it does                                                          |
