@@ -1,15 +1,68 @@
-# PixelPort
+# Holdings
 
-A gaming website in two forms:
+| Folder | What it is |
+| --- | --- |
+| [`green-home-store/`](green-home-store) | **Green Home Store**: the WooCommerce theme for [greenhomesystems.co.za](https://greenhomesystems.co.za/). Zip: [`dist/green-home-store.zip`](dist/green-home-store.zip) |
+| [`pixelport/`](pixelport) | **PixelPort**: dark gaming WooCommerce theme. Zip: [`dist/pixelport.zip`](dist/pixelport.zip) |
+| `index.html`, `games.html`, `arcade.html` | The original static PixelPort site |
 
-- **`pixelport/`: a WordPress theme with WooCommerce support.** Your products
-  show as PixelPort cards on the home page, the shop, category pages and
-  related products, with a header cart, dark-styled cart, checkout and account
-  pages, and the Neon Snake arcade as a page template.
-- **The original static site** (`index.html`, `games.html`, `arcade.html`):
-  plain HTML/CSS/JS, no build step.
+## Green Home Store theme
 
-## WordPress theme
+A solar-energy storefront in the Green Home Systems brand (charcoal and lime,
+the Green Home logo and copy). Your WooCommerce products show on the home page
+(shop-by-category tiles, featured products, DEYE kit packages), in the shop and
+category pages, and on product pages, which get WhatsApp and installation-quote
+buttons. The quote form saves every request under **Quote requests** in the
+dashboard and emails it to you. Every home page section can be edited or
+switched off in **Appearance → Customize → Green Home theme**.
+
+### Go live
+
+1. Download [`dist/green-home-store.zip`](dist/green-home-store.zip) (on
+   GitHub: open it, then **Download raw file**).
+2. **Appearance → Themes → Add New Theme → Upload Theme** → choose the zip →
+   **Install** → **Activate**. The old theme stays installed, so you can switch
+   back at any time.
+3. **WooCommerce → Settings → Site visibility → Live → Save.** In "Coming soon"
+   mode, visitors can't see any products.
+4. **Settings → General → Site Title:** `Green Home Systems`. It currently says
+   "My blog", which is what shows in browser tabs and Google.
+5. **Customize → Green Home theme → Contact details & quotes:** check the phone,
+   WhatsApp number and email address. Quote requests are emailed there.
+6. Optional: **Products → Import** →
+   `green-home-store/sample-data/complete-kits.csv` adds the five DEYE kits as
+   products in a "Complete Kits" category; the home page kit section then
+   shows them with live prices.
+7. Send a test quote from the home page and check it arrives. If the email
+   doesn't arrive, the request is still saved; install an SMTP plugin such as
+   WP Mail SMTP.
+
+The quote form can also go on any page with the `[ghstore_quote_form]`
+shortcode. To mark a kit "Most popular", give it the product tag `popular`.
+
+### Structure
+
+```
+green-home-store/
+  style.css                  theme header + layout, home sections, footer
+  functions.php              theme supports, menus, scripts
+  inc/woocommerce.php        product cards, shop toolbar, header cart, product enquiry box, home product sections
+  inc/quote-requests.php     quote form, saving to "Quote requests", email
+  inc/customizer.php         Customizer settings
+  inc/template-tags.php      logo, menu fallback, WhatsApp / phone / quote links
+  inc/icons.php              inline SVG icons
+  front-page.php             home page (sections in template-parts/home/)
+  assets/css/woocommerce.css shop, product, cart and checkout styling
+  sample-data/complete-kits.csv
+```
+
+Rebuild the zip after changes:
+
+```sh
+rm -f dist/green-home-store.zip && zip -rq dist/green-home-store.zip green-home-store -x '*.DS_Store'
+```
+
+## PixelPort WordPress theme
 
 ### Install
 

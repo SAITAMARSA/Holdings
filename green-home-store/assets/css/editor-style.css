@@ -1,0 +1,15 @@
+/* Green Home Store: make the block editor read like the front end. */
+body,
+.editor-styles-wrapper {
+	color: #1f2937;
+	font: 16px/1.6 "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+}
+
+.editor-styles-wrapper a { color: #0f766e; }
+
+.editor-styles-wrapper h1,
+.editor-styles-wrapper h2,
+.editor-styles-wrapper h3,
+.editor-styles-wrapper h4 { color: #1a1a1a; line-height: 1.2; }
+
+.editor-styles-wrapper blockquote { border-left: 4px solid #9acd32; padding-left: 20px; color: #5f6673; }
