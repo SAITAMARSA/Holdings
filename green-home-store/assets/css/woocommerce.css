@@ -21,6 +21,7 @@
 
 .woocommerce:where(body:not(.woocommerce-uses-block-theme)) .woocommerce-breadcrumb a { color: var(--muted); }
 .woocommerce .woocommerce-breadcrumb a:hover { color: var(--teal); }
+.woocommerce .woocommerce-breadcrumb { overflow-wrap: anywhere; }
 
 .page-header .woocommerce-breadcrumb,
 .woocommerce:where(body:not(.woocommerce-uses-block-theme)) .page-header .woocommerce-breadcrumb,
@@ -419,6 +420,8 @@ p.demo_store { background: var(--dark); color: #fff; }
 .woocommerce div.product .woocommerce-tabs ul.tabs li.active a:hover { color: #fff; }
 
 .woocommerce div.product .woocommerce-tabs .panel {
+	min-width: 0;
+	overflow-wrap: anywhere;
 	margin: 0 0 40px;
 	padding: 26px;
 	background: #fff;
@@ -519,4 +522,9 @@ p.demo_store { background: var(--dark); color: #fff; }
 	.product-enquiry { border-color: color-mix(in srgb, var(--primary) 50%, transparent); }
 	.wc-block-components-text-input input:focus,
 	.wc-blocks-components-select .wc-blocks-components-select__select:focus { box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 40%, transparent) !important; }
+}
+
+@media print {
+	.woocommerce .page-header .woocommerce-breadcrumb,
+	.woocommerce .page-header .woocommerce-breadcrumb a { color: #000; }
 }

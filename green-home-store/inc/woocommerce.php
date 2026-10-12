@@ -157,6 +157,11 @@ add_filter( 'woocommerce_is_purchasable', 'ghstore_filter_purchasable', 10, 2 );
 function ghstore_remove_quote_only_cart_form() {
 	global $product;
 
+	// Start from the default every time: WooCommerce skips
+	// woocommerce_after_single_product for a password-protected product, so an
+	// earlier product on the same page may have left the form removed.
+	add_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
+
 	if ( $product instanceof WC_Product && ghstore_is_quote_only( $product ) ) {
 		remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
 		add_action( 'woocommerce_after_single_product', 'ghstore_restore_cart_form' );

@@ -78,9 +78,11 @@ services text is fixed in the theme).
 The quote form can also go on any page with the `[ghstore_quote_form]`
 shortcode. To mark a kit "Most popular", give it the product tag `popular`.
 Quote requests are visible to Administrators, Editors and Shop managers only.
-Spam limits: 5 emailed requests per connection per 10 minutes, 3 per email
-address per hour, 40 per hour in total; beyond those, requests are still saved
-(marked "[Check]") but not emailed, and the dashboard says so. If every
+Spam limits: a fourth request from the same email address within an hour is
+turned away (the visitor is told you already have their details); beyond 5
+requests per connection per 10 minutes or 40 per hour in total, requests are
+still saved (marked "[Not emailed]") but not emailed, and the dashboard says
+so. If every
 request reaches the site through Cloudflare or a load balancer, add
 `define( 'GHSTORE_TRUST_PROXY_HEADERS', true );` to `wp-config.php` so the
 limits see real visitor addresses (Cloudflare's `CF-Connecting-IP`, or the

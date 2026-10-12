@@ -25,13 +25,16 @@
 	var notice = document.getElementById( "quote-notice" );
 	if ( notice && ( "#quote-notice" === window.location.hash || "#quote-form" === window.location.hash ) ) {
 		// Browsers move focus for the fragment while the page is still loading,
-		// which undoes a focus set earlier; set it once loading has finished.
+		// which undoes a focus set earlier: try now and again once loading has
+		// finished, but never take focus away from something the visitor chose.
 		var focusNotice = function () {
-			notice.focus( { preventScroll: true } );
+			var active = document.activeElement;
+			if ( ! active || active === document.body || active === notice ) {
+				notice.focus( { preventScroll: true } );
+			}
 		};
-		if ( "complete" === document.readyState ) {
-			focusNotice();
-		} else {
+		focusNotice();
+		if ( "complete" !== document.readyState ) {
 			window.addEventListener(
 				"load",
 				function () {

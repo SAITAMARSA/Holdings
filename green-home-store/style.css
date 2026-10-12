@@ -469,7 +469,8 @@ label { font-weight: 600; font-size: 0.92rem; }
 
 .stats {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+	/* 10rem = 160px at normal text; the minimum grows with enlarged text so the numbers never overlap. */
+	grid-template-columns: repeat(auto-fit, minmax(min(10rem, 100%), 1fr));
 	gap: 20px;
 	padding-top: 40px;
 	padding-bottom: 40px;
@@ -607,8 +608,13 @@ label { font-weight: 600; font-size: 0.92rem; }
 .kit-title { margin: 4px 0 2px; font-size: 1.25rem; }
 .kit-tier { margin: 0; color: var(--muted); font-size: 0.9rem; }
 .kit-card.is-popular .kit-tier { color: #9ca3af; }
-/* Capped at 13vw so an enlarged price still fits a 280px-wide card in one piece. */
+/* Capped at 13vw so an enlarged price still fits a 280px-wide card in one piece;
+   where container units exist the cap follows the card itself and the number never breaks. */
 .kit-price { margin: 14px 0 16px; color: var(--dark); font-size: 1.7rem; font-size: min(1.7rem, 13vw); font-weight: 800; line-height: 1.1; overflow-wrap: anywhere; }
+@supports (font-size: 1cqw) {
+	.kit-card { container-type: inline-size; }
+	.kit-price { font-size: min(1.7rem, 13vw, 17.5cqw); white-space: nowrap; overflow-wrap: normal; }
+}
 .kit-price del { display: block; color: var(--muted); font-size: 0.55em; font-weight: 600; }
 .kit-price ins { text-decoration: none; }
 
@@ -1092,11 +1098,12 @@ a.page-numbers:hover { background: var(--primary); border-color: var(--primary);
 }
 
 /* Column counts come from the template (--kit-cols*), so fewer kits still fill the row. */
-@media (min-width: 720px) and (max-width: 1169px) {
+/* Breakpoints allow for a classic 17px scrollbar, which media queries count but the grid can't use. */
+@media (min-width: 728px) and (max-width: 1183px) {
 	.kit-grid { grid-template-columns: repeat(var(--kit-cols-mid, 3), minmax(0, 1fr)); }
 }
 
-@media (min-width: 1170px) {
+@media (min-width: 1184px) {
 	.kit-grid { grid-template-columns: repeat(var(--kit-cols, 5), minmax(0, 1fr)); }
 }
 

@@ -428,12 +428,19 @@ function ghstore_handle_quote() {
 	}
 
 	$flagged = '1' !== ghstore_request_string( $post, 'ghstore_js' );
+	if ( $unmailed ) {
+		$prefix = __( '[Not emailed]', 'green-home-store' );
+	} elseif ( $flagged ) {
+		$prefix = __( '[Check]', 'green-home-store' );
+	} else {
+		$prefix = '';
+	}
 
 	$post_id = wp_insert_post(
 		array(
 			'post_type'    => 'ghstore_quote',
 			'post_status'  => 'private',
-			'post_title'   => ( $flagged || $unmailed ? __( '[Check]', 'green-home-store' ) . ' ' : '' ) . $data['name'] . ' — ' . $data['city'],
+			'post_title'   => ( $prefix ? $prefix . ' ' : '' ) . $data['name'] . ' — ' . $data['city'],
 			'post_content' => $data['message'],
 		)
 	);
@@ -546,18 +553,13 @@ function ghstore_mail_failed_notice() {
 add_action( 'admin_notices', 'ghstore_mail_failed_notice' );
 
 /**
- * Remember that a request was saved without an email, for the admin notice.
+ * Remember when requests started being saved without an email, for the
+ * admin notice. Only the start time is stored (add_option is a no-op once it
+ * exists, so simultaneous requests can't lose each other); the notice counts
+ * the saved requests themselves.
  */
 function ghstore_note_unmailed_request() {
-	$log = (array) get_option( 'ghstore_quote_unmailed', array() );
-	update_option(
-		'ghstore_quote_unmailed',
-		array(
-			'count' => ( isset( $log['count'] ) ? (int) $log['count'] : 0 ) + 1,
-			'since' => isset( $log['since'] ) ? (int) $log['since'] : time(),
-		),
-		false
-	);
+	add_option( 'ghstore_quote_unmailed_since', time(), '', false );
 }
 
 /**
@@ -565,8 +567,8 @@ function ghstore_note_unmailed_request() {
  * notice stays until the Quote requests list has been opened.
  */
 function ghstore_quote_unmailed_notice() {
-	$log = get_option( 'ghstore_quote_unmailed' );
-	if ( empty( $log['count'] ) || ! current_user_can( 'edit_pages' ) ) {
+	$since = (int) get_option( 'ghstore_quote_unmailed_since' );
+	if ( ! $since || ! current_user_can( 'edit_pages' ) ) {
 		return;
 	}
 
@@ -574,14 +576,36 @@ function ghstore_quote_unmailed_notice() {
 	if ( ! $screen || ! in_array( $screen->id, array( 'dashboard', 'edit-ghstore_quote', 'ghstore_quote' ), true ) ) {
 		return;
 	}
+
+	$count = count(
+		get_posts(
+			array(
+				'post_type'      => 'ghstore_quote',
+				'post_status'    => 'private',
+				'posts_per_page' => 100,
+				'fields'         => 'ids',
+				'no_found_rows'  => true,
+				'meta_key'       => '_ghstore_unmailed', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- a handful of rows.
+				'date_query'     => array(
+					array(
+						'column' => 'post_date_gmt',
+						'after'  => gmdate( 'Y-m-d H:i:s', $since - 1 ),
+					),
+				),
+			)
+		)
+	);
 	if ( 'edit-ghstore_quote' === $screen->id ) {
-		delete_option( 'ghstore_quote_unmailed' );
+		delete_option( 'ghstore_quote_unmailed_since' );
+	}
+	if ( ! $count ) {
+		return;
 	}
 	/* translators: 1: number of requests, 2: date and time, 3: hourly ceiling, 4: link to the Quote requests list. */
 	$message = _n(
-		'%1$d quote request since %2$s was saved but not emailed, because it arrived faster than the spam limit allows (several from one connection within minutes, or more than %3$d in an hour). Find it under %4$s, marked [Check].',
-		'%1$d quote requests since %2$s were saved but not emailed, because they arrived faster than the spam limit allows (several from one connection within minutes, or more than %3$d in an hour). Find them under %4$s, marked [Check].',
-		(int) $log['count'],
+		'%1$d quote request since %2$s was saved but not emailed, because it arrived faster than the spam limit allows (several from one connection within minutes, or more than %3$d in an hour). Find it under %4$s, marked [Not emailed].',
+		'%1$d quote requests since %2$s were saved but not emailed, because they arrived faster than the spam limit allows (several from one connection within minutes, or more than %3$d in an hour). Find them under %4$s, marked [Not emailed].',
+		$count,
 		'green-home-store'
 	);
 	?>
@@ -590,8 +614,8 @@ function ghstore_quote_unmailed_notice() {
 			<?php
 			printf(
 				esc_html( $message ),
-				(int) $log['count'],
-				esc_html( wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), (int) $log['since'] ) ),
+				(int) $count,
+				esc_html( wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $since ) ),
 				(int) GHSTORE_QUOTE_HOURLY_CEILING,
 				'<a href="' . esc_url( admin_url( 'edit.php?post_type=ghstore_quote' ) ) . '">' . esc_html__( 'Quote requests', 'green-home-store' ) . '</a>'
 			);

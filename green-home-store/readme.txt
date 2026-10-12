@@ -24,10 +24,11 @@ Solar energy storefront theme for Green Home Systems, built for WooCommerce.
   shop sells online, or switch everything to "Enquire only" in the Customizer.
 * Quote request form that saves every request under "Quote requests" in the
   dashboard and emails it to you. Spam is limited by a hidden trap field and
-  rate limits: 5 emailed requests per connection per 10 minutes, 3 per email
-  address per hour and 40 per hour in total. Beyond those, requests are still
-  saved (marked "[Check]") but not emailed, and the dashboard tells you. It
-  also warns you if emails stop going out.
+  rate limits: a fourth request from the same email address within an hour
+  is turned away (the visitor is told you already have their details), and
+  beyond 5 requests per connection per 10 minutes or 40 per hour in total,
+  requests are still saved (marked "[Not emailed]") but not emailed, and the
+  dashboard tells you. It also warns you if emails stop going out.
 * Floating WhatsApp button, header cart with live item count, promo bar.
 * Footer links to your real product categories.
 
