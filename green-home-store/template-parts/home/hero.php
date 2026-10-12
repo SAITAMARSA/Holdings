@@ -8,6 +8,12 @@
 $ghstore_primary_url   = ghstore_mod( 'hero_primary_url' ) ? ghstore_mod( 'hero_primary_url' ) : ghstore_quote_url();
 $ghstore_secondary_url = ghstore_mod( 'hero_secondary_url' ) ? ghstore_mod( 'hero_secondary_url' ) : ghstore_shop_url();
 $ghstore_ticker        = ghstore_lines( ghstore_mod( 'ticker' ) );
+$ghstore_title         = trim( (string) ghstore_mod( 'hero_title' ) );
+$ghstore_highlight     = trim( (string) ghstore_mod( 'hero_highlight' ) );
+if ( '' === $ghstore_title && '' === $ghstore_highlight ) {
+	// The front page must keep a heading.
+	$ghstore_title = get_bloginfo( 'name' );
+}
 ?>
 <section class="hero" id="home">
 	<div class="wrap hero-inner">
@@ -16,9 +22,9 @@ $ghstore_ticker        = ghstore_lines( ghstore_mod( 'ticker' ) );
 		<?php endif; ?>
 
 		<h1>
-			<?php echo esc_html( ghstore_mod( 'hero_title' ) ); ?>
-			<?php if ( ghstore_mod( 'hero_highlight' ) ) : ?>
-				<span class="highlight"><?php echo esc_html( ghstore_mod( 'hero_highlight' ) ); ?></span>
+			<?php echo esc_html( $ghstore_title ); ?>
+			<?php if ( '' !== $ghstore_highlight ) : ?>
+				<span class="highlight"><?php echo esc_html( $ghstore_highlight ); ?></span>
 			<?php endif; ?>
 		</h1>
 
@@ -39,6 +45,7 @@ $ghstore_ticker        = ghstore_lines( ghstore_mod( 'ticker' ) );
 
 <?php if ( $ghstore_ticker ) : ?>
 	<div class="ticker">
+		<button type="button" class="ticker-toggle" aria-pressed="false" aria-label="<?php esc_attr_e( 'Pause highlights', 'green-home-store' ); ?>" data-pause="<?php esc_attr_e( 'Pause highlights', 'green-home-store' ); ?>" data-play="<?php esc_attr_e( 'Play highlights', 'green-home-store' ); ?>"><?php ghstore_icon_e( 'pause', 14 ); ?><?php ghstore_icon_e( 'play', 14 ); ?></button>
 		<div class="ticker-track">
 			<?php foreach ( array( false, true ) as $ghstore_is_copy ) : ?>
 				<ul class="ticker-list"<?php echo $ghstore_is_copy ? ' aria-hidden="true"' : ''; ?>>

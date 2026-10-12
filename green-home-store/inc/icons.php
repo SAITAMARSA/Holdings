@@ -44,6 +44,8 @@ function ghstore_icon( $name, $size = 24 ) {
 		'menu'      => '<path d="M4 6h16M4 12h16M4 18h16"/>',
 		'value'     => '<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M12 17v-6M9.5 13.5 12 11l2.5 2.5"/>',
 		'calendar'  => '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+		'pause'     => '<path d="M8 5v14M16 5v14"/>',
+		'play'      => '<path fill="currentColor" stroke="none" d="M8 5v14l11-7z"/>',
 		'star'      => '<path fill="currentColor" stroke="none" d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3z"/>',
 	);
 

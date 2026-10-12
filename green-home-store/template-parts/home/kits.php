@@ -11,24 +11,15 @@
 
 $ghstore_kit_products = function_exists( 'ghstore_kit_products' ) ? ghstore_kit_products() : array();
 $ghstore_includes_all = array( __( 'Full Accessories', 'green-home-store' ), __( 'Installation & COC', 'green-home-store' ) );
+$ghstore_kit_interest = __( 'A complete solar kit', 'green-home-store' );
 
 $ghstore_default_kits = array(
-	array( '8KWH KIT', __( '8KWH DEYE Kit', 'green-home-store' ), __( 'Entry Level Solution', 'green-home-store' ), 81895, array( '1x8KWH Inverter', '2x5.12kWh Battery', '10x560W Panels' ), false ),
-	array( '8KWH KIT', __( '8KWH DEYE Kit', 'green-home-store' ), __( 'Standard Solution', 'green-home-store' ), 103895, array( '1x8KWH Inverter', '3x5.12kWh Battery', '14x560W Panels' ), false ),
-	array( '12KWH KIT', __( '12KWH DEYE Kit', 'green-home-store' ), __( 'Most Popular', 'green-home-store' ), 123895, array( '1x12KWH Inverter', '3x5.12kWh Battery', '20x560W Panels' ), true ),
-	array( '12KWH KIT', __( '12KWH DEYE Kit', 'green-home-store' ), __( 'Premium Solution', 'green-home-store' ), 158895, array( '1x16KWH Inverter', '4x5.12kWh Battery', '24x560W Panels' ), false ),
-	array( '50KWH KIT', __( '50KWH DEYE Kit', 'green-home-store' ), __( 'Enterprise Solution', 'green-home-store' ), 445895, array( '1x50KWH Inverter', '12x5.12kWh Battery', '60x560W Panels' ), false ),
+	array( '8KWH KIT', __( '8KWH DEYE Kit', 'green-home-store' ), __( 'Entry Level Solution', 'green-home-store' ), 81895, array( '1x8kW Inverter', '2x5.12kWh Battery', '10x560W Panels' ), false ),
+	array( '8KWH KIT', __( '8KWH DEYE Kit', 'green-home-store' ), __( 'Standard Solution', 'green-home-store' ), 103895, array( '1x8kW Inverter', '3x5.12kWh Battery', '14x560W Panels' ), false ),
+	array( '12KWH KIT', __( '12KWH DEYE Kit', 'green-home-store' ), __( 'Family Solution', 'green-home-store' ), 123895, array( '1x12kW Inverter', '3x5.12kWh Battery', '20x560W Panels' ), true ),
+	array( '12KWH KIT', __( '12KWH DEYE Kit', 'green-home-store' ), __( 'Premium Solution', 'green-home-store' ), 158895, array( '1x16kW Inverter', '4x5.12kWh Battery', '24x560W Panels' ), false ),
+	array( '50KWH KIT', __( '50KWH DEYE Kit', 'green-home-store' ), __( 'Enterprise Solution', 'green-home-store' ), 445895, array( '1x50kW Inverter', '12x5.12kWh Battery', '60x560W Panels' ), false ),
 );
-
-/**
- * Quote form link pre-filled with a kit name.
- *
- * @param string $name Kit name.
- * @return string
- */
-$ghstore_quote_link = static function ( $name ) {
-	return add_query_arg( 'quote_item', rawurlencode( $name ), home_url( '/' ) ) . '#quote';
-};
 ?>
 <section class="section" id="kits">
 	<div class="wrap">
@@ -42,23 +33,31 @@ $ghstore_quote_link = static function ( $name ) {
 		<div class="kit-grid">
 			<?php if ( $ghstore_kit_products ) : ?>
 				<?php foreach ( $ghstore_kit_products as $ghstore_kit ) : ?>
-					<?php $ghstore_popular = has_term( 'popular', 'product_tag', $ghstore_kit->get_id() ); ?>
+					<?php
+					$ghstore_popular  = has_term( 'popular', 'product_tag', $ghstore_kit->get_id() );
+					$ghstore_kit_name = wp_specialchars_decode( $ghstore_kit->get_name(), ENT_QUOTES );
+					?>
 					<article class="kit-card<?php echo $ghstore_popular ? ' is-popular' : ''; ?>">
 						<?php if ( $ghstore_popular ) : ?>
 							<span class="kit-flag"><?php esc_html_e( 'Most Popular', 'green-home-store' ); ?></span>
 						<?php endif; ?>
-						<h3 class="kit-title"><a href="<?php echo esc_url( $ghstore_kit->get_permalink() ); ?>"><?php echo esc_html( $ghstore_kit->get_name() ); ?></a></h3>
+						<h3 class="kit-title"><a href="<?php echo esc_url( $ghstore_kit->get_permalink() ); ?>"><?php echo esc_html( $ghstore_kit_name ); ?></a></h3>
 						<p class="kit-price"><?php echo wp_kses_post( $ghstore_kit->get_price_html() ); ?></p>
 						<div class="kit-includes"><?php echo wp_kses_post( wpautop( $ghstore_kit->get_short_description() ) ); ?></div>
 						<div class="kit-actions">
-							<a class="btn btn-primary" href="<?php echo esc_url( $ghstore_quote_link( $ghstore_kit->get_name() ) ); ?>"><?php esc_html_e( 'Request Quote', 'green-home-store' ); ?></a>
+							<?php if ( ghstore_quote_link( $ghstore_kit_name, $ghstore_kit_interest ) ) : ?>
+								<a class="btn btn-primary" href="<?php echo esc_url( ghstore_quote_link( $ghstore_kit_name, $ghstore_kit_interest ) ); ?>"><?php esc_html_e( 'Request Quote', 'green-home-store' ); ?></a>
+							<?php endif; ?>
 							<a class="btn btn-outline" href="<?php echo esc_url( $ghstore_kit->get_permalink() ); ?>"><?php esc_html_e( 'View kit', 'green-home-store' ); ?></a>
 						</div>
 					</article>
 				<?php endforeach; ?>
 			<?php else : ?>
 				<?php foreach ( $ghstore_default_kits as $ghstore_kit ) : ?>
-					<?php list( $ghstore_size, $ghstore_title, $ghstore_tier, $ghstore_price, $ghstore_items, $ghstore_popular ) = $ghstore_kit; ?>
+					<?php
+					list( $ghstore_size, $ghstore_title, $ghstore_tier, $ghstore_price, $ghstore_items, $ghstore_popular ) = $ghstore_kit;
+					$ghstore_kit_link = ghstore_quote_link( $ghstore_title . ' – ' . $ghstore_tier, $ghstore_kit_interest );
+					?>
 					<article class="kit-card<?php echo $ghstore_popular ? ' is-popular' : ''; ?>">
 						<?php if ( $ghstore_popular ) : ?>
 							<span class="kit-flag"><?php esc_html_e( 'Most Popular', 'green-home-store' ); ?></span>
@@ -80,9 +79,11 @@ $ghstore_quote_link = static function ( $name ) {
 								<li><?php ghstore_icon_e( 'check', 16 ); ?> <?php echo esc_html( $ghstore_line ); ?></li>
 							<?php endforeach; ?>
 						</ul>
-						<div class="kit-actions">
-							<a class="btn btn-primary" href="<?php echo esc_url( $ghstore_quote_link( $ghstore_title . ' – ' . $ghstore_tier ) ); ?>"><?php esc_html_e( 'Request Quote', 'green-home-store' ); ?></a>
-						</div>
+						<?php if ( $ghstore_kit_link ) : ?>
+							<div class="kit-actions">
+								<a class="btn btn-primary" href="<?php echo esc_url( $ghstore_kit_link ); ?>"><?php esc_html_e( 'Request Quote', 'green-home-store' ); ?></a>
+							</div>
+						<?php endif; ?>
 					</article>
 				<?php endforeach; ?>
 			<?php endif; ?>

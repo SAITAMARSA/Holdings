@@ -1,7 +1,8 @@
 <?php
 /**
  * WooCommerce integration: page wrappers, product cards, shop toolbar, header
- * cart, product-page enquiry box and the home page product sections.
+ * cart, product-page enquiry box, quote-only products and the home page
+ * product sections.
  *
  * Loaded only when WooCommerce is active.
  *
@@ -14,12 +15,30 @@ defined( 'ABSPATH' ) || exit;
 const GHSTORE_KITS_CATEGORY = 'complete-kits';
 
 /**
- * Shop styles, loaded after WooCommerce's own so they can restyle them.
+ * Shop styles, loaded after WooCommerce's own so they can restyle them, and
+ * the cart-fragments script so the header count stays right behind a page
+ * cache (WooCommerce only loads it for its cart widget).
  */
 function ghstore_woocommerce_assets() {
 	wp_enqueue_style( 'green-home-store-woocommerce', get_template_directory_uri() . '/assets/css/woocommerce.css', array( 'green-home-store' ), GHSTORE_VERSION );
+	wp_enqueue_script( 'wc-cart-fragments' );
 }
 add_action( 'wp_enqueue_scripts', 'ghstore_woocommerce_assets', 20 );
+
+/**
+ * Request uncropped product thumbnails: the cards letterbox images inside a
+ * square, so tall batteries and wide panels show whole.
+ *
+ * @param array $size Width, height, crop.
+ * @return array
+ */
+function ghstore_uncropped_thumbnail( $size ) {
+	$size['height'] = '';
+	$size['crop']   = 0;
+
+	return $size;
+}
+add_filter( 'woocommerce_get_image_size_thumbnail', 'ghstore_uncropped_thumbnail' );
 
 /* ---------- page wrappers (no sidebar) ---------- */
 
@@ -59,20 +78,140 @@ function ghstore_wc_wrapper_end() {
 }
 add_action( 'woocommerce_after_main_content', 'ghstore_wc_wrapper_end', 10 );
 
+/* ---------- quote-only products ---------- */
+
+/**
+ * Whether a product is in the Complete Kits category.
+ *
+ * @param WC_Product|null $product Product.
+ * @return bool
+ */
+function ghstore_is_kit( $product ) {
+	return $product instanceof WC_Product && has_term( GHSTORE_KITS_CATEGORY, 'product_cat', $product->get_id() );
+}
+
+/**
+ * Whether a product is sold by quote rather than online: everything when
+ * the shop is in "Enquire only" mode, kits unless the owner enabled buying
+ * them online.
+ *
+ * @param WC_Product|null $product Product.
+ * @return bool
+ */
+function ghstore_is_quote_only( $product ) {
+	if ( ! $product instanceof WC_Product ) {
+		return false;
+	}
+	if ( 'enquire' === ghstore_mod( 'shop_mode' ) ) {
+		return true;
+	}
+
+	return ghstore_is_kit( $product ) && ! ghstore_mod( 'kits_purchasable' );
+}
+
+/**
+ * Quote-only products cannot be bought (also blocks ?add-to-cart= URLs).
+ *
+ * @param bool       $purchasable Current value.
+ * @param WC_Product $product     Product.
+ * @return bool
+ */
+function ghstore_filter_purchasable( $purchasable, $product ) {
+	return ghstore_is_quote_only( $product ) ? false : $purchasable;
+}
+add_filter( 'woocommerce_is_purchasable', 'ghstore_filter_purchasable', 10, 2 );
+
+/**
+ * The "I'm interested in" option that matches a product's category.
+ *
+ * @param WC_Product $product Product.
+ * @return string Empty when no option matches.
+ */
+function ghstore_interest_for_product( $product ) {
+	if ( ghstore_is_kit( $product ) ) {
+		return __( 'A complete solar kit', 'green-home-store' );
+	}
+
+	$term = ghstore_product_category( $product );
+	$name = $term ? strtolower( $term->name . ' ' . $term->slug ) : '';
+	$map  = array(
+		'kit'      => __( 'A complete solar kit', 'green-home-store' ),
+		'inverter' => __( 'Inverter', 'green-home-store' ),
+		'batter'   => __( 'Lithium batteries', 'green-home-store' ),
+		'panel'    => __( 'Solar panels', 'green-home-store' ),
+	);
+	foreach ( $map as $needle => $interest ) {
+		if ( false !== strpos( $name, $needle ) ) {
+			return $interest;
+		}
+	}
+
+	return '';
+}
+
+/**
+ * Pre-filled quote link for a product.
+ *
+ * @param WC_Product $product Product.
+ * @return string
+ */
+function ghstore_product_quote_link( $product ) {
+	return ghstore_quote_link( $product->get_name(), ghstore_interest_for_product( $product ) );
+}
+
+/**
+ * Loop button: "Request a quote" (to the form) for quote-only products,
+ * WooCommerce's own button otherwise.
+ *
+ * @param string     $link    Button HTML.
+ * @param WC_Product $product Product.
+ * @return string
+ */
+function ghstore_loop_quote_button( $link, $product ) {
+	if ( ! ghstore_is_quote_only( $product ) ) {
+		return $link;
+	}
+
+	return sprintf(
+		'<a href="%1$s" class="button ghstore-quote-button">%2$s</a>',
+		esc_url( ghstore_product_quote_link( $product ) ),
+		esc_html__( 'Request a quote', 'green-home-store' )
+	);
+}
+add_filter( 'woocommerce_loop_add_to_cart_link', 'ghstore_loop_quote_button', 10, 2 );
+
+/**
+ * Button text for products that can't be added to the cart: "View details"
+ * instead of WooCommerce's "Read more".
+ *
+ * @param string     $text    Button text.
+ * @param WC_Product $product Product.
+ * @return string
+ */
+function ghstore_loop_button_text( $text, $product ) {
+	if ( $product instanceof WC_Product && ! $product->is_type( 'external' ) && ( ! $product->is_in_stock() || ! $product->is_purchasable() ) ) {
+		return __( 'View details', 'green-home-store' );
+	}
+
+	return $text;
+}
+add_filter( 'woocommerce_product_add_to_cart_text', 'ghstore_loop_button_text', 10, 2 );
+
 /* ---------- product cards ---------- */
 
 /*
- * Card layout: image (with sale / sold-out badges), then a body with
- * category, title, rating, and a footer holding price and button.
+ * Card layout: badges, image, then a body with category, title, rating, and
+ * a footer holding price and button.
  */
 remove_action( 'woocommerce_before_shop_loop_item', 'woocommerce_template_loop_product_link_open', 10 );
+remove_action( 'woocommerce_before_shop_loop_item_title', 'woocommerce_show_product_loop_sale_flash', 10 );
 remove_action( 'woocommerce_before_shop_loop_item_title', 'woocommerce_template_loop_product_thumbnail', 10 );
 remove_action( 'woocommerce_shop_loop_item_title', 'woocommerce_template_loop_product_title', 10 );
 remove_action( 'woocommerce_after_shop_loop_item_title', 'woocommerce_template_loop_price', 10 );
 remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_product_link_close', 5 );
 
+add_action( 'woocommerce_before_shop_loop_item', 'ghstore_loop_badges', 5 );
 add_action( 'woocommerce_before_shop_loop_item', 'ghstore_loop_image_open', 10 );
-add_action( 'woocommerce_before_shop_loop_item_title', 'ghstore_loop_stock_badge', 11 );
 add_action( 'woocommerce_before_shop_loop_item_title', 'ghstore_loop_thumbnail', 12 );
 add_action( 'woocommerce_before_shop_loop_item_title', 'ghstore_loop_image_close', 20 );
 add_action( 'woocommerce_shop_loop_item_title', 'ghstore_loop_category', 5 );
@@ -82,22 +221,29 @@ add_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_price
 add_action( 'woocommerce_after_shop_loop_item', 'ghstore_loop_foot_close', 20 );
 
 /**
+ * Sale and sold-out badges. Printed before the image link (which is hidden
+ * from assistive technology) so screen readers hear them.
+ */
+function ghstore_loop_badges() {
+	global $product;
+
+	if ( ! $product instanceof WC_Product ) {
+		return;
+	}
+
+	woocommerce_show_product_loop_sale_flash();
+
+	if ( ! $product->is_in_stock() ) {
+		echo '<span class="badge badge-soldout">' . esc_html__( 'Sold out', 'green-home-store' ) . '</span>';
+	}
+}
+
+/**
  * Open the image link. It repeats the title link, so it is hidden from
  * keyboard and screen-reader users.
  */
 function ghstore_loop_image_open() {
 	echo '<a href="' . esc_url( get_permalink() ) . '" class="card-media" tabindex="-1" aria-hidden="true">';
-}
-
-/**
- * "Sold out" badge for out-of-stock products.
- */
-function ghstore_loop_stock_badge() {
-	global $product;
-
-	if ( $product && ! $product->is_in_stock() ) {
-		echo '<span class="badge badge-soldout">' . esc_html__( 'Sold out', 'green-home-store' ) . '</span>';
-	}
 }
 
 /**
@@ -198,7 +344,7 @@ function ghstore_category_nav() {
 
 	$current = is_product_category() ? get_queried_object() : null;
 
-	echo '<nav class="category-nav" aria-label="' . esc_attr__( 'Product categories', 'green-home-store' ) . '">';
+	echo '<nav class="category-nav" aria-label="' . esc_attr__( 'Shop by category', 'green-home-store' ) . '">';
 	printf(
 		'<a class="chip" href="%1$s"%2$s>%3$s</a>',
 		esc_url( ghstore_shop_url() ),
@@ -220,23 +366,50 @@ function ghstore_category_nav() {
 add_action( 'woocommerce_shop_loop_header', 'ghstore_category_nav', 20 );
 
 /**
- * Top-level product categories that have products, largest first.
+ * Top-level product categories with visible products, largest first.
+ *
+ * WooCommerce replaces each term's ->count with the number of products
+ * visible in the catalogue, so categories whose products are all hidden are
+ * dropped here instead of linking to an empty page.
  *
  * @return WP_Term[]
  */
 function ghstore_top_categories() {
+	static $cached = null;
+	if ( null !== $cached ) {
+		return $cached;
+	}
+
 	$terms = get_terms(
 		array(
 			'taxonomy'   => 'product_cat',
 			'parent'     => 0,
 			'hide_empty' => true,
-			'orderby'    => 'count',
-			'order'      => 'DESC',
 			'exclude'    => array( (int) get_option( 'default_product_cat' ) ),
 		)
 	);
+	if ( is_wp_error( $terms ) ) {
+		$cached = array();
+		return $cached;
+	}
 
-	return is_wp_error( $terms ) ? array() : $terms;
+	$terms = array_values(
+		array_filter(
+			$terms,
+			function ( $term ) {
+				return (int) $term->count > 0;
+			}
+		)
+	);
+	usort(
+		$terms,
+		function ( $a, $b ) {
+			return (int) $b->count <=> (int) $a->count;
+		}
+	);
+
+	$cached = $terms;
+	return $cached;
 }
 
 /**
@@ -259,7 +432,8 @@ add_action( 'woocommerce_before_shop_loop', 'ghstore_shop_toolbar_close', 40 );
 /* ---------- single product: enquiry box ---------- */
 
 /**
- * WhatsApp and installation-quote box under the add-to-cart button.
+ * WhatsApp and quote box under the add-to-cart button. For quote-only
+ * products it carries the main call to action.
  */
 function ghstore_product_enquiry() {
 	global $product;
@@ -268,21 +442,42 @@ function ghstore_product_enquiry() {
 		return;
 	}
 
-	$whatsapp = ghstore_whatsapp_url(
+	$name       = wp_specialchars_decode( $product->get_name(), ENT_QUOTES );
+	$quote_only = ghstore_is_quote_only( $product );
+	$is_kit     = ghstore_is_kit( $product );
+	$whatsapp   = ghstore_whatsapp_url(
 		/* translators: 1: product name, 2: product URL. */
-		sprintf( __( 'Hi, I’m interested in the %1$s (%2$s). Can you help?', 'green-home-store' ), $product->get_name(), get_permalink( $product->get_id() ) )
+		sprintf( __( 'Hi, I’m interested in the %1$s (%2$s). Can you help?', 'green-home-store' ), $name, get_permalink( $product->get_id() ) )
 	);
-	$quote = add_query_arg( 'quote_item', rawurlencode( $product->get_name() ), home_url( '/' ) ) . '#quote';
+	$quote = ghstore_product_quote_link( $product );
+	if ( $quote === $whatsapp ) {
+		$quote = '';
+	}
+	if ( ! $whatsapp && ! $quote ) {
+		return;
+	}
+
+	if ( $is_kit ) {
+		$title = $quote_only ? __( 'Get a quote for this kit', 'green-home-store' ) : __( 'Installation included', 'green-home-store' );
+		$text  = __( 'Installation and a Certificate of Compliance (COC) are included. Tell us about your home and we’ll confirm the final price and installation date.', 'green-home-store' );
+	} elseif ( $quote_only ) {
+		$title = __( 'Ask about this product', 'green-home-store' );
+		$text  = __( 'We’ll confirm price, availability and installation options, and send you a quote.', 'green-home-store' );
+	} else {
+		$title = __( 'Need it installed?', 'green-home-store' );
+		$text  = __( 'Our certified installers handle the job and issue a full Certificate of Compliance (COC).', 'green-home-store' );
+	}
+	$quote_label = $quote_only || $is_kit ? __( 'Request a quote', 'green-home-store' ) : __( 'Get an installation quote', 'green-home-store' );
 	?>
-	<div class="product-enquiry">
-		<p class="product-enquiry-title"><?php ghstore_icon_e( 'wrench', 20 ); ?> <?php esc_html_e( 'Need it installed?', 'green-home-store' ); ?></p>
-		<p><?php esc_html_e( 'Our certified installers handle the job and issue a full Certificate of Compliance (COC).', 'green-home-store' ); ?></p>
+	<div class="product-enquiry<?php echo $quote_only ? ' is-primary' : ''; ?>">
+		<p class="product-enquiry-title"><?php ghstore_icon_e( $quote_only ? 'chat' : 'wrench', 20 ); ?> <?php echo esc_html( $title ); ?></p>
+		<p><?php echo esc_html( $text ); ?></p>
 		<div class="product-enquiry-actions">
+			<?php if ( $quote ) : ?>
+				<a class="btn <?php echo $quote_only ? 'btn-primary' : 'btn-outline'; ?>" href="<?php echo esc_url( $quote ); ?>"><?php echo esc_html( $quote_label ); ?></a>
+			<?php endif; ?>
 			<?php if ( $whatsapp ) : ?>
 				<a class="btn btn-whatsapp" href="<?php echo esc_url( $whatsapp ); ?>" target="_blank" rel="noopener"><?php ghstore_icon_e( 'whatsapp', 18 ); ?> <?php esc_html_e( 'Ask on WhatsApp', 'green-home-store' ); ?></a>
-			<?php endif; ?>
-			<?php if ( ghstore_mod( 'show_quote' ) ) : ?>
-				<a class="btn btn-outline" href="<?php echo esc_url( $quote ); ?>"><?php esc_html_e( 'Get an installation quote', 'green-home-store' ); ?></a>
 			<?php endif; ?>
 		</div>
 	</div>
@@ -316,7 +511,7 @@ function ghstore_cart_link() {
 }
 
 /**
- * Refresh the header cart after an AJAX add-to-cart.
+ * Refresh the header cart after an AJAX add-to-cart and on page load.
  *
  * @param array $fragments Selector => HTML.
  * @return array
@@ -371,6 +566,29 @@ function ghstore_home_products_html() {
 }
 
 /**
+ * Keep sold-out products off the home page grid.
+ *
+ * @param array $query_args WP_Query arguments.
+ * @return array
+ */
+function ghstore_grid_hide_out_of_stock( $query_args ) {
+	$visibility = wc_get_product_visibility_term_ids();
+	if ( empty( $visibility['outofstock'] ) ) {
+		return $query_args;
+	}
+
+	$query_args['tax_query']   = isset( $query_args['tax_query'] ) ? $query_args['tax_query'] : array(); // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+	$query_args['tax_query'][] = array(
+		'taxonomy' => 'product_visibility',
+		'field'    => 'term_taxonomy_id',
+		'terms'    => array( $visibility['outofstock'] ),
+		'operator' => 'NOT IN',
+	);
+
+	return $query_args;
+}
+
+/**
  * Render a WooCommerce products shortcode loop.
  *
  * @param array  $atts Shortcode attributes.
@@ -378,39 +596,102 @@ function ghstore_home_products_html() {
  * @return string Empty when the query found nothing.
  */
 function ghstore_products_grid( $atts, $type ) {
+	add_filter( 'woocommerce_shortcode_products_query', 'ghstore_grid_hide_out_of_stock' );
 	$shortcode = new WC_Shortcode_Products( $atts, $type );
 	$html      = $shortcode->get_content();
+	remove_filter( 'woocommerce_shortcode_products_query', 'ghstore_grid_hide_out_of_stock' );
 
 	return false === strpos( $html, 'class="products' ) ? '' : $html;
 }
 
 /**
  * Image for a category tile: the category's own thumbnail, otherwise the
- * image of its best-selling product.
+ * image of its best-selling visible product.
  *
  * @param WP_Term $term Product category.
  * @return string Image markup or empty.
  */
 function ghstore_category_image( $term ) {
 	$image_id = (int) get_term_meta( $term->term_id, 'thumbnail_id', true );
-
 	if ( ! $image_id ) {
-		$products = wc_get_products(
-			array(
-				'status'   => 'publish',
-				'limit'    => 1,
-				'category' => array( $term->slug ),
-				'orderby'  => 'popularity',
-			)
-		);
-		$image_id = $products ? (int) $products[0]->get_image_id() : 0;
+		$image_id = ghstore_category_fallback_image_id( $term );
 	}
 
 	return $image_id ? wp_get_attachment_image( $image_id, 'woocommerce_thumbnail', false, array( 'alt' => '' ) ) : '';
 }
 
 /**
- * Published products in the Complete Kits category, cheapest first.
+ * Image of a category's best-selling product, cached until the catalogue
+ * changes (WooCommerce bumps the product_query transient version on every
+ * product save).
+ *
+ * @param WP_Term $term Product category.
+ * @return int Attachment ID, 0 when none.
+ */
+function ghstore_category_fallback_image_id( $term ) {
+	$version = WC_Cache_Helper::get_transient_version( 'product_query' );
+	$key     = 'ghstore_cat_img_' . $term->term_id;
+	$cached  = get_transient( $key );
+	if ( is_array( $cached ) && isset( $cached['v'], $cached['id'] ) && $cached['v'] === $version ) {
+		return (int) $cached['id'];
+	}
+
+	$visibility = wc_get_product_visibility_term_ids();
+	$tax_query  = array(
+		array(
+			'taxonomy' => 'product_cat',
+			'field'    => 'term_id',
+			'terms'    => $term->term_id,
+		),
+	);
+	if ( ! empty( $visibility['exclude-from-catalog'] ) ) {
+		$tax_query[] = array(
+			'taxonomy' => 'product_visibility',
+			'field'    => 'term_taxonomy_id',
+			'terms'    => array( $visibility['exclude-from-catalog'] ),
+			'operator' => 'NOT IN',
+		);
+	}
+
+	$popularity = array( WC()->query, 'order_by_popularity_post_clauses' );
+	add_filter( 'posts_clauses', $popularity );
+	$ids = get_posts(
+		array(
+			'post_type'              => 'product',
+			'post_status'            => 'publish',
+			'posts_per_page'         => 5,
+			'fields'                 => 'ids',
+			'no_found_rows'          => true,
+			'update_post_term_cache' => false,
+			'update_post_meta_cache' => false,
+			'suppress_filters'       => false,
+			'tax_query'              => $tax_query, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+		)
+	);
+	remove_filter( 'posts_clauses', $popularity );
+
+	$image_id = 0;
+	foreach ( $ids as $id ) {
+		$image_id = (int) get_post_thumbnail_id( $id );
+		if ( $image_id ) {
+			break;
+		}
+	}
+
+	set_transient(
+		$key,
+		array(
+			'v'  => $version,
+			'id' => $image_id,
+		),
+		DAY_IN_SECONDS
+	);
+
+	return $image_id;
+}
+
+/**
+ * Catalogue-visible products in the Complete Kits category, cheapest first.
  *
  * @return WC_Product[]
  */
@@ -421,9 +702,10 @@ function ghstore_kit_products() {
 
 	$kits = wc_get_products(
 		array(
-			'status'   => 'publish',
-			'limit'    => 12,
-			'category' => array( GHSTORE_KITS_CATEGORY ),
+			'status'     => 'publish',
+			'limit'      => 12,
+			'category'   => array( GHSTORE_KITS_CATEGORY ),
+			'visibility' => 'catalog',
 		)
 	);
 	usort(
@@ -435,3 +717,44 @@ function ghstore_kit_products() {
 
 	return $kits;
 }
+
+/* ---------- admin: payments check ---------- */
+
+/**
+ * Warn when customers can add to the cart but there is no way to pay.
+ */
+function ghstore_payments_notice() {
+	if ( 'buy' !== ghstore_mod( 'shop_mode' ) || ! current_user_can( 'manage_woocommerce' ) ) { // phpcs:ignore WordPress.WP.Capabilities.Unknown -- WooCommerce capability.
+		return;
+	}
+
+	$screen = get_current_screen();
+	if ( ! $screen || ! in_array( $screen->id, array( 'dashboard', 'woocommerce_page_wc-settings', 'themes', 'edit-ghstore_quote' ), true ) ) {
+		return;
+	}
+
+	if ( ! function_exists( 'WC' ) || ! method_exists( WC(), 'payment_gateways' ) ) {
+		return;
+	}
+	foreach ( WC()->payment_gateways()->payment_gateways() as $gateway ) {
+		if ( 'yes' === $gateway->enabled ) {
+			return;
+		}
+	}
+	?>
+	<div class="notice notice-warning">
+		<p>
+			<strong><?php esc_html_e( 'No payment method is enabled.', 'green-home-store' ); ?></strong>
+			<?php
+			printf(
+				/* translators: 1: link to WooCommerce payment settings, 2: link to the Customizer. */
+				esc_html__( 'Customers can add products to the cart but cannot check out. %1$s, or switch the shop to “Enquire only” %2$s so every product shows a “Request a quote” button instead.', 'green-home-store' ),
+				'<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout' ) ) . '">' . esc_html__( 'Enable a payment method', 'green-home-store' ) . '</a>',
+				'<a href="' . esc_url( admin_url( 'customize.php?autofocus[section]=ghstore_shop' ) ) . '">' . esc_html__( 'in the Customizer', 'green-home-store' ) . '</a>'
+			);
+			?>
+		</p>
+	</div>
+	<?php
+}
+add_action( 'admin_notices', 'ghstore_payments_notice' );

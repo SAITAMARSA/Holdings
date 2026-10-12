@@ -33,7 +33,7 @@ $ghstore_whatsapp   = ghstore_whatsapp_url();
 		</nav>
 
 		<?php if ( $ghstore_categories ) : ?>
-			<nav class="footer-col" aria-label="<?php esc_attr_e( 'Product categories', 'green-home-store' ); ?>">
+			<nav class="footer-col" aria-label="<?php esc_attr_e( 'Shop categories', 'green-home-store' ); ?>">
 				<h2 class="footer-title"><?php esc_html_e( 'Categories', 'green-home-store' ); ?></h2>
 				<ul class="footer-links">
 					<?php foreach ( array_slice( $ghstore_categories, 0, 6 ) as $ghstore_term ) : ?>
@@ -60,7 +60,9 @@ $ghstore_whatsapp   = ghstore_whatsapp_url();
 					<li class="muted"><?php ghstore_icon_e( 'pin', 18 ); ?> <?php echo esc_html( ghstore_mod( 'location' ) ); ?></li>
 				<?php endif; ?>
 			</ul>
-			<a class="btn btn-primary btn-sm" href="<?php echo esc_url( ghstore_quote_url() ); ?>"><?php esc_html_e( 'Request a Quote', 'green-home-store' ); ?></a>
+			<?php if ( ghstore_quote_url() ) : ?>
+				<a class="btn btn-primary btn-sm" href="<?php echo esc_url( ghstore_quote_url() ); ?>"><?php esc_html_e( 'Request a Quote', 'green-home-store' ); ?></a>
+			<?php endif; ?>
 		</div>
 	</div>
 	<div class="wrap footer-bottom">

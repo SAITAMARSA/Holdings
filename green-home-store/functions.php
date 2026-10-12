@@ -103,3 +103,29 @@ function ghstore_assets() {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'ghstore_assets' );
+
+// No emoji polyfill: it is the theme's only third-party request (s.w.org) and
+// every browser the site supports renders emoji natively.
+remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+remove_action( 'wp_print_styles', 'print_emoji_styles' );
+
+/**
+ * On the front page every WordPress-generated image sits below the hero, so
+ * lazy-load them all instead of letting the "first images are above the
+ * fold" heuristic eager-load the whole catalogue strip.
+ *
+ * @param array  $loading_attrs Loading attributes.
+ * @param string $tag_name      Tag name.
+ * @return array
+ */
+function ghstore_front_page_lazy_images( $loading_attrs, $tag_name ) {
+	if ( 'img' !== $tag_name || is_admin() || ! is_front_page() ) {
+		return $loading_attrs;
+	}
+
+	$loading_attrs['loading'] = 'lazy';
+	unset( $loading_attrs['fetchpriority'] );
+
+	return $loading_attrs;
+}
+add_filter( 'wp_get_loading_optimization_attributes', 'ghstore_front_page_lazy_images', 10, 2 );

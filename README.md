@@ -11,48 +11,72 @@
 A solar-energy storefront in the Green Home Systems brand (charcoal and lime,
 the Green Home logo and copy). Your WooCommerce products show on the home page
 (shop-by-category tiles, featured products, DEYE kit packages), in the shop and
-category pages, and on product pages, which get WhatsApp and installation-quote
-buttons. The quote form saves every request under **Quote requests** in the
-dashboard and emails it to you. Every home page section can be edited or
-switched off in **Appearance → Customize → Green Home theme**.
+category pages, and on product pages, which get WhatsApp and quote buttons.
+Complete Kits are quote-only because they include installation; the rest of the
+shop sells online, or the whole shop can be switched to "Enquire only". The
+quote form saves every request under **Quote requests** in the dashboard and
+emails it to you. Home page sections can be switched off, and the promo bar,
+hero, stats, FAQ, testimonials, contact details and footer tagline are editable
+in **Appearance → Customize → Green Home theme** (the "why us", steps and
+services text is fixed in the theme).
 
 ### Go live
 
 1. Download [`dist/green-home-store.zip`](dist/green-home-store.zip) (on
    GitHub: open it, then **Download raw file**).
-2. **Appearance → Themes → Add New Theme → Upload Theme** → choose the zip →
-   **Install** → **Activate**. The old theme stays installed, so you can switch
-   back at any time.
-3. **WooCommerce → Settings → Site visibility → Live → Save.** In "Coming soon"
+2. **Appearance → Themes → Add Theme → Upload Theme** → choose the zip →
+   **Install Now** → **Activate**. The old theme stays installed, so you can
+   switch back at any time.
+3. **Decide how you sell.** Products show "Add to cart", but customers can only
+   pay if a payment method is on under **WooCommerce → Settings → Payments**
+   (Direct bank transfer, PayFast, Yoco…) and a shipping method exists under
+   **WooCommerce → Settings → Shipping**. To handle every sale by quote for
+   now, set **Customize → Green Home theme → Shop & buying** to "Enquire
+   only". The dashboard warns you while "Buy online" is on without a payment
+   method.
+4. **WooCommerce → Settings → Site visibility → Live → Save.** In "Coming soon"
    mode, visitors can't see any products.
-4. **Settings → General → Site Title:** `Green Home Systems`. It currently says
-   "My blog", which is what shows in browser tabs and Google.
-5. **Customize → Green Home theme → Contact details & quotes:** check the phone,
-   WhatsApp number and email address. Quote requests are emailed there.
-6. Optional: **Products → Import** →
-   `green-home-store/sample-data/complete-kits.csv` adds the five DEYE kits as
-   products in a "Complete Kits" category; the home page kit section then
-   shows them with live prices.
-7. Send a test quote from the home page and check it arrives. If the email
+5. **Settings → General:** Site Title `Green Home Systems`, a Tagline (e.g.
+   `Solar kits, inverters and batteries – supplied and installed`) and Timezone
+   `Johannesburg`. The title and tagline currently read "My blog – Just another
+   WordPress site" in browser tabs and Google.
+6. **Customize → Green Home theme → Contact details & quotes:** check the
+   phone, WhatsApp number, WhatsApp opening message and email address. Quote
+   requests are emailed there. The old site showed
+   `info@greenihomesystems.co.za`, a misspelt domain that cannot receive mail;
+   the theme defaults to `info@greenhomesystems.co.za`, so confirm that mailbox
+   exists.
+7. **Customize → Site Identity → Site Icon:** a square crop of the logo.
+8. Recommended: unzip the download, then **Products → All Products → Import**
+   (button at the top) → `green-home-store/sample-data/complete-kits.csv` →
+   **Continue → Run the importer**. This adds the five DEYE kits as products in
+   a "Complete Kits" category; the home page kit section then shows them with
+   live prices. Check the "12KWH DEYE Kit – Premium Solution" first: it lists a
+   16 kW inverter, as the old site did.
+9. Send a test quote from the home page and check it arrives. If the email
    doesn't arrive, the request is still saved; install an SMTP plugin such as
-   WP Mail SMTP.
+   WP Mail SMTP. The dashboard also shows a warning if quote emails fail.
+10. Optional: an SEO plugin (Yoast, Rank Math, SEOPress); delete the leftover
+    "Sample Page"; publish a Privacy Policy page (**Settings → Privacy**).
 
 The quote form can also go on any page with the `[ghstore_quote_form]`
 shortcode. To mark a kit "Most popular", give it the product tag `popular`.
+Quote requests are visible to Administrators, Editors and Shop managers only.
 
 ### Structure
 
 ```
 green-home-store/
   style.css                  theme header + layout, home sections, footer
-  functions.php              theme supports, menus, scripts
-  inc/woocommerce.php        product cards, shop toolbar, header cart, product enquiry box, home product sections
-  inc/quote-requests.php     quote form, saving to "Quote requests", email
+  functions.php              theme supports, scripts, image loading
+  inc/woocommerce.php        product cards, shop toolbar, header cart, quote-only products, enquiry box, home product sections
+  inc/quote-requests.php     quote form, saving to "Quote requests", email, rate limit
   inc/customizer.php         Customizer settings
-  inc/template-tags.php      logo, menu fallback, WhatsApp / phone / quote links
+  inc/template-tags.php      logo, menu fallback, WhatsApp / phone / quote links, meta tags
   inc/icons.php              inline SVG icons
   front-page.php             home page (sections in template-parts/home/)
   assets/css/woocommerce.css shop, product, cart and checkout styling
+  assets/js/theme.js         menu, submenus, ticker pause, form marker
   sample-data/complete-kits.csv
 ```
 

@@ -144,6 +144,12 @@ function ghstore_text_settings() {
 			'description' => __( 'International format without + or spaces, e.g. 27713959721. Leave empty to hide WhatsApp buttons.', 'green-home-store' ),
 			'default'     => '27713959721',
 		),
+		'whatsapp_message'     => array(
+			'section'     => 'ghstore_contact',
+			'label'       => __( 'WhatsApp opening message', 'green-home-store' ),
+			'description' => __( 'Pre-filled in the customer’s chat when they tap a WhatsApp button.', 'green-home-store' ),
+			'default'     => __( 'Hi, I’d like to find out more about going solar.', 'green-home-store' ),
+		),
 		'email'                => array(
 			'section' => 'ghstore_contact',
 			'label'   => __( 'Email address (shown on the site)', 'green-home-store' ),
@@ -181,11 +187,37 @@ function ghstore_text_settings() {
 			),
 			'type'        => 'textarea',
 		),
+		'faq_items'            => array(
+			'section'     => 'ghstore_content',
+			'label'       => __( 'FAQ', 'green-home-store' ),
+			'description' => __( 'One question per line, written as: Question | Answer', 'green-home-store' ),
+			'default'     => implode( "\n", ghstore_default_faqs() ),
+			'type'        => 'textarea',
+		),
+		'testimonials_items'   => array(
+			'section'     => 'ghstore_content',
+			'label'       => __( 'Testimonials', 'green-home-store' ),
+			'description' => __( 'One per line, written as: What they said | Name | Town', 'green-home-store' ),
+			'default'     => implode( "\n", ghstore_default_testimonials() ),
+			'type'        => 'textarea',
+		),
 		'footer_tagline'       => array(
 			'section' => 'ghstore_footer',
 			'label'   => __( 'Footer tagline', 'green-home-store' ),
 			'default' => __( 'Powering homes. Empowering tomorrow.', 'green-home-store' ),
 		),
+	);
+}
+
+/**
+ * How products are sold.
+ *
+ * @return array<string, string>
+ */
+function ghstore_shop_modes() {
+	return array(
+		'buy'     => __( 'Buy online: Add to cart and checkout (needs a payment method in WooCommerce → Settings → Payments)', 'green-home-store' ),
+		'enquire' => __( 'Enquire only: every product shows a “Request a quote” button instead of Add to cart', 'green-home-store' ),
 	);
 }
 
@@ -231,9 +263,11 @@ function ghstore_product_sources() {
  */
 function ghstore_option_defaults() {
 	$defaults = array(
-		'primary'         => '#9acd32',
-		'products_source' => 'featured',
-		'products_count'  => 8,
+		'primary'          => '#9acd32',
+		'products_source'  => 'featured',
+		'products_count'   => 8,
+		'shop_mode'        => 'buy',
+		'kits_purchasable' => false,
 	);
 	foreach ( array_keys( ghstore_home_sections() ) as $section ) {
 		$defaults[ 'show_' . $section ] = true;
@@ -249,8 +283,12 @@ function ghstore_option_defaults() {
  * @return mixed
  */
 function ghstore_mod( $key ) {
-	$text    = ghstore_text_settings();
-	$options = ghstore_option_defaults();
+	static $text    = null;
+	static $options = null;
+	if ( null === $text ) {
+		$text    = ghstore_text_settings();
+		$options = ghstore_option_defaults();
+	}
 
 	if ( isset( $text[ $key ] ) ) {
 		$fallback = $text[ $key ]['default'];
@@ -282,6 +320,8 @@ function ghstore_customize_register( $wp_customize ) {
 		'ghstore_hero'    => __( 'Home: hero', 'green-home-store' ),
 		'ghstore_stats'   => __( 'Home: stats', 'green-home-store' ),
 		'ghstore_home'    => __( 'Home: sections & products', 'green-home-store' ),
+		'ghstore_content' => __( 'Home: FAQ & testimonials', 'green-home-store' ),
+		'ghstore_shop'    => __( 'Shop & buying', 'green-home-store' ),
 		'ghstore_contact' => __( 'Contact details & quotes', 'green-home-store' ),
 		'ghstore_footer'  => __( 'Footer', 'green-home-store' ),
 	);
@@ -381,6 +421,40 @@ function ghstore_customize_register( $wp_customize ) {
 	}
 
 	$wp_customize->add_setting(
+		'ghstore_shop_mode',
+		array(
+			'default'           => $defaults['shop_mode'],
+			'sanitize_callback' => 'ghstore_sanitize_shop_mode',
+		)
+	);
+	$wp_customize->add_control(
+		'ghstore_shop_mode',
+		array(
+			'label'   => __( 'How products are sold', 'green-home-store' ),
+			'section' => 'ghstore_shop',
+			'type'    => 'radio',
+			'choices' => ghstore_shop_modes(),
+		)
+	);
+
+	$wp_customize->add_setting(
+		'ghstore_kits_purchasable',
+		array(
+			'default'           => $defaults['kits_purchasable'],
+			'sanitize_callback' => 'rest_sanitize_boolean',
+		)
+	);
+	$wp_customize->add_control(
+		'ghstore_kits_purchasable',
+		array(
+			'label'       => __( 'Let customers buy Complete Kits online', 'green-home-store' ),
+			'description' => __( 'Off by default: kits include installation, so they show “Request a quote” even when the rest of the shop sells online.', 'green-home-store' ),
+			'section'     => 'ghstore_shop',
+			'type'        => 'checkbox',
+		)
+	);
+
+	$wp_customize->add_setting(
 		'ghstore_primary',
 		array(
 			'default'           => $defaults['primary'],
@@ -408,6 +482,16 @@ add_action( 'customize_register', 'ghstore_customize_register' );
  */
 function ghstore_sanitize_product_source( $value ) {
 	return array_key_exists( $value, ghstore_product_sources() ) ? $value : 'featured';
+}
+
+/**
+ * Keep the shop mode to a known value.
+ *
+ * @param string $value Submitted value.
+ * @return string
+ */
+function ghstore_sanitize_shop_mode( $value ) {
+	return array_key_exists( $value, ghstore_shop_modes() ) ? $value : 'buy';
 }
 
 /**

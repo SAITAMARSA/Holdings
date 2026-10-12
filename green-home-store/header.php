@@ -34,7 +34,7 @@ $ghstore_promo_url = ghstore_mod( 'promo_url' ) ? ghstore_mod( 'promo_url' ) : g
 <header class="site-header">
 	<div class="wrap nav">
 		<?php ghstore_brand(); ?>
-		<nav class="nav-links" id="site-nav" aria-label="<?php esc_attr_e( 'Primary', 'green-home-store' ); ?>">
+		<nav class="nav-links" id="site-nav" aria-label="<?php esc_attr_e( 'Primary', 'green-home-store' ); ?>" data-submenu-label="<?php esc_attr_e( 'Open submenu for', 'green-home-store' ); ?>">
 			<?php
 			wp_nav_menu(
 				array(

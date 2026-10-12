@@ -19,6 +19,6 @@ $ghstore_product = 'product' === get_post_type() && function_exists( 'wc_get_pro
 			<time class="post-item-kicker" datetime="<?php echo esc_attr( get_the_date( DATE_W3C ) ); ?>"><?php echo esc_html( get_the_date() ); ?></time>
 		<?php endif; ?>
 		<h2 class="post-item-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
-		<p><?php echo esc_html( wp_trim_words( get_the_excerpt(), 30 ) ); ?></p>
+		<p><?php echo esc_html( ghstore_summary( 30 ) ); ?></p>
 	</div>
 </article>
