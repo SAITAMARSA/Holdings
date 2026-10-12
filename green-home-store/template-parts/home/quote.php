@@ -35,7 +35,7 @@ $ghstore_email    = ghstore_mod( 'email' );
 				<?php if ( is_email( $ghstore_email ) ) : ?>
 					<a class="contact-card" href="<?php echo esc_url( 'mailto:' . $ghstore_email ); ?>">
 						<span class="feature-icon"><?php ghstore_icon_e( 'mail' ); ?></span>
-						<span><strong><?php esc_html_e( 'Email', 'green-home-store' ); ?></strong><?php echo esc_html( $ghstore_email ); ?></span>
+						<span><strong><?php esc_html_e( 'Email', 'green-home-store' ); ?></strong><?php echo ghstore_breakable_email( $ghstore_email ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in helper. ?></span>
 					</a>
 				<?php endif; ?>
 				<?php if ( ghstore_mod( 'location' ) ) : ?>

@@ -159,8 +159,19 @@ function ghstore_lines( $text ) {
 function ghstore_rows( $text, $columns ) {
 	$rows = array();
 	foreach ( ghstore_lines( $text ) as $line ) {
-		$cells = array_map( 'trim', explode( '|', $line, $columns ) );
-		if ( count( $cells ) === $columns && '' !== $cells[0] ) {
+		$parts = array_map( 'trim', explode( '|', $line ) );
+		if ( count( $parts ) < $columns ) {
+			continue;
+		}
+		if ( 2 === $columns ) {
+			// Question | Answer: the answer may itself contain a pipe.
+			$cells = array( $parts[0], trim( implode( ' | ', array_slice( $parts, 1 ) ) ) );
+		} else {
+			// Quote | Name | Town: the quote may contain a pipe, the last cells don't.
+			$tail  = array_slice( $parts, -( $columns - 1 ) );
+			$cells = array_merge( array( trim( implode( ' | ', array_slice( $parts, 0, -( $columns - 1 ) ) ) ) ), $tail );
+		}
+		if ( '' !== $cells[0] ) {
 			$rows[] = $cells;
 		}
 	}
@@ -175,11 +186,17 @@ function ghstore_rows( $text, $columns ) {
  */
 function ghstore_default_faqs() {
 	return array(
+		/* translators: keep the " | " separator: it splits the question from the answer. */
 		__( 'How much can I save on my electricity bill? | Most homeowners save between 60-80% on their monthly electricity bills with a solar system. The exact amount depends on your current consumption, location, and the package size. Contact us for a personalized assessment.', 'green-home-store' ),
+		/* translators: keep the " | " separator: it splits the question from the answer. */
 		__( 'How long does installation take? | A typical residential installation takes 2-3 days from start to finish. The timeline depends on system size and roof complexity. We’ll provide a detailed schedule when you request your quote.', 'green-home-store' ),
+		/* translators: keep the " | " separator: it splits the question from the answer. */
 		__( 'Do solar panels work during cloudy weather? | Yes, solar panels still generate electricity on cloudy days, though at reduced capacity (about 25% of normal output). Modern systems with battery storage ensure you have power even when generation is low.', 'green-home-store' ),
+		/* translators: keep the " | " separator: it splits the question from the answer. */
 		__( 'What warranty do you provide? | We offer 5-15 years warranty depending on your package. Solar panels typically last 25+ years. Inverters and batteries have separate warranties. All details are included in your quote.', 'green-home-store' ),
+		/* translators: keep the " | " separator: it splits the question from the answer. */
 		__( 'Do you offer financing options? | Yes! We offer flexible financing options to make solar more affordable. Monthly payments can often be lower than your current electricity bill, so you save money from day one.', 'green-home-store' ),
+		/* translators: keep the " | " separator: it splits the question from the answer. */
 		__( 'What about maintenance? | Solar systems require minimal maintenance. Occasional cleaning and annual inspections are recommended. We offer maintenance packages to keep your system running optimally.', 'green-home-store' ),
 	);
 }
@@ -191,11 +208,17 @@ function ghstore_default_faqs() {
  */
 function ghstore_default_testimonials() {
 	return array(
+		/* translators: keep both " | " separators: they split the quote, the name and the town. */
 		__( 'Green Home Systems transformed our home. We’ve cut our electricity bills by 75% and no longer worry about load shedding. Highly recommended! | Johann Pieterse | Cape Town', 'green-home-store' ),
+		/* translators: keep both " | " separators: they split the quote, the name and the town. */
 		__( 'The installation team was professional and efficient. Everything is working perfectly. We’re generating excess power and saving money every day! | Sarah Mkazi | Johannesburg', 'green-home-store' ),
+		/* translators: keep both " | " separators: they split the quote, the name and the town. */
 		__( 'Best investment we’ve made for our home. The customer service is outstanding and we’re seeing real savings. Thank you, Green Home Systems! | Trevor Van der Merwe | Durban', 'green-home-store' ),
+		/* translators: keep both " | " separators: they split the quote, the name and the town. */
 		__( 'We haven’t noticed a single load shedding outage since installation. The 12KWH kit powers our whole house, even during Stage 6. Worth every rand. | Nomvula Mahlangu | Pretoria', 'green-home-store' ),
+		/* translators: keep both " | " separators: they split the quote, the name and the town. */
 		__( 'From quote to installation took under a week. The team was upfront about pricing with no hidden costs. Our business hasn’t lost a single hour of trading since. | Riaan de Klerk | Gqeberha', 'green-home-store' ),
+		/* translators: keep both " | " separators: they split the quote, the name and the town. */
 		__( 'I used the financing option and was approved within two days. My monthly repayment is lower than what I used to pay Eskom. Should have done this years ago. | Lindiwe Khumalo | Bloemfontein', 'green-home-store' ),
 	);
 }
@@ -325,21 +348,42 @@ function ghstore_listing_heading() {
 }
 
 /**
- * Plain-text summary of a post or product for listings: block-level tags
- * become spaces so list items don't run together.
+ * HTML to one line of plain text: block-level and line-break tags become
+ * spaces so list items don't run together.
+ *
+ * @param string $html HTML.
+ * @return string
+ */
+function ghstore_plain_text( $html ) {
+	$text = preg_replace( '/<\/?(?:li|ul|ol|p|h[1-6]|div|br|tr|td|th|blockquote)\b[^>]*>/i', ' ', strip_shortcodes( (string) $html ) );
+
+	return trim( preg_replace( '/\s+/', ' ', wp_strip_all_tags( $text ) ) );
+}
+
+/**
+ * Plain-text summary of a post or product for listings.
  *
  * @param int $words Word limit.
  * @return string
  */
 function ghstore_summary( $words = 30 ) {
-	$text = preg_replace( '/<\/?(?:li|ul|ol|p|h[1-6]|div|br|tr|td|th|blockquote)\b[^>]*>/i', ' ', get_the_excerpt() );
-
-	return wp_trim_words( wp_strip_all_tags( $text ), $words );
+	return wp_trim_words( ghstore_plain_text( get_the_excerpt() ), $words );
 }
 
 /**
- * Meta description and Open Graph tags for the home page and single
- * products/posts, unless an SEO plugin is handling them.
+ * An email address with optional break points before "@" and ".", so it can
+ * wrap on narrow screens without breaking mid-word.
+ *
+ * @param string $email Email address.
+ * @return string Escaped HTML.
+ */
+function ghstore_breakable_email( $email ) {
+	return implode( '<wbr>', array_map( 'esc_html', preg_split( '/(?=[@.])/', (string) $email ) ) );
+}
+
+/**
+ * Meta description, Open Graph tags and (where core doesn't) a canonical
+ * link, unless an SEO plugin is handling them.
  */
 function ghstore_meta_tags() {
 	if ( defined( 'WPSEO_VERSION' ) || defined( 'RANK_MATH_VERSION' ) || defined( 'SEOPRESS_VERSION' ) || defined( 'AIOSEO_VERSION' ) ) {
@@ -349,13 +393,19 @@ function ghstore_meta_tags() {
 	$description = '';
 	$image       = '';
 	$url         = '';
+	$canonical   = '';
+	$paged       = max( 1, (int) get_query_var( 'paged' ) );
 
 	if ( is_front_page() ) {
 		$description = ghstore_mod( 'hero_text' );
 		$url         = home_url( '/' );
+		$canonical   = 1 === $paged ? $url : '';
 	} elseif ( is_singular() ) {
 		$post = get_queried_object();
-		$url  = get_permalink( $post );
+		if ( function_exists( 'is_cart' ) && ( is_cart() || is_checkout() || is_account_page() ) ) {
+			return;
+		}
+		$url = get_permalink( $post );
 		if ( function_exists( 'wc_get_product' ) && 'product' === $post->post_type ) {
 			$product     = wc_get_product( $post );
 			$description = $product ? $product->get_short_description() : '';
@@ -366,21 +416,38 @@ function ghstore_meta_tags() {
 			$description = has_excerpt( $post ) ? get_the_excerpt( $post ) : $post->post_content;
 		}
 		$image = get_the_post_thumbnail_url( $post, 'large' );
+	} elseif ( function_exists( 'is_shop' ) && ( is_shop() || is_product_taxonomy() ) ) {
+		$term = is_product_taxonomy() ? get_queried_object() : null;
+		$base = $term instanceof WP_Term ? get_term_link( $term ) : wc_get_page_permalink( 'shop' );
+		if ( is_string( $base ) ) {
+			$canonical = 1 === $paged ? $base : ( get_option( 'permalink_structure' ) ? trailingslashit( $base ) . user_trailingslashit( 'page/' . $paged, 'paged' ) : add_query_arg( 'paged', $paged, $base ) );
+			$url       = $canonical;
+		}
+		$description = $term instanceof WP_Term ? $term->description : '';
 	} else {
 		return;
 	}
 
-	$description = wp_trim_words( wp_strip_all_tags( strip_shortcodes( (string) $description ) ), 30, '…' );
+	$description = wp_trim_words( ghstore_plain_text( $description ), 30, '…' );
 	if ( ! $image ) {
 		$image = get_template_directory_uri() . '/assets/images/logo.webp';
 	}
 
-	echo '<meta name="description" content="' . esc_attr( $description ) . '">' . "\n";
+	if ( $canonical ) {
+		echo '<link rel="canonical" href="' . esc_url( $canonical ) . '">' . "\n";
+	}
+	if ( '' !== $description ) {
+		echo '<meta name="description" content="' . esc_attr( $description ) . '">' . "\n";
+	}
 	echo '<meta property="og:site_name" content="' . esc_attr( get_bloginfo( 'name' ) ) . '">' . "\n";
-	echo '<meta property="og:type" content="' . ( is_front_page() ? 'website' : 'article' ) . '">' . "\n";
+	echo '<meta property="og:type" content="' . ( is_singular() ? 'article' : 'website' ) . '">' . "\n";
 	echo '<meta property="og:title" content="' . esc_attr( wp_get_document_title() ) . '">' . "\n";
-	echo '<meta property="og:description" content="' . esc_attr( $description ) . '">' . "\n";
-	echo '<meta property="og:url" content="' . esc_url( $url ) . '">' . "\n";
+	if ( '' !== $description ) {
+		echo '<meta property="og:description" content="' . esc_attr( $description ) . '">' . "\n";
+	}
+	if ( $url ) {
+		echo '<meta property="og:url" content="' . esc_url( $url ) . '">' . "\n";
+	}
 	echo '<meta property="og:image" content="' . esc_url( $image ) . '">' . "\n";
 	echo '<meta name="twitter:card" content="summary_large_image">' . "\n";
 }

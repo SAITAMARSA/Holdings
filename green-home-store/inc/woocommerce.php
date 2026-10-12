@@ -40,6 +40,23 @@ function ghstore_uncropped_thumbnail( $size ) {
 }
 add_filter( 'woocommerce_get_image_size_thumbnail', 'ghstore_uncropped_thumbnail' );
 
+/**
+ * Existing products keep their old cropped thumbnails until WooCommerce
+ * regenerates them. WooCommerce does that on theme switch; this also runs
+ * it once per theme version (it only queues work when the size hash changed).
+ */
+function ghstore_maybe_regenerate_thumbnails() {
+	if ( ! class_exists( 'WC_Regenerate_Images' ) || ! current_user_can( 'manage_woocommerce' ) ) { // phpcs:ignore WordPress.WP.Capabilities.Unknown -- WooCommerce capability.
+		return;
+	}
+	if ( get_option( 'ghstore_thumbs_version' ) === GHSTORE_VERSION ) {
+		return;
+	}
+	update_option( 'ghstore_thumbs_version', GHSTORE_VERSION, false );
+	WC_Regenerate_Images::maybe_regenerate_images();
+}
+add_action( 'admin_init', 'ghstore_maybe_regenerate_thumbnails' );
+
 /* ---------- page wrappers (no sidebar) ---------- */
 
 remove_action( 'woocommerce_before_main_content', 'woocommerce_output_content_wrapper', 10 );
@@ -87,7 +104,13 @@ add_action( 'woocommerce_after_main_content', 'ghstore_wc_wrapper_end', 10 );
  * @return bool
  */
 function ghstore_is_kit( $product ) {
-	return $product instanceof WC_Product && has_term( GHSTORE_KITS_CATEGORY, 'product_cat', $product->get_id() );
+	if ( ! $product instanceof WC_Product ) {
+		return false;
+	}
+	// Categories live on the parent, so check it for variations.
+	$id = $product->get_parent_id() ? $product->get_parent_id() : $product->get_id();
+
+	return has_term( GHSTORE_KITS_CATEGORY, 'product_cat', $id );
 }
 
 /**
@@ -172,10 +195,17 @@ function ghstore_loop_quote_button( $link, $product ) {
 		return $link;
 	}
 
+	$url = ghstore_product_quote_link( $product );
+	if ( ! $url ) {
+		return $link;
+	}
+
 	return sprintf(
-		'<a href="%1$s" class="button ghstore-quote-button">%2$s</a>',
-		esc_url( ghstore_product_quote_link( $product ) ),
-		esc_html__( 'Request a quote', 'green-home-store' )
+		'<a href="%1$s" class="button ghstore-quote-button" aria-label="%3$s">%2$s</a>',
+		esc_url( $url ),
+		esc_html__( 'Request a quote', 'green-home-store' ),
+		/* translators: %s: product name. */
+		esc_attr( sprintf( __( 'Request a quote for “%s”', 'green-home-store' ), wp_specialchars_decode( $product->get_name(), ENT_QUOTES ) ) )
 	);
 }
 add_filter( 'woocommerce_loop_add_to_cart_link', 'ghstore_loop_quote_button', 10, 2 );
@@ -196,6 +226,24 @@ function ghstore_loop_button_text( $text, $product ) {
 	return $text;
 }
 add_filter( 'woocommerce_product_add_to_cart_text', 'ghstore_loop_button_text', 10, 2 );
+
+/**
+ * Matching accessible name for the "View details" button (WooCommerce's
+ * default aria-label says "Read more about…").
+ *
+ * @param string     $text    Description.
+ * @param WC_Product $product Product.
+ * @return string
+ */
+function ghstore_loop_button_description( $text, $product ) {
+	if ( $product instanceof WC_Product && ! $product->is_type( 'external' ) && ( ! $product->is_in_stock() || ! $product->is_purchasable() ) ) {
+		/* translators: %s: product name. */
+		return sprintf( __( 'View details for “%s”', 'green-home-store' ), wp_specialchars_decode( $product->get_name(), ENT_QUOTES ) );
+	}
+
+	return $text;
+}
+add_filter( 'woocommerce_product_add_to_cart_description', 'ghstore_loop_button_description', 10, 2 );
 
 /* ---------- product cards ---------- */
 
@@ -450,8 +498,9 @@ function ghstore_product_enquiry() {
 		sprintf( __( 'Hi, I’m interested in the %1$s (%2$s). Can you help?', 'green-home-store' ), $name, get_permalink( $product->get_id() ) )
 	);
 	$quote = ghstore_product_quote_link( $product );
-	if ( $quote === $whatsapp ) {
-		$quote = '';
+	if ( $whatsapp && 0 === strpos( $quote, 'https://wa.me/' ) ) {
+		// Without the quote form both buttons would open WhatsApp; keep one.
+		$whatsapp = '';
 	}
 	if ( ! $whatsapp && ! $quote ) {
 		return;
@@ -491,7 +540,7 @@ add_action( 'woocommerce_single_product_summary', 'ghstore_product_enquiry', 35 
  * Cart icon with item count, for the header.
  */
 function ghstore_cart_link() {
-	if ( ! WC()->cart ) {
+	if ( ! WC()->cart || 'enquire' === ghstore_mod( 'shop_mode' ) ) {
 		return;
 	}
 
@@ -572,18 +621,27 @@ function ghstore_home_products_html() {
  * @return array
  */
 function ghstore_grid_hide_out_of_stock( $query_args ) {
+	$query_args['tax_query'] = isset( $query_args['tax_query'] ) ? $query_args['tax_query'] : array(); // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+
 	$visibility = wc_get_product_visibility_term_ids();
-	if ( empty( $visibility['outofstock'] ) ) {
-		return $query_args;
+	if ( ! empty( $visibility['outofstock'] ) ) {
+		$query_args['tax_query'][] = array(
+			'taxonomy' => 'product_visibility',
+			'field'    => 'term_taxonomy_id',
+			'terms'    => array( $visibility['outofstock'] ),
+			'operator' => 'NOT IN',
+		);
 	}
 
-	$query_args['tax_query']   = isset( $query_args['tax_query'] ) ? $query_args['tax_query'] : array(); // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
-	$query_args['tax_query'][] = array(
-		'taxonomy' => 'product_visibility',
-		'field'    => 'term_taxonomy_id',
-		'terms'    => array( $visibility['outofstock'] ),
-		'operator' => 'NOT IN',
-	);
+	// Kits have their own home page section.
+	if ( ghstore_mod( 'show_kits' ) && term_exists( GHSTORE_KITS_CATEGORY, 'product_cat' ) ) {
+		$query_args['tax_query'][] = array(
+			'taxonomy' => 'product_cat',
+			'field'    => 'slug',
+			'terms'    => array( GHSTORE_KITS_CATEGORY ),
+			'operator' => 'NOT IN',
+		);
+	}
 
 	return $query_args;
 }

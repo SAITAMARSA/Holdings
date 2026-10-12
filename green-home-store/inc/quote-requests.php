@@ -10,11 +10,17 @@
 
 defined( 'ABSPATH' ) || exit;
 
-/** Submissions allowed per visitor IP within GHSTORE_QUOTE_RATE_WINDOW. */
+/** Accepted submissions allowed per visitor IP within GHSTORE_QUOTE_RATE_WINDOW. */
 const GHSTORE_QUOTE_RATE_LIMIT = 5;
 
-/** Length of the rate-limit window, in seconds. */
+/** Length of the per-IP window, in seconds. */
 const GHSTORE_QUOTE_RATE_WINDOW = 10 * MINUTE_IN_SECONDS;
+
+/** Accepted submissions per email address per hour. */
+const GHSTORE_QUOTE_EMAIL_LIMIT = 3;
+
+/** Accepted submissions per hour site-wide before emails pause (requests are still saved). */
+const GHSTORE_QUOTE_HOURLY_CEILING = 40;
 
 /**
  * Form fields.
@@ -145,7 +151,6 @@ function ghstore_quote_form() {
 	if ( 'invalid' === $status && $token ) {
 		$draft = get_transient( 'ghstore_quote_draft_' . $token );
 		if ( is_array( $draft ) ) {
-			delete_transient( 'ghstore_quote_draft_' . $token );
 			$errors = isset( $draft['_errors'] ) ? (array) $draft['_errors'] : array();
 			unset( $draft['_errors'] );
 			$values = $draft;
@@ -165,12 +170,12 @@ function ghstore_quote_form() {
 	?>
 	<div class="quote-form-wrap" id="quote-form">
 	<?php if ( 'sent' === $status ) : ?>
-		<div class="form-notice is-success" role="status">
+		<div class="form-notice is-success" role="status" tabindex="-1">
 			<?php ghstore_icon_e( 'check' ); ?>
 			<p><strong><?php esc_html_e( 'Thank you — your request has been sent.', 'green-home-store' ); ?></strong> <?php esc_html_e( 'We’ll get back to you within 24 hours.', 'green-home-store' ); ?></p>
 		</div>
 	<?php elseif ( 'invalid' === $status ) : ?>
-		<div class="form-notice is-error" role="alert">
+		<div class="form-notice is-error" role="alert" tabindex="-1">
 			<p>
 				<?php
 				$labels = array();
@@ -189,7 +194,7 @@ function ghstore_quote_form() {
 			</p>
 		</div>
 	<?php elseif ( 'limited' === $status ) : ?>
-		<div class="form-notice is-error" role="alert">
+		<div class="form-notice is-error" role="alert" tabindex="-1">
 			<p>
 				<?php esc_html_e( 'You’ve sent several requests in a short time. Please wait ten minutes before sending another, or contact us directly:', 'green-home-store' ); ?>
 				<?php if ( ghstore_whatsapp_url() ) : ?>
@@ -258,14 +263,25 @@ function ghstore_quote_form() {
 add_shortcode( 'ghstore_quote_form', 'ghstore_quote_form' );
 
 /**
- * The visitor's IP address, honouring Cloudflare / proxy headers when present.
+ * Whether proxy headers may be trusted for the visitor's IP address. Off
+ * unless the site opts in: add  define( 'GHSTORE_TRUST_PROXY_HEADERS', true );
+ * to wp-config.php when the site sits behind Cloudflare or a load balancer
+ * that overwrites those headers. On a plain host they are attacker-chosen.
  *
- * Only used to slow down floods, so a spoofed header costs nothing.
+ * @return bool
+ */
+function ghstore_trust_proxy_headers() {
+	return (bool) apply_filters( 'ghstore_trust_proxy_headers', defined( 'GHSTORE_TRUST_PROXY_HEADERS' ) && GHSTORE_TRUST_PROXY_HEADERS );
+}
+
+/**
+ * The visitor's IP address.
  *
  * @return string Empty when unknown.
  */
 function ghstore_client_ip() {
-	foreach ( array( 'HTTP_CF_CONNECTING_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR' ) as $key ) {
+	$keys = ghstore_trust_proxy_headers() ? array( 'HTTP_CF_CONNECTING_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR' ) : array( 'REMOTE_ADDR' );
+	foreach ( $keys as $key ) {
 		if ( empty( $_SERVER[ $key ] ) || ! is_string( $_SERVER[ $key ] ) ) {
 			continue;
 		}
@@ -280,22 +296,25 @@ function ghstore_client_ip() {
 }
 
 /**
- * Count this submission against the visitor's rate limit.
+ * Count one event against a limit kept in a transient.
  *
- * @return bool False when the visitor has sent too many requests recently.
+ * @param string $bucket Counter name, e.g. "ip".
+ * @param string $key    What is being counted (IP, email…); '' counts nothing.
+ * @param int    $limit  Events allowed per window.
+ * @param int    $window Window length in seconds.
+ * @return bool False when the limit was already reached.
  */
-function ghstore_quote_rate_allow() {
-	$ip = ghstore_client_ip();
-	if ( ! $ip ) {
+function ghstore_quote_rate_allow( $bucket, $key, $limit, $window ) {
+	if ( '' === $key ) {
 		return true;
 	}
 
-	$key   = 'ghstore_qrl_' . md5( $ip );
-	$count = (int) get_transient( $key );
-	if ( $count >= GHSTORE_QUOTE_RATE_LIMIT ) {
+	$name  = 'ghstore_qrl_' . $bucket . '_' . md5( $key );
+	$count = (int) get_transient( $name );
+	if ( $count >= $limit ) {
 		return false;
 	}
-	set_transient( $key, $count + 1, GHSTORE_QUOTE_RATE_WINDOW );
+	set_transient( $name, $count + 1, $window );
 
 	return true;
 }
@@ -306,7 +325,8 @@ function ghstore_quote_rate_allow() {
  * Public contact forms carry no nonce on purpose: anyone may submit one, it
  * grants no privilege, and cached pages would serve expired nonces and lose
  * real leads. Abuse is limited by a hidden honeypot field, a per-IP rate
- * limit, and flagging submissions that didn't come through a browser.
+ * limit (per IP, per email address and site-wide), and flagging submissions
+ * that didn't come through a browser.
  */
 function ghstore_handle_quote() {
 	// phpcs:disable WordPress.Security.NonceVerification.Missing -- see function docblock.
@@ -350,15 +370,26 @@ function ghstore_handle_quote() {
 	}
 
 	if ( $errors ) {
-		// Keep what the visitor typed for the re-rendered form.
+		// Keep what the visitor typed for the re-rendered form (bounded per IP so
+		// nobody can fill wp_options with drafts).
+		if ( ! ghstore_quote_rate_allow( 'draft', ghstore_client_ip(), 20, GHSTORE_QUOTE_RATE_WINDOW ) ) {
+			ghstore_quote_redirect( $redirect, 'invalid' );
+		}
 		$token = strtolower( wp_generate_password( 20, false, false ) );
 		set_transient( 'ghstore_quote_draft_' . $token, $data + array( '_errors' => $errors ), 10 * MINUTE_IN_SECONDS );
 		ghstore_quote_redirect( $redirect, 'invalid', array( 'qt' => $token ) );
 	}
 
-	// Only complete submissions count against the limit, so typos don't.
-	if ( ! ghstore_quote_rate_allow() ) {
+	// Only complete submissions count against the limits, so typos don't.
+	if ( ! ghstore_quote_rate_allow( 'ip', ghstore_client_ip(), GHSTORE_QUOTE_RATE_LIMIT, GHSTORE_QUOTE_RATE_WINDOW )
+		|| ! ghstore_quote_rate_allow( 'email', strtolower( $data['email'] ), GHSTORE_QUOTE_EMAIL_LIMIT, HOUR_IN_SECONDS ) ) {
 		ghstore_quote_redirect( $redirect, 'limited' );
+	}
+	// Site-wide ceiling: a flood from many addresses is still saved, but the
+	// inbox is spared and the dashboard says so.
+	$flood = ! ghstore_quote_rate_allow( 'all', 'all', GHSTORE_QUOTE_HOURLY_CEILING, HOUR_IN_SECONDS );
+	if ( $flood ) {
+		update_option( 'ghstore_quote_flood', time(), false );
 	}
 
 	$flagged = '1' !== ghstore_request_string( $post, 'ghstore_js' );
@@ -406,6 +437,10 @@ function ghstore_handle_quote() {
 	}
 
 	$reply_name = trim( str_replace( array( '"', '<', '>', ',' ), '', $data['name'] ) );
+
+	if ( $flood ) {
+		ghstore_quote_redirect( $redirect, 'sent' );
+	}
 
 	add_action( 'wp_mail_failed', 'ghstore_note_mail_failure' );
 	$sent = wp_mail(
@@ -471,6 +506,40 @@ function ghstore_mail_failed_notice() {
 	<?php
 }
 add_action( 'admin_notices', 'ghstore_mail_failed_notice' );
+
+/**
+ * Say so in the dashboard when the hourly ceiling paused quote emails.
+ */
+function ghstore_quote_flood_notice() {
+	$since = (int) get_option( 'ghstore_quote_flood' );
+	if ( ! $since || ! current_user_can( 'edit_pages' ) ) {
+		return;
+	}
+	if ( time() - $since > DAY_IN_SECONDS ) {
+		delete_option( 'ghstore_quote_flood' );
+		return;
+	}
+
+	$screen = get_current_screen();
+	if ( ! $screen || ! in_array( $screen->id, array( 'dashboard', 'edit-ghstore_quote', 'ghstore_quote' ), true ) ) {
+		return;
+	}
+	?>
+	<div class="notice notice-warning">
+		<p>
+			<?php
+			printf(
+				/* translators: 1: number of requests, 2: date and time. */
+				esc_html__( 'More than %1$d quote requests arrived within one hour (last at %2$s), which looks like spam. To protect your inbox, emails for the extra ones were not sent. Every request is still saved under Quote requests.', 'green-home-store' ),
+				(int) GHSTORE_QUOTE_HOURLY_CEILING,
+				esc_html( wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $since ) )
+			);
+			?>
+		</p>
+	</div>
+	<?php
+}
+add_action( 'admin_notices', 'ghstore_quote_flood_notice' );
 
 /**
  * Send the visitor back to the form with a status.

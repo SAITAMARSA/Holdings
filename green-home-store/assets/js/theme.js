@@ -17,9 +17,14 @@
 			function () {
 				var paused = ticker.classList.toggle( "is-paused" );
 				tickerToggle.setAttribute( "aria-pressed", String( paused ) );
-				tickerToggle.setAttribute( "aria-label", tickerToggle.getAttribute( paused ? "data-play" : "data-pause" ) );
 			}
 		);
+	}
+
+	/* ---------- quote form: announce the result ---------- */
+	var notice = document.querySelector( "#quote-form .form-notice" );
+	if ( notice && "#quote-form" === window.location.hash ) {
+		notice.focus( { preventScroll: true } );
 	}
 
 	/* ---------- header navigation ---------- */
@@ -117,6 +122,27 @@
 					closeSubmenus( item );
 					item.classList.toggle( "is-open", open );
 					button.setAttribute( "aria-expanded", String( open ) );
+				}
+			);
+
+			// Mouse users: keep the disclosure state in step with hover.
+			item.addEventListener(
+				"mouseenter",
+				function () {
+					if ( window.matchMedia( "(hover: hover)" ).matches && toggle.offsetParent === null ) {
+						closeSubmenus( item );
+						item.classList.add( "is-open" );
+						button.setAttribute( "aria-expanded", "true" );
+					}
+				}
+			);
+			item.addEventListener(
+				"mouseleave",
+				function () {
+					if ( ! item.contains( document.activeElement ) ) {
+						item.classList.remove( "is-open" );
+						button.setAttribute( "aria-expanded", "false" );
+					}
 				}
 			);
 

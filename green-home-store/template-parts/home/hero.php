@@ -45,7 +45,8 @@ if ( '' === $ghstore_title && '' === $ghstore_highlight ) {
 
 <?php if ( $ghstore_ticker ) : ?>
 	<div class="ticker">
-		<button type="button" class="ticker-toggle" aria-pressed="false" aria-label="<?php esc_attr_e( 'Pause highlights', 'green-home-store' ); ?>" data-pause="<?php esc_attr_e( 'Pause highlights', 'green-home-store' ); ?>" data-play="<?php esc_attr_e( 'Play highlights', 'green-home-store' ); ?>"><?php ghstore_icon_e( 'pause', 14 ); ?><?php ghstore_icon_e( 'play', 14 ); ?></button>
+		<button type="button" class="ticker-toggle" aria-pressed="false" aria-label="<?php esc_attr_e( 'Pause highlights', 'green-home-store' ); ?>"><?php ghstore_icon_e( 'pause', 14 ); ?><?php ghstore_icon_e( 'play', 14 ); ?></button>
+		<div class="ticker-viewport">
 		<div class="ticker-track">
 			<?php foreach ( array( false, true ) as $ghstore_is_copy ) : ?>
 				<ul class="ticker-list"<?php echo $ghstore_is_copy ? ' aria-hidden="true"' : ''; ?>>
@@ -54,6 +55,7 @@ if ( '' === $ghstore_title && '' === $ghstore_highlight ) {
 					<?php endforeach; ?>
 				</ul>
 			<?php endforeach; ?>
+		</div>
 		</div>
 	</div>
 <?php endif; ?>

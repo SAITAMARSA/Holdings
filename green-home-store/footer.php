@@ -54,7 +54,7 @@ $ghstore_whatsapp   = ghstore_whatsapp_url();
 					<li><a href="<?php echo esc_url( $ghstore_whatsapp ); ?>" target="_blank" rel="noopener"><?php ghstore_icon_e( 'whatsapp', 18 ); ?> <?php esc_html_e( 'Chat on WhatsApp', 'green-home-store' ); ?></a></li>
 				<?php endif; ?>
 				<?php if ( is_email( ghstore_mod( 'email' ) ) ) : ?>
-					<li><a href="<?php echo esc_url( 'mailto:' . ghstore_mod( 'email' ) ); ?>"><?php ghstore_icon_e( 'mail', 18 ); ?> <?php echo esc_html( ghstore_mod( 'email' ) ); ?></a></li>
+					<li><a href="<?php echo esc_url( 'mailto:' . ghstore_mod( 'email' ) ); ?>"><?php ghstore_icon_e( 'mail', 18 ); ?> <?php echo ghstore_breakable_email( ghstore_mod( 'email' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in helper. ?></a></li>
 				<?php endif; ?>
 				<?php if ( ghstore_mod( 'location' ) ) : ?>
 					<li class="muted"><?php ghstore_icon_e( 'pin', 18 ); ?> <?php echo esc_html( ghstore_mod( 'location' ) ); ?></li>

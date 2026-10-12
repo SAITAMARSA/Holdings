@@ -64,6 +64,10 @@ Solar energy storefront theme for Green Home Systems, built for WooCommerce.
    edit prices and add photos like any other product. Before importing,
    check the "12KWH DEYE Kit – Premium Solution": it lists a 16 kW inverter,
    as your old site did.
+   Also run WooCommerce → Status → Tools → "Regenerate shop thumbnails" once
+   (the theme shows product photos uncropped, so existing thumbnails need
+   rebuilding; WooCommerce also starts this by itself after activation and
+   it runs in the background).
 8. Submit a test quote request from the home page and check that it appears
    under Quote requests and arrives by email. If the email doesn't arrive, the
    request is still saved; install an SMTP plugin (for example WP Mail SMTP)
@@ -75,6 +79,17 @@ Solar energy storefront theme for Green Home Systems, built for WooCommerce.
 10. Pages: delete the leftover "Sample Page", and publish a Privacy Policy
     page (Settings → Privacy) because the quote form collects personal
     details.
+11. Decide about content from the old home page that is not in the theme:
+    the trust strip ("NRS 097-2-1 Compliant Installers", "PV GreenCard
+    Registered Installers", "4.9/5 from 312+ Google Reviews", "Up to 15-Year
+    Warranty Included"), the "Why Solar + Battery Wins" comparison, the "Why
+    Go Solar?" benefits, the load-shedding stage selector, the savings
+    calculator, the before/after bill box, the "Special Offer R5,000" box and
+    the social icons. Tell your developer which of these are true and wanted
+    and they can be added back. Two small changes were made on purpose: the
+    third kit is now called "12KWH DEYE Kit – Family Solution" (its old name
+    repeated the "Most Popular" label), and inverter sizes read "kW" instead
+    of "KWH" (the correct unit).
 
 If you use a caching plugin or Cloudflare caching, nothing extra is needed:
 the header cart count refreshes itself and the quote form works on cached
@@ -113,6 +128,13 @@ Yes. Add the shortcode [ghstore_quote_form] to any page.
 Appearance → Menus: create a menu and assign it to "Header menu" (and
 "Footer quick links"). Until then, the theme shows Home, Shop, Solar Kits,
 Services, FAQ and Contact. Drop-down submenus are supported.
+
+= My site is behind Cloudflare or a load balancer. Does the spam limit still work? =
+
+Yes, but it then counts all visitors as one address. Add
+define( 'GHSTORE_TRUST_PROXY_HEADERS', true ); to wp-config.php so the theme
+reads the real visitor address from the proxy's headers. Don't add it on a
+plain host: there those headers can be faked.
 
 = Who can see quote requests? =
 

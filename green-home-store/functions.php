@@ -116,10 +116,12 @@ remove_action( 'wp_print_styles', 'print_emoji_styles' );
  *
  * @param array  $loading_attrs Loading attributes.
  * @param string $tag_name      Tag name.
+ * @param array  $attr          Attributes the caller asked for.
  * @return array
  */
-function ghstore_front_page_lazy_images( $loading_attrs, $tag_name ) {
-	if ( 'img' !== $tag_name || is_admin() || ! is_front_page() ) {
+function ghstore_front_page_lazy_images( $loading_attrs, $tag_name, $attr = array() ) {
+	// Respect an explicit choice by the caller (core passes loading => false for the custom logo).
+	if ( 'img' !== $tag_name || is_admin() || ! is_front_page() || ( is_array( $attr ) && array_key_exists( 'loading', $attr ) ) ) {
 		return $loading_attrs;
 	}
 
@@ -128,4 +130,16 @@ function ghstore_front_page_lazy_images( $loading_attrs, $tag_name ) {
 
 	return $loading_attrs;
 }
-add_filter( 'wp_get_loading_optimization_attributes', 'ghstore_front_page_lazy_images', 10, 2 );
+add_filter( 'wp_get_loading_optimization_attributes', 'ghstore_front_page_lazy_images', 10, 3 );
+
+/**
+ * Flush rewrite rules once per theme version, so rules from earlier
+ * versions (or the previous theme) don't linger on the live site.
+ */
+function ghstore_maybe_flush_rewrites() {
+	if ( get_option( 'ghstore_rewrite_version' ) !== GHSTORE_VERSION ) {
+		flush_rewrite_rules();
+		update_option( 'ghstore_rewrite_version', GHSTORE_VERSION, false );
+	}
+}
+add_action( 'init', 'ghstore_maybe_flush_rewrites', 99 );

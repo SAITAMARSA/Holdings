@@ -53,15 +53,28 @@ services text is fixed in the theme).
    a "Complete Kits" category; the home page kit section then shows them with
    live prices. Check the "12KWH DEYE Kit – Premium Solution" first: it lists a
    16 kW inverter, as the old site did.
+   Then run **WooCommerce → Status → Tools → Regenerate shop thumbnails** once,
+   so existing product photos are rebuilt uncropped (WooCommerce also queues
+   this itself after activation).
 9. Send a test quote from the home page and check it arrives. If the email
    doesn't arrive, the request is still saved; install an SMTP plugin such as
    WP Mail SMTP. The dashboard also shows a warning if quote emails fail.
 10. Optional: an SEO plugin (Yoast, Rank Math, SEOPress); delete the leftover
     "Sample Page"; publish a Privacy Policy page (**Settings → Privacy**).
+11. Old home-page content not carried over, for you to confirm or drop: the
+    trust strip (NRS 097-2-1 / PV GreenCard / "4.9 from 312+ Google Reviews" /
+    15-year warranty), the "Why Solar + Battery Wins" table, "Why Go Solar?"
+    benefits, the load-shedding stage selector, the savings calculator, the
+    before/after bill box, the "Special Offer R5,000" box and social icons.
+    Deliberate changes: the third kit is now "12KWH DEYE Kit – Family
+    Solution" and inverter sizes read kW instead of KWH.
 
 The quote form can also go on any page with the `[ghstore_quote_form]`
 shortcode. To mark a kit "Most popular", give it the product tag `popular`.
 Quote requests are visible to Administrators, Editors and Shop managers only.
+Behind Cloudflare or a load balancer, add
+`define( 'GHSTORE_TRUST_PROXY_HEADERS', true );` to `wp-config.php` so the
+quote spam limit sees real visitor addresses.
 
 ### Structure
 
