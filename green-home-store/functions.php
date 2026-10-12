@@ -120,8 +120,9 @@ remove_action( 'wp_print_styles', 'print_emoji_styles' );
  * @return array
  */
 function ghstore_front_page_lazy_images( $loading_attrs, $tag_name, $attr = array() ) {
-	// Respect an explicit choice by the caller (core passes loading => false for the custom logo).
-	if ( 'img' !== $tag_name || is_admin() || ! is_front_page() || ( is_array( $attr ) && array_key_exists( 'loading', $attr ) ) ) {
+	// Respect an explicit choice by the caller (core passes loading => false for
+	// the custom logo; null means "no attribute", not a choice).
+	if ( 'img' !== $tag_name || is_admin() || ! is_front_page() || ( is_array( $attr ) && isset( $attr['loading'] ) ) ) {
 		return $loading_attrs;
 	}
 
@@ -139,7 +140,7 @@ add_filter( 'wp_get_loading_optimization_attributes', 'ghstore_front_page_lazy_i
 function ghstore_maybe_flush_rewrites() {
 	if ( get_option( 'ghstore_rewrite_version' ) !== GHSTORE_VERSION ) {
 		flush_rewrite_rules();
-		update_option( 'ghstore_rewrite_version', GHSTORE_VERSION, false );
+		update_option( 'ghstore_rewrite_version', GHSTORE_VERSION, true );
 	}
 }
 add_action( 'init', 'ghstore_maybe_flush_rewrites', 99 );

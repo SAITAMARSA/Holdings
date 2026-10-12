@@ -22,9 +22,23 @@
 	}
 
 	/* ---------- quote form: announce the result ---------- */
-	var notice = document.querySelector( "#quote-form .form-notice" );
-	if ( notice && "#quote-form" === window.location.hash ) {
-		notice.focus( { preventScroll: true } );
+	var notice = document.getElementById( "quote-notice" );
+	if ( notice && ( "#quote-notice" === window.location.hash || "#quote-form" === window.location.hash ) ) {
+		// Browsers move focus for the fragment while the page is still loading,
+		// which undoes a focus set earlier; set it once loading has finished.
+		var focusNotice = function () {
+			notice.focus( { preventScroll: true } );
+		};
+		if ( "complete" === document.readyState ) {
+			focusNotice();
+		} else {
+			window.addEventListener(
+				"load",
+				function () {
+					window.setTimeout( focusNotice, 0 );
+				}
+			);
+		}
 	}
 
 	/* ---------- header navigation ---------- */
@@ -34,16 +48,32 @@
 		return;
 	}
 
+	var header = toggle.closest( ".site-header" );
+
+	// The open drawer ends at the bottom of the screen, wherever the sticky
+	// header is right now (the promo bar above it varies in height).
+	function sizeMenu() {
+		if ( header && links.classList.contains( "open" ) ) {
+			links.style.setProperty( "--ghstore-nav-max", Math.max( 160, window.innerHeight - header.getBoundingClientRect().bottom ) + "px" );
+		}
+	}
+
 	function setOpen( open ) {
 		links.classList.toggle( "open", open );
 		toggle.setAttribute( "aria-expanded", String( open ) );
 		if ( open ) {
+			sizeMenu();
 			var first = links.querySelector( "a, button" );
 			if ( first ) {
 				first.focus();
 			}
+		} else {
+			links.style.removeProperty( "--ghstore-nav-max" );
 		}
 	}
+
+	window.addEventListener( "scroll", sizeMenu, { passive: true } );
+	window.addEventListener( "resize", sizeMenu );
 
 	toggle.addEventListener(
 		"click",
@@ -73,6 +103,10 @@
 	);
 
 	/* ---------- drop-down submenus: disclosure buttons ---------- */
+	// With JS running, .is-open is the only thing that shows a submenu (the
+	// CSS :hover opener is for no-JS visitors), so what is shown and what
+	// aria-expanded says always agree.
+	links.classList.add( "has-js" );
 	var parents   = links.querySelectorAll( ".menu > .menu-item-has-children" );
 	var openLabel = links.getAttribute( "data-submenu-label" ) || "Open submenu for";
 

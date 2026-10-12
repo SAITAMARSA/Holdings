@@ -23,8 +23,11 @@ Solar energy storefront theme for Green Home Systems, built for WooCommerce.
 * Complete Kits are quote-only (they include installation); the rest of the
   shop sells online, or switch everything to "Enquire only" in the Customizer.
 * Quote request form that saves every request under "Quote requests" in the
-  dashboard and emails it to you. Spam is limited by a hidden trap field and a
-  per-visitor rate limit; the dashboard warns you if emails stop going out.
+  dashboard and emails it to you. Spam is limited by a hidden trap field and
+  rate limits: 5 emailed requests per connection per 10 minutes, 3 per email
+  address per hour and 40 per hour in total. Beyond those, requests are still
+  saved (marked "[Check]") but not emailed, and the dashboard tells you. It
+  also warns you if emails stop going out.
 * Floating WhatsApp button, header cart with live item count, promo bar.
 * Footer links to your real product categories.
 
@@ -81,15 +84,21 @@ Solar energy storefront theme for Green Home Systems, built for WooCommerce.
     details.
 11. Decide about content from the old home page that is not in the theme:
     the trust strip ("NRS 097-2-1 Compliant Installers", "PV GreenCard
-    Registered Installers", "4.9/5 from 312+ Google Reviews", "Up to 15-Year
-    Warranty Included"), the "Why Solar + Battery Wins" comparison, the "Why
-    Go Solar?" benefits, the load-shedding stage selector, the savings
-    calculator, the before/after bill box, the "Special Offer R5,000" box and
-    the social icons. Tell your developer which of these are true and wanted
-    and they can be added back. Two small changes were made on purpose: the
-    third kit is now called "12KWH DEYE Kit – Family Solution" (its old name
-    repeated the "Most Popular" label), and inverter sizes read "kW" instead
-    of "KWH" (the correct unit).
+    Registered Installers", "4.9/5 from 312+ Google Reviews"), the "Why Solar
+    + Battery Wins" comparison, the "Why Go Solar?" benefits, the
+    load-shedding stage selector, the savings calculator, the before/after
+    bill box, the "Special Offer R5,000" box, the social icons, and the About
+    / Why Solar / Testimonials menu links (About pointed at a page that does
+    not exist). Trust-strip lines you can vouch for can go straight into
+    Customize → Green Home theme → Home: hero → "Highlights strip under the
+    hero"; for the rest, tell your developer which are true and wanted and
+    they can be added back. Three changes were made on purpose: the third kit
+    is now called "12KWH DEYE Kit – Family Solution" (its old name repeated
+    the "Most Popular" label); inverter sizes read "kW" instead of "KWH" (the
+    correct unit); and the hero's second button reads "Shop Products" and
+    opens the shop, where the old "View Packages" scrolled down to the kits.
+    To get that back, set "Second button text" to "View Packages" and "Second
+    button link" to /#kits under Customize → Green Home theme → Home: hero.
 
 If you use a caching plugin or Cloudflare caching, nothing extra is needed:
 the header cart count refreshes itself and the quote form works on cached
@@ -133,8 +142,10 @@ Services, FAQ and Contact. Drop-down submenus are supported.
 
 Yes, but it then counts all visitors as one address. Add
 define( 'GHSTORE_TRUST_PROXY_HEADERS', true ); to wp-config.php so the theme
-reads the real visitor address from the proxy's headers. Don't add it on a
-plain host: there those headers can be faked.
+reads the real visitor address from the proxy's headers (Cloudflare's
+CF-Connecting-IP, or the last address in X-Forwarded-For, which is the one
+your proxy added). Only do this when every request reaches the site through
+that proxy; on a plain host those headers can be faked.
 
 = Who can see quote requests? =
 

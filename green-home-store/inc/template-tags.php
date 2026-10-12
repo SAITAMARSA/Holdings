@@ -399,7 +399,8 @@ function ghstore_meta_tags() {
 	if ( is_front_page() ) {
 		$description = ghstore_mod( 'hero_text' );
 		$url         = home_url( '/' );
-		$canonical   = 1 === $paged ? $url : '';
+		// Core prints its own canonical for a static front page.
+		$canonical = 1 === $paged && ! is_singular() ? $url : '';
 	} elseif ( is_singular() ) {
 		$post = get_queried_object();
 		if ( function_exists( 'is_cart' ) && ( is_cart() || is_checkout() || is_account_page() ) ) {
@@ -440,7 +441,7 @@ function ghstore_meta_tags() {
 		echo '<meta name="description" content="' . esc_attr( $description ) . '">' . "\n";
 	}
 	echo '<meta property="og:site_name" content="' . esc_attr( get_bloginfo( 'name' ) ) . '">' . "\n";
-	echo '<meta property="og:type" content="' . ( is_singular() ? 'article' : 'website' ) . '">' . "\n";
+	echo '<meta property="og:type" content="' . ( is_singular() && ! is_front_page() ? 'article' : 'website' ) . '">' . "\n";
 	echo '<meta property="og:title" content="' . esc_attr( wp_get_document_title() ) . '">' . "\n";
 	if ( '' !== $description ) {
 		echo '<meta property="og:description" content="' . esc_attr( $description ) . '">' . "\n";

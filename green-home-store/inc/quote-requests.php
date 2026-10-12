@@ -10,16 +10,19 @@
 
 defined( 'ABSPATH' ) || exit;
 
-/** Accepted submissions allowed per visitor IP within GHSTORE_QUOTE_RATE_WINDOW. */
+/**
+ * Emailed submissions per visitor address within GHSTORE_QUOTE_RATE_WINDOW.
+ * Further ones are still saved (a mobile network can share one address).
+ */
 const GHSTORE_QUOTE_RATE_LIMIT = 5;
 
-/** Length of the per-IP window, in seconds. */
+/** Length of the per-address window, in seconds. */
 const GHSTORE_QUOTE_RATE_WINDOW = 10 * MINUTE_IN_SECONDS;
 
-/** Accepted submissions per email address per hour. */
+/** Submissions per email address per hour; further ones are turned away. */
 const GHSTORE_QUOTE_EMAIL_LIMIT = 3;
 
-/** Accepted submissions per hour site-wide before emails pause (requests are still saved). */
+/** Submissions per hour site-wide before emails pause (requests are still saved). */
 const GHSTORE_QUOTE_HOURLY_CEILING = 40;
 
 /**
@@ -170,12 +173,12 @@ function ghstore_quote_form() {
 	?>
 	<div class="quote-form-wrap" id="quote-form">
 	<?php if ( 'sent' === $status ) : ?>
-		<div class="form-notice is-success" role="status" tabindex="-1">
+		<div class="form-notice is-success" id="quote-notice" role="status" tabindex="-1">
 			<?php ghstore_icon_e( 'check' ); ?>
 			<p><strong><?php esc_html_e( 'Thank you — your request has been sent.', 'green-home-store' ); ?></strong> <?php esc_html_e( 'We’ll get back to you within 24 hours.', 'green-home-store' ); ?></p>
 		</div>
 	<?php elseif ( 'invalid' === $status ) : ?>
-		<div class="form-notice is-error" role="alert" tabindex="-1">
+		<div class="form-notice is-error" id="quote-notice" role="alert" tabindex="-1">
 			<p>
 				<?php
 				$labels = array();
@@ -194,9 +197,9 @@ function ghstore_quote_form() {
 			</p>
 		</div>
 	<?php elseif ( 'limited' === $status ) : ?>
-		<div class="form-notice is-error" role="alert" tabindex="-1">
+		<div class="form-notice is-error" id="quote-notice" role="alert" tabindex="-1">
 			<p>
-				<?php esc_html_e( 'You’ve sent several requests in a short time. Please wait ten minutes before sending another, or contact us directly:', 'green-home-store' ); ?>
+				<?php esc_html_e( 'We’ve already received several requests from this email address in the last hour and will be in touch. If it’s urgent, contact us directly:', 'green-home-store' ); ?>
 				<?php if ( ghstore_whatsapp_url() ) : ?>
 					<a href="<?php echo esc_url( ghstore_whatsapp_url() ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'WhatsApp', 'green-home-store' ); ?></a>
 				<?php endif; ?>
@@ -265,8 +268,8 @@ add_shortcode( 'ghstore_quote_form', 'ghstore_quote_form' );
 /**
  * Whether proxy headers may be trusted for the visitor's IP address. Off
  * unless the site opts in: add  define( 'GHSTORE_TRUST_PROXY_HEADERS', true );
- * to wp-config.php when the site sits behind Cloudflare or a load balancer
- * that overwrites those headers. On a plain host they are attacker-chosen.
+ * to wp-config.php when every request reaches the site through Cloudflare or
+ * a load balancer. On a plain host those headers are attacker-chosen.
  *
  * @return bool
  */
@@ -277,6 +280,10 @@ function ghstore_trust_proxy_headers() {
 /**
  * The visitor's IP address.
  *
+ * With proxy headers trusted, the last X-Forwarded-For entry is used: that is
+ * the one the proxy itself appended, while earlier entries are whatever the
+ * client sent.
+ *
  * @return string Empty when unknown.
  */
 function ghstore_client_ip() {
@@ -286,7 +293,7 @@ function ghstore_client_ip() {
 			continue;
 		}
 		$parts     = explode( ',', sanitize_text_field( wp_unslash( $_SERVER[ $key ] ) ) );
-		$candidate = trim( $parts[0] );
+		$candidate = trim( end( $parts ) );
 		if ( filter_var( $candidate, FILTER_VALIDATE_IP ) ) {
 			return $candidate;
 		}
@@ -296,25 +303,43 @@ function ghstore_client_ip() {
 }
 
 /**
+ * Events recorded so far in a limit bucket.
+ *
+ * @param string $bucket Counter name, e.g. "ip".
+ * @param string $key    What is being counted (IP, email…); '' counts nothing.
+ * @return int
+ */
+function ghstore_quote_rate_count( $bucket, $key ) {
+	return '' === $key ? 0 : (int) get_transient( 'ghstore_qrl_' . $bucket . '_' . md5( $key ) );
+}
+
+/**
+ * Record one event in a limit bucket.
+ *
+ * @param string $bucket Counter name.
+ * @param string $key    What is being counted; '' records nothing.
+ * @param int    $window Window length in seconds (restarts with each event).
+ */
+function ghstore_quote_rate_hit( $bucket, $key, $window ) {
+	if ( '' !== $key ) {
+		set_transient( 'ghstore_qrl_' . $bucket . '_' . md5( $key ), ghstore_quote_rate_count( $bucket, $key ) + 1, $window );
+	}
+}
+
+/**
  * Count one event against a limit kept in a transient.
  *
  * @param string $bucket Counter name, e.g. "ip".
  * @param string $key    What is being counted (IP, email…); '' counts nothing.
  * @param int    $limit  Events allowed per window.
  * @param int    $window Window length in seconds.
- * @return bool False when the limit was already reached.
+ * @return bool False when the limit was already reached (nothing is recorded then).
  */
 function ghstore_quote_rate_allow( $bucket, $key, $limit, $window ) {
-	if ( '' === $key ) {
-		return true;
-	}
-
-	$name  = 'ghstore_qrl_' . $bucket . '_' . md5( $key );
-	$count = (int) get_transient( $name );
-	if ( $count >= $limit ) {
+	if ( ghstore_quote_rate_count( $bucket, $key ) >= $limit ) {
 		return false;
 	}
-	set_transient( $name, $count + 1, $window );
+	ghstore_quote_rate_hit( $bucket, $key, $window );
 
 	return true;
 }
@@ -381,15 +406,25 @@ function ghstore_handle_quote() {
 	}
 
 	// Only complete submissions count against the limits, so typos don't.
-	if ( ! ghstore_quote_rate_allow( 'ip', ghstore_client_ip(), GHSTORE_QUOTE_RATE_LIMIT, GHSTORE_QUOTE_RATE_WINDOW )
-		|| ! ghstore_quote_rate_allow( 'email', strtolower( $data['email'] ), GHSTORE_QUOTE_EMAIL_LIMIT, HOUR_IN_SECONDS ) ) {
+	// The same email address over and over: we already have their details.
+	$email = strtolower( $data['email'] );
+	if ( ghstore_quote_rate_count( 'email', $email ) >= GHSTORE_QUOTE_EMAIL_LIMIT ) {
 		ghstore_quote_redirect( $redirect, 'limited' );
 	}
-	// Site-wide ceiling: a flood from many addresses is still saved, but the
-	// inbox is spared and the dashboard says so.
-	$flood = ! ghstore_quote_rate_allow( 'all', 'all', GHSTORE_QUOTE_HOURLY_CEILING, HOUR_IN_SECONDS );
-	if ( $flood ) {
-		update_option( 'ghstore_quote_flood', time(), false );
+	ghstore_quote_rate_hit( 'email', $email, HOUR_IN_SECONDS );
+
+	// Many requests from one address (which may be a whole mobile network), or a
+	// flood from many: every request is saved, but the inbox only gets the
+	// first few and the dashboard says so.
+	$unmailed = '';
+	if ( ! ghstore_quote_rate_allow( 'ip', ghstore_client_ip(), GHSTORE_QUOTE_RATE_LIMIT, GHSTORE_QUOTE_RATE_WINDOW ) ) {
+		$unmailed = 'ip';
+	}
+	if ( ! ghstore_quote_rate_allow( 'all', 'all', GHSTORE_QUOTE_HOURLY_CEILING, HOUR_IN_SECONDS ) ) {
+		$unmailed = 'all';
+	}
+	if ( $unmailed ) {
+		ghstore_note_unmailed_request();
 	}
 
 	$flagged = '1' !== ghstore_request_string( $post, 'ghstore_js' );
@@ -398,7 +433,7 @@ function ghstore_handle_quote() {
 		array(
 			'post_type'    => 'ghstore_quote',
 			'post_status'  => 'private',
-			'post_title'   => ( $flagged ? __( '[Check]', 'green-home-store' ) . ' ' : '' ) . $data['name'] . ' — ' . $data['city'],
+			'post_title'   => ( $flagged || $unmailed ? __( '[Check]', 'green-home-store' ) . ' ' : '' ) . $data['name'] . ' — ' . $data['city'],
 			'post_content' => $data['message'],
 		)
 	);
@@ -408,6 +443,9 @@ function ghstore_handle_quote() {
 		}
 		if ( $flagged ) {
 			update_post_meta( $post_id, '_ghstore_flagged', 1 );
+		}
+		if ( $unmailed ) {
+			update_post_meta( $post_id, '_ghstore_unmailed', $unmailed );
 		}
 	} else {
 		$post_id = 0;
@@ -438,7 +476,7 @@ function ghstore_handle_quote() {
 
 	$reply_name = trim( str_replace( array( '"', '<', '>', ',' ), '', $data['name'] ) );
 
-	if ( $flood ) {
+	if ( $unmailed ) {
 		ghstore_quote_redirect( $redirect, 'sent' );
 	}
 
@@ -508,15 +546,27 @@ function ghstore_mail_failed_notice() {
 add_action( 'admin_notices', 'ghstore_mail_failed_notice' );
 
 /**
- * Say so in the dashboard when the hourly ceiling paused quote emails.
+ * Remember that a request was saved without an email, for the admin notice.
  */
-function ghstore_quote_flood_notice() {
-	$since = (int) get_option( 'ghstore_quote_flood' );
-	if ( ! $since || ! current_user_can( 'edit_pages' ) ) {
-		return;
-	}
-	if ( time() - $since > DAY_IN_SECONDS ) {
-		delete_option( 'ghstore_quote_flood' );
+function ghstore_note_unmailed_request() {
+	$log = (array) get_option( 'ghstore_quote_unmailed', array() );
+	update_option(
+		'ghstore_quote_unmailed',
+		array(
+			'count' => ( isset( $log['count'] ) ? (int) $log['count'] : 0 ) + 1,
+			'since' => isset( $log['since'] ) ? (int) $log['since'] : time(),
+		),
+		false
+	);
+}
+
+/**
+ * Say so in the dashboard when the spam limits held back quote emails. The
+ * notice stays until the Quote requests list has been opened.
+ */
+function ghstore_quote_unmailed_notice() {
+	$log = get_option( 'ghstore_quote_unmailed' );
+	if ( empty( $log['count'] ) || ! current_user_can( 'edit_pages' ) ) {
 		return;
 	}
 
@@ -524,22 +574,33 @@ function ghstore_quote_flood_notice() {
 	if ( ! $screen || ! in_array( $screen->id, array( 'dashboard', 'edit-ghstore_quote', 'ghstore_quote' ), true ) ) {
 		return;
 	}
+	if ( 'edit-ghstore_quote' === $screen->id ) {
+		delete_option( 'ghstore_quote_unmailed' );
+	}
+	/* translators: 1: number of requests, 2: date and time, 3: hourly ceiling, 4: link to the Quote requests list. */
+	$message = _n(
+		'%1$d quote request since %2$s was saved but not emailed, because it arrived faster than the spam limit allows (several from one connection within minutes, or more than %3$d in an hour). Find it under %4$s, marked [Check].',
+		'%1$d quote requests since %2$s were saved but not emailed, because they arrived faster than the spam limit allows (several from one connection within minutes, or more than %3$d in an hour). Find them under %4$s, marked [Check].',
+		(int) $log['count'],
+		'green-home-store'
+	);
 	?>
 	<div class="notice notice-warning">
 		<p>
 			<?php
 			printf(
-				/* translators: 1: number of requests, 2: date and time. */
-				esc_html__( 'More than %1$d quote requests arrived within one hour (last at %2$s), which looks like spam. To protect your inbox, emails for the extra ones were not sent. Every request is still saved under Quote requests.', 'green-home-store' ),
+				esc_html( $message ),
+				(int) $log['count'],
+				esc_html( wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), (int) $log['since'] ) ),
 				(int) GHSTORE_QUOTE_HOURLY_CEILING,
-				esc_html( wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $since ) )
+				'<a href="' . esc_url( admin_url( 'edit.php?post_type=ghstore_quote' ) ) . '">' . esc_html__( 'Quote requests', 'green-home-store' ) . '</a>'
 			);
 			?>
 		</p>
 	</div>
 	<?php
 }
-add_action( 'admin_notices', 'ghstore_quote_flood_notice' );
+add_action( 'admin_notices', 'ghstore_quote_unmailed_notice' );
 
 /**
  * Send the visitor back to the form with a status.
@@ -549,7 +610,8 @@ add_action( 'admin_notices', 'ghstore_quote_flood_notice' );
  * @param array  $extra  Extra query arguments.
  */
 function ghstore_quote_redirect( $url, $status, $extra = array() ) {
-	wp_safe_redirect( add_query_arg( array_merge( $extra, array( 'quote' => $status ) ), $url ) . '#quote-form' );
+	// The notice is the fragment target so the browser itself moves focus to it.
+	wp_safe_redirect( add_query_arg( array_merge( $extra, array( 'quote' => $status ) ), $url ) . '#quote-notice' );
 	exit;
 }
 
@@ -632,5 +694,11 @@ function ghstore_quote_meta_box_html( $post ) {
 
 	if ( get_post_meta( $post->ID, '_ghstore_flagged', true ) ) {
 		echo '<p><em>' . esc_html__( 'Sent without a normal browser — may be automated.', 'green-home-store' ) . '</em></p>';
+	}
+	$unmailed = get_post_meta( $post->ID, '_ghstore_unmailed', true );
+	if ( 'ip' === $unmailed ) {
+		echo '<p><em>' . esc_html__( 'Not emailed: it followed several other requests from the same connection within minutes.', 'green-home-store' ) . '</em></p>';
+	} elseif ( 'all' === $unmailed ) {
+		echo '<p><em>' . esc_html__( 'Not emailed: it arrived during a burst of requests that looked like spam.', 'green-home-store' ) . '</em></p>';
 	}
 }

@@ -20,6 +20,11 @@ $ghstore_default_kits = array(
 	array( '12KWH KIT', __( '12KWH DEYE Kit', 'green-home-store' ), __( 'Premium Solution', 'green-home-store' ), 158895, array( '1x16kW Inverter', '4x5.12kWh Battery', '24x560W Panels' ), false ),
 	array( '50KWH KIT', __( '50KWH DEYE Kit', 'green-home-store' ), __( 'Enterprise Solution', 'green-home-store' ), 445895, array( '1x50kW Inverter', '12x5.12kWh Battery', '60x560W Panels' ), false ),
 );
+
+// Column counts for the grid, so three or four kits still fill the row (four split 2 + 2 on tablets).
+$ghstore_kit_count    = count( $ghstore_kit_products ? $ghstore_kit_products : $ghstore_default_kits );
+$ghstore_kit_cols     = min( 5, $ghstore_kit_count );
+$ghstore_kit_cols_mid = 4 === $ghstore_kit_count ? 2 : min( 3, $ghstore_kit_count );
 ?>
 <section class="section" id="kits">
 	<div class="wrap">
@@ -30,7 +35,7 @@ $ghstore_default_kits = array(
 			__( 'Industry-leading DEYE hybrid inverters with complete solar kit packages. From 8kWh to 50kWh systems.', 'green-home-store' )
 		);
 		?>
-		<div class="kit-grid">
+		<div class="kit-grid" style="--kit-cols: <?php echo (int) $ghstore_kit_cols; ?>; --kit-cols-mid: <?php echo (int) $ghstore_kit_cols_mid; ?>;">
 			<?php if ( $ghstore_kit_products ) : ?>
 				<?php foreach ( $ghstore_kit_products as $ghstore_kit ) : ?>
 					<?php

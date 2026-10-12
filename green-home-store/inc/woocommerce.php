@@ -49,6 +49,11 @@ function ghstore_maybe_regenerate_thumbnails() {
 	if ( ! class_exists( 'WC_Regenerate_Images' ) || ! current_user_can( 'manage_woocommerce' ) ) { // phpcs:ignore WordPress.WP.Capabilities.Unknown -- WooCommerce capability.
 		return;
 	}
+	// WooCommerce only wires this up when background regeneration is possible
+	// (no Jetpack Photon, not multisite, not filtered off); called otherwise it fatals.
+	if ( ! has_action( 'after_switch_theme', array( 'WC_Regenerate_Images', 'maybe_regenerate_images' ) ) ) {
+		return;
+	}
 	if ( get_option( 'ghstore_thumbs_version' ) === GHSTORE_VERSION ) {
 		return;
 	}
@@ -143,6 +148,29 @@ function ghstore_filter_purchasable( $purchasable, $product ) {
 	return ghstore_is_quote_only( $product ) ? false : $purchasable;
 }
 add_filter( 'woocommerce_is_purchasable', 'ghstore_filter_purchasable', 10, 2 );
+
+/**
+ * No add-to-cart form on quote-only product pages. WooCommerce leaves it out
+ * for simple products that can't be bought, but still prints the variations
+ * form (with a dead "Add to cart" button) for variable ones.
+ */
+function ghstore_remove_quote_only_cart_form() {
+	global $product;
+
+	if ( $product instanceof WC_Product && ghstore_is_quote_only( $product ) ) {
+		remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
+		add_action( 'woocommerce_after_single_product', 'ghstore_restore_cart_form' );
+	}
+}
+add_action( 'woocommerce_before_single_product', 'ghstore_remove_quote_only_cart_form' );
+
+/**
+ * Put the add-to-cart form back for anything rendered after a quote-only product.
+ */
+function ghstore_restore_cart_form() {
+	add_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
+	remove_action( 'woocommerce_after_single_product', 'ghstore_restore_cart_form' );
+}
 
 /**
  * The "I'm interested in" option that matches a product's category.

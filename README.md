@@ -62,19 +62,29 @@ services text is fixed in the theme).
 10. Optional: an SEO plugin (Yoast, Rank Math, SEOPress); delete the leftover
     "Sample Page"; publish a Privacy Policy page (**Settings → Privacy**).
 11. Old home-page content not carried over, for you to confirm or drop: the
-    trust strip (NRS 097-2-1 / PV GreenCard / "4.9 from 312+ Google Reviews" /
-    15-year warranty), the "Why Solar + Battery Wins" table, "Why Go Solar?"
-    benefits, the load-shedding stage selector, the savings calculator, the
-    before/after bill box, the "Special Offer R5,000" box and social icons.
-    Deliberate changes: the third kit is now "12KWH DEYE Kit – Family
-    Solution" and inverter sizes read kW instead of KWH.
+    trust strip (NRS 097-2-1 / PV GreenCard / "4.9 from 312+ Google Reviews"),
+    the "Why Solar + Battery Wins" table, "Why Go Solar?" benefits, the
+    load-shedding stage selector, the savings calculator, the before/after
+    bill box, the "Special Offer R5,000" box, social icons, and the About /
+    Why Solar / Testimonials menu links (About pointed at a page that doesn't
+    exist). Trust-strip lines you can vouch for go in **Customize → Green Home
+    theme → Home: hero → Highlights strip under the hero**. Deliberate
+    changes: the third kit is now "12KWH DEYE Kit – Family Solution", inverter
+    sizes read kW instead of KWH, and the hero's second button is "Shop
+    Products" (opens the shop) instead of "View Packages" (scrolled to the
+    kits) — restore it with "Second button text" / "Second button link" =
+    `View Packages` / `/#kits` in **Home: hero**.
 
 The quote form can also go on any page with the `[ghstore_quote_form]`
 shortcode. To mark a kit "Most popular", give it the product tag `popular`.
 Quote requests are visible to Administrators, Editors and Shop managers only.
-Behind Cloudflare or a load balancer, add
+Spam limits: 5 emailed requests per connection per 10 minutes, 3 per email
+address per hour, 40 per hour in total; beyond those, requests are still saved
+(marked "[Check]") but not emailed, and the dashboard says so. If every
+request reaches the site through Cloudflare or a load balancer, add
 `define( 'GHSTORE_TRUST_PROXY_HEADERS', true );` to `wp-config.php` so the
-quote spam limit sees real visitor addresses.
+limits see real visitor addresses (Cloudflare's `CF-Connecting-IP`, or the
+last `X-Forwarded-For` entry, the one your proxy added).
 
 ### Structure
 
