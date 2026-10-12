@@ -577,24 +577,22 @@ function ghstore_quote_unmailed_notice() {
 		return;
 	}
 
-	$count = count(
-		get_posts(
-			array(
-				'post_type'      => 'ghstore_quote',
-				'post_status'    => 'private',
-				'posts_per_page' => 100,
-				'fields'         => 'ids',
-				'no_found_rows'  => true,
-				'meta_key'       => '_ghstore_unmailed', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- a handful of rows.
-				'date_query'     => array(
-					array(
-						'column' => 'post_date_gmt',
-						'after'  => gmdate( 'Y-m-d H:i:s', $since - 1 ),
-					),
+	$query = new WP_Query(
+		array(
+			'post_type'      => 'ghstore_quote',
+			'post_status'    => 'private',
+			'posts_per_page' => 1,
+			'fields'         => 'ids',
+			'meta_key'       => '_ghstore_unmailed', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- a handful of rows.
+			'date_query'     => array(
+				array(
+					'column' => 'post_date_gmt',
+					'after'  => gmdate( 'Y-m-d H:i:s', $since - 1 ),
 				),
-			)
+			),
 		)
 	);
+	$count = (int) $query->found_posts;
 	if ( 'edit-ghstore_quote' === $screen->id ) {
 		delete_option( 'ghstore_quote_unmailed_since' );
 	}

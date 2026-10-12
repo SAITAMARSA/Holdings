@@ -62,6 +62,20 @@ function ghstore_maybe_regenerate_thumbnails() {
 }
 add_action( 'admin_init', 'ghstore_maybe_regenerate_thumbnails' );
 
+/**
+ * Plain spaces around the breadcrumb delimiter (WooCommerce uses non-breaking
+ * ones), so a long product name can wrap after the slash on a phone.
+ *
+ * @param array $defaults Breadcrumb arguments.
+ * @return array
+ */
+function ghstore_breadcrumb_defaults( $defaults ) {
+	$defaults['delimiter'] = ' / ';
+
+	return $defaults;
+}
+add_filter( 'woocommerce_breadcrumb_defaults', 'ghstore_breadcrumb_defaults' );
+
 /* ---------- page wrappers (no sidebar) ---------- */
 
 remove_action( 'woocommerce_before_main_content', 'woocommerce_output_content_wrapper', 10 );
@@ -157,23 +171,49 @@ add_filter( 'woocommerce_is_purchasable', 'ghstore_filter_purchasable', 10, 2 );
 function ghstore_remove_quote_only_cart_form() {
 	global $product;
 
-	// Start from the default every time: WooCommerce skips
-	// woocommerce_after_single_product for a password-protected product, so an
-	// earlier product on the same page may have left the form removed.
-	add_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
+	// WooCommerce skips woocommerce_after_single_product for a password-protected
+	// product, so an earlier product on the same page may have left the form
+	// removed: put it back first.
+	ghstore_restore_cart_form();
 
-	if ( $product instanceof WC_Product && ghstore_is_quote_only( $product ) ) {
-		remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
+	if ( ! $product instanceof WC_Product || ! ghstore_is_quote_only( $product ) ) {
+		return;
+	}
+	$priority = has_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart' );
+	if ( false !== $priority ) {
+		// Only touch a form that is registered; other code may have removed it on purpose.
+		remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', $priority );
+		ghstore_cart_form_removed_at( $priority );
 		add_action( 'woocommerce_after_single_product', 'ghstore_restore_cart_form' );
 	}
 }
 add_action( 'woocommerce_before_single_product', 'ghstore_remove_quote_only_cart_form' );
 
 /**
- * Put the add-to-cart form back for anything rendered after a quote-only product.
+ * Remember at which priority the theme removed the add-to-cart form.
+ *
+ * @param int|false|null $priority Priority to remember, false to forget, null to read.
+ * @return int|false
+ */
+function ghstore_cart_form_removed_at( $priority = null ) {
+	static $removed_at = false;
+
+	if ( null !== $priority ) {
+		$removed_at = $priority;
+	}
+
+	return $removed_at;
+}
+
+/**
+ * Put the add-to-cart form back if the theme removed it.
  */
 function ghstore_restore_cart_form() {
-	add_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
+	$priority = ghstore_cart_form_removed_at();
+	if ( false !== $priority ) {
+		add_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', $priority );
+		ghstore_cart_form_removed_at( false );
+	}
 	remove_action( 'woocommerce_after_single_product', 'ghstore_restore_cart_form' );
 }
 

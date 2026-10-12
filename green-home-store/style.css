@@ -613,7 +613,8 @@ label { font-weight: 600; font-size: 0.92rem; }
 .kit-price { margin: 14px 0 16px; color: var(--dark); font-size: 1.7rem; font-size: min(1.7rem, 13vw); font-weight: 800; line-height: 1.1; overflow-wrap: anywhere; }
 @supports (font-size: 1cqw) {
 	.kit-card { container-type: inline-size; }
-	.kit-price { font-size: min(1.7rem, 13vw, 17.5cqw); white-space: nowrap; overflow-wrap: normal; }
+	.kit-price { font-size: min(1.7rem, 13vw, 17.5cqw); overflow-wrap: normal; }
+	.kit-price .amount { white-space: nowrap; }
 }
 .kit-price del { display: block; color: var(--muted); font-size: 0.55em; font-weight: 600; }
 .kit-price ins { text-decoration: none; }
@@ -1099,11 +1100,11 @@ a.page-numbers:hover { background: var(--primary); border-color: var(--primary);
 
 /* Column counts come from the template (--kit-cols*), so fewer kits still fill the row. */
 /* Breakpoints allow for a classic 17px scrollbar, which media queries count but the grid can't use. */
-@media (min-width: 728px) and (max-width: 1183px) {
+@media (min-width: 728px) and (max-width: 1186px) {
 	.kit-grid { grid-template-columns: repeat(var(--kit-cols-mid, 3), minmax(0, 1fr)); }
 }
 
-@media (min-width: 1184px) {
+@media (min-width: 1187px) {
 	.kit-grid { grid-template-columns: repeat(var(--kit-cols, 5), minmax(0, 1fr)); }
 }
 

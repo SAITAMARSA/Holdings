@@ -82,7 +82,8 @@ Spam limits: a fourth request from the same email address within an hour is
 turned away (the visitor is told you already have their details); beyond 5
 requests per connection per 10 minutes or 40 per hour in total, requests are
 still saved (marked "[Not emailed]") but not emailed, and the dashboard says
-so. If every
+so; requests sent without a normal browser are emailed but marked "[Check]".
+If every
 request reaches the site through Cloudflare or a load balancer, add
 `define( 'GHSTORE_TRUST_PROXY_HEADERS', true );` to `wp-config.php` so the
 limits see real visitor addresses (Cloudflare's `CF-Connecting-IP`, or the

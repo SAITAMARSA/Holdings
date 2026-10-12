@@ -430,6 +430,7 @@ p.demo_store { background: var(--dark); color: #fff; }
 }
 
 .woocommerce div.product .woocommerce-tabs .panel > h2:first-child { margin-top: 0; font-size: 1.25rem; }
+.woocommerce div.product .woocommerce-tabs .panel pre { max-width: 100%; white-space: pre-wrap; overflow-wrap: anywhere; }
 .woocommerce table.shop_attributes th,
 .woocommerce table.shop_attributes td { padding: 10px 12px; }
 
