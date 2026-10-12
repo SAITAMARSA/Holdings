@@ -202,7 +202,7 @@ function ghstore_quote_form() {
 		</div>
 	<?php endif; ?>
 
-	<form class="quote-form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" novalidate="">
+	<form class="quote-form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 		<input type="hidden" name="action" value="ghstore_quote">
 		<input type="hidden" name="ghstore_js" value="">
 		<input type="hidden" name="ghstore_redirect" value="<?php echo esc_url( remove_query_arg( array( 'quote', 'quote_item', 'quote_interest', 'qt' ) ) ); ?>">
