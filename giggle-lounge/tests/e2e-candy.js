@@ -122,6 +122,6 @@ const modes = {
 
 (async () => {
   const b = await L.launch();
-  for (const k of Object.keys(modes)) { if (only && only !== k) continue; try { await modes[k](b); } catch (e) { bad++; console.log('  CRASH in ' + k + ':', (e.message || e).toString().split('\n')[0]); } }
+  for (const k of Object.keys(modes)) { if (only && only !== k) continue; try { await modes[k](b); } catch (e) { bad++; console.log('  CRASH in ' + k + ':', (e.message || e).toString().split('\n')[0]); } finally { await L.closeAll(); } }
   console.log('\n' + (bad ? bad + ' PROBLEM(S)' : 'ALL CANDY CHECKS PASSED')); await b.close(); process.exit(bad ? 1 : 0);
 })();

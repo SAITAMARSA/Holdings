@@ -167,9 +167,22 @@ $room = read_json(room_file($code));
 if (!$room) fail('Room not found', 404);
 if (find_player($room, $pid, $tok) === null) fail('Not in this room', 403);
 
+// A held-open poll ties up one PHP process. Cap how many may wait at once (flock'd slot files) so a busy room can't
+// starve the host: past the cap, a poll just answers immediately and the client's short-poll fallback takes over.
+function take_wait_slot() {
+    for ($i = 0; $i < MAX_WAITERS; $i++) {
+        $fh = @fopen(path_of('slots/' . $i . '.lock'), 'c');
+        if ($fh && flock($fh, LOCK_EX | LOCK_NB)) return $fh;
+        if ($fh) fclose($fh);
+    }
+    return null;
+}
+
 if ($action === 'poll') {
     $since = (int) param('since', 0);
     $wait  = min((float) param('wait', 0), (float) POLL_WAIT_MAX);
+    $slot = null;
+    if ($wait > 0) { $slot = take_wait_slot(); if ($slot === null) $wait = 0; }
     if ($wait > 0) {
         $deadline = microtime(true) + $wait;
         while (microtime(true) < $deadline) {
@@ -179,6 +192,7 @@ if ($action === 'poll') {
         }
         $room = read_json(room_file($code)) ?: $room;
     }
+    if ($slot) { flock($slot, LOCK_UN); fclose($slot); }
     $i = find_player($room, $pid, $tok);
     if ($i !== null && (now_ms() - $room['players'][$i]['last']) > 4000) {   // heartbeat, at most every 4s
         $room = update_json(room_file($code), function (&$r) use ($pid) {

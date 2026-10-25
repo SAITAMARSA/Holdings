@@ -11,6 +11,7 @@ if (!defined('ROOM_TTL'))        define('ROOM_TTL', 60 * 60 * 12);   // idle roo
 if (!defined('MAX_EVENTS'))      define('MAX_EVENTS', 12000);        // per room, oldest dropped past this
 if (!defined('MAX_EVENT_BYTES')) define('MAX_EVENT_BYTES', 24000);   // one event's payload
 if (!defined('POLL_WAIT_MAX'))   define('POLL_WAIT_MAX', 5);         // seconds a poll may wait; 0 = plain polling
+if (!defined('MAX_WAITERS'))     define('MAX_WAITERS', 6);           // at most this many requests may hold a poll open at once; the rest get quick polls
 if (!defined('PRESENT_SECS'))    define('PRESENT_SECS', 12);         // seen within this = "present"
 if (!defined('KEEP_MAX_ITEMS'))  define('KEEP_MAX_ITEMS', 200);
 if (!defined('KEEP_MAX_BYTES'))  define('KEEP_MAX_BYTES', 260000);

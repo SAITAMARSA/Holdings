@@ -84,7 +84,7 @@
     async _loop(gen) {
       let backoff = 0;
       while (this.running && gen === this._gen) {
-        const t0 = Date.now();
+        const t0 = Date.now(); let got = 0;
         this._abort = new AbortController();
         try {
           // the very first poll must answer straight away (we need the player list now); after that, long-poll
@@ -93,7 +93,7 @@
           this._polledOnce = true;
           if (gen !== this._gen) return;
           this._clock(r, t0);
-          this._apply(r);
+          got = this._apply(r);
           backoff = 0; this._setOnline(true);
         } catch (e) {
           if (gen !== this._gen) return;
@@ -104,7 +104,9 @@
           continue;
         }
         const spent = Date.now() - t0;
-        if (spent < 350) await sleep(350 - spent);      // never spin: also the fallback if the host disables long-polling
+        // Never spin. But if events just arrived, poll again at once — otherwise every receiver is throttled to ~3 updates a second.
+        // (The floor only matters when the host has long-polling disabled and empty replies come back instantly.)
+        if (!got && spent < 350) await sleep(350 - spent);
       }
     }
     _setOnline(v) { if (v !== this.online) { this.online = v; this.emit("online", v); } }
@@ -126,6 +128,7 @@
       }
       const evs = (r.events || []).filter((e) => e.s > this.lastSeq).sort((a, b) => a.s - b.s);
       for (const e of evs) { this.lastSeq = e.s; this._dispatch(e); }
+      return evs.length;
     }
 
     _dispatch(e) {

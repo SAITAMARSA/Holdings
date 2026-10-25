@@ -11,7 +11,7 @@
     S("Embarrassing", "Proud"), S("Casual", "Fancy"), S("Boring holiday", "Epic holiday"), S("Unlucky", "Lucky"), S("A bad idea", "A great idea"),
     S("Terrible dancer", "Amazing dancer"), S("Messy", "Spotless"), S("Terrible singer", "Amazing singer"), S("Soft", "Hard"), S("Slow", "Fast"),
     S("Rude", "Polite"), S("Likely to nap", "Likely to run a marathon", "s", "silly"), S("Not a snack", "The ultimate snack", "f", "food"), S("A bad pet", "The perfect pet", "f", "animal"),
-    S("Mild", "Spicy", "f", "food"), S("Underwhelming", "Mind-blowing"), S("Lame party game", "Best party game"), S("Gross", "Delicious", "f", "food"), S("Haunted", "Cheerful", "s", "silly"),
+    S("Mild", "Spicy", "f", "food"), S("Underwhelming", "Mind-blowing"), S("Lame party game", "Best party game"), S("Gross", "Delicious", "f", "food"),
     S("Old-fashioned", "Trendy"), S("Secret", "Obvious"), S("A baby's name", "A grandpa's name", "s", "silly"), S("Easy to find", "Always lost", "s", "silly"), S("Peaceful", "Chaos"),
     S("A bad hair day", "Perfect hair day"), S("Gentle", "Fierce"), S("Plain", "Extra"), S("A bad habit", "A good habit"), S("Pointless", "Essential"),
     S("A bad smell, but you love it", "A lovely smell, but you hate it", "s", "silly"), S("A little white lie", "A whopper", "s", "silly"), S("Tastes like nothing", "Tastes like everything", "s", "silly"),

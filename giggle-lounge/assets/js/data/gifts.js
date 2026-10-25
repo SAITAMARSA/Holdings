@@ -31,14 +31,14 @@
     { t: "Because they're simply the best", v: "f", g: ["sweet"] }, { t: "They kept a straight face at a very silly moment", v: "s", g: ["silly"] }, { t: "It's raining and they brought an umbrella for once", v: "f", g: ["luck"] },
   ]);
   E.registerDeck("gift-quirk", [
-    { t: "secretly afraid of balloons", v: "s", g: ["fear"] }, { t: "collects spoons", v: "s", g: ["hobby"] }, { t: "talks to their plants", v: "f", g: ["quirk"] },
+    { t: "has very dramatic feelings about balloons", v: "s", g: ["fear"] }, { t: "collects spoons", v: "s", g: ["hobby"] }, { t: "talks to their plants", v: "f", g: ["quirk"] },
     { t: "can't whistle but tries constantly", v: "f", g: ["quirk"] }, { t: "swears they're a morning person", v: "f", g: ["quirk"] }, { t: "has strong opinions about toast", v: "s", g: ["quirk"] },
     { t: "dances only when no one is watching", v: "f", g: ["quirk"] }, { t: "names every car they see", v: "s", g: ["quirk"] }, { t: "is allergic to Mondays", v: "f", g: ["quirk"] },
-    { t: "believes they'd survive a zombie apocalypse", v: "f", g: ["quirk"] }, { t: "has a favourite cloud", v: "s", g: ["quirk"] }, { t: "loves a fancy coffee but orders 'whatever's easiest'", v: "f", g: ["quirk"] },
+    { t: "believes they'd win any survival challenge", v: "f", g: ["quirk"] }, { t: "has a favourite cloud", v: "s", g: ["quirk"] }, { t: "loves a fancy coffee but orders 'whatever's easiest'", v: "f", g: ["quirk"] },
     { t: "is convinced the cat understands everything", v: "f", g: ["pets"] }, { t: "pronounces 'pasta' with way too much flair", v: "s", g: ["quirk"] }, { t: "has 47 unread voice notes", v: "f", g: ["quirk"] },
     { t: "talks to the GPS like a friend", v: "f", g: ["quirk"] }, { t: "has never finished a puzzle", v: "f", g: ["quirk"] }, { t: "wants to be a lighthouse keeper someday", v: "s", g: ["dream"] },
-    { t: "hoards the good pen", v: "s", g: ["quirk"] }, { t: "is a secret karaoke legend", v: "f", g: ["talent"] }, { t: "fears the self-checkout machine", v: "f", g: ["fear"] },
-    { t: "believes in aliens, ghosts, and sensible shoes", v: "s", g: ["quirk"] }, { t: "can nap anywhere, anytime", v: "f", g: ["quirk"] }, { t: "is oddly competitive about board games", v: "f", g: ["quirk"] },
+    { t: "hoards the good pen", v: "s", g: ["quirk"] }, { t: "is a secret karaoke legend", v: "f", g: ["talent"] }, { t: "argues with the self-checkout machine", v: "f", g: ["fear"] },
+    { t: "believes in aliens, fairies, and sensible shoes", v: "s", g: ["quirk"] }, { t: "can nap anywhere, anytime", v: "f", g: ["quirk"] }, { t: "is oddly competitive about board games", v: "f", g: ["quirk"] },
     { t: "keeps a snack in every bag", v: "f", g: ["food"] }, { t: "gets emotional about cartoon films", v: "f", g: ["sweet"] }, { t: "says 'I'll just have a bite' and eats the whole thing", v: "f", g: ["food"] },
     { t: "dreams of owning a very small dog in a very big coat", v: "s", g: ["dream"] }, { t: "never knows what day it is", v: "f", g: ["quirk"] }, { t: "has a lucky sock they refuse to wash", v: "s", g: ["quirk"] },
   ]);

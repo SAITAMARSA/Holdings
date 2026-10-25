@@ -2,9 +2,11 @@
 const { chromium } = require('playwright');
 const BASE = process.env.GL_URL || 'http://127.0.0.1:8099/';
 async function launch() { return chromium.launch(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {}); }
+const created = [];
+async function closeAll() { while (created.length) { try { await created.pop().close(); } catch (e) {} } }
 async function player(browser, name, opts = {}) {
   const ctx = await browser.newContext({ viewport: opts.viewport || { width: 412, height: 860 }, hasTouch: true, permissions: ['clipboard-read', 'clipboard-write'] });
-  const page = await ctx.newPage();
+  const page = await ctx.newPage(); created.push(ctx);
   page.errs = [];
   page.on('pageerror', (e) => page.errs.push('pageerror: ' + e.message));
   page.on('console', (m) => { if (m.type() === 'error' && !/favicon|fonts\.g|404/.test(m.text())) page.errs.push('console: ' + m.text()); });
@@ -15,4 +17,4 @@ async function setName(page, name) { await page.goto(BASE); await page.waitForSe
 async function createRoom(page) { await page.click('text=Start a room'); await page.waitForSelector('.code-big'); return (await page.textContent('.code-big')).trim(); }
 async function joinRoom(page, code) { await page.fill('input[aria-label="Room code"]', code); await page.click('button:has-text("Join")'); await page.waitForSelector('.code-big'); }
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-module.exports = { launch, player, setName, createRoom, joinRoom, sleep, BASE };
+module.exports = { closeAll, launch, player, setName, createRoom, joinRoom, sleep, BASE };

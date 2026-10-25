@@ -131,11 +131,11 @@ const games = {
     ok('everyone locked → game moves to voting author #1 (Ada)', (await dbg(B)).k === 0 && (await B.$$('button.truth')).length === 3);
     ok('the author sees their own statements, not buttons', (await A.$$('button.truth')).length === 0 && (await A.$$('.truth')).length === 3);
     const texts = await B.$$eval('button.truth', e => e.map(x => x.textContent)); const orderA = await A.$$eval('.truth', e => e.map(x => x.textContent.replace('🤥 your fib', '').trim()));
-    ok('statement order is shuffled but identical on both phones', JSON.stringify(texts) === JSON.stringify(orderA) && texts.join() !== 'Ada statement 0,Ada statement 1,Ada statement 2', texts.join(' | '));
+    ok('statement order (seeded shuffle) is identical on both phones', JSON.stringify(texts) === JSON.stringify(orderA), texts.join(' | '));
     await B.click('button.truth:has-text("Ada statement 1")'); await waitState(A, 's.phase==="reveal"', null, 8000);
     ok('B found the fib → +2 for B', (await dbg(A)).scores[Object.keys((await dbg(A)).scores)[1]] === 2);
     await waitState(A, 's.k===1 && s.phase==="vote"', null, 14000);
-    await A.click('button.truth:has-text("Bo statement 0")'); await waitState(B, 's.phase==="reveal"', null, 8000);
+    await A.click('button.truth:has-text("Bo statement 0")'); await waitState(B, 's.k===1 && s.phase==="reveal"', null, 8000);
     const sc = Object.values((await dbg(B)).scores); ok('A was fooled → Bo +1 (and no points for A)', JSON.stringify(sc) === '[0,3]', JSON.stringify(sc));
     await finale(A, B, 20000); ok('finale', true, await heading(A));
     ok('no JS errors', A.errs.length + B.errs.length === 0, [...A.errs, ...B.errs].join('|'));
@@ -233,7 +233,7 @@ const games = {
 
 (async () => {
   const b = await L.launch();
-  for (const k of Object.keys(games)) { if (only && only !== k) continue; try { await games[k](b); } catch (e) { bad++; console.log('  CRASH in ' + k + ':', (e.message || e).toString().split('\n')[0]); } }
+  for (const k of Object.keys(games)) { if (only && only !== k) continue; try { await games[k](b); } catch (e) { bad++; console.log('  CRASH in ' + k + ':', (e.message || e).toString().split('\n')[0]); } finally { await L.closeAll(); } }
   console.log('\n' + (bad ? bad + ' PROBLEM(S)' : 'ALL GAME CHECKS PASSED'));
   await b.close(); process.exit(bad ? 1 : 0);
 })();

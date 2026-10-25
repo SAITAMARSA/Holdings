@@ -22,12 +22,17 @@
   let prefs = LS.get("gl.prefs", { w: {} });
   let seen = LS.get("gl.seen", {});
   const EXPLORE = 0.15;
+  let SA_ON = LS.get("gl.sa", true);
 
   function norm(it) { return typeof it === "string" ? { t: it, v: "f", g: [] } : Object.assign({ v: "f", g: [] }, it); }
 
   const E = {
     EXPLORE,
+    get sa() { return SA_ON ? 3 : 1; },
+    saOn() { return SA_ON; },
+    setSA(on) { SA_ON = !!on; LS.set("gl.sa", SA_ON); },
     registerDeck(id, items) { decks[id] = items.map(norm); },
+    extendDeck(id, items) { decks[id] = (decks[id] || []).concat(items.map(norm)); },                 // appended, so existing indexes stay valid
     size(id) { return decks[id] ? decks[id].length : 0; },
     get(id, idx) { return decks[id][idx]; },
     all(id) { return decks[id]; },
@@ -36,6 +41,7 @@
     weight(deckId, item) {
       const W = prefs.w;
       let w = W["v:" + item.v] || 1;
+      if (item.g.indexOf("sa") >= 0) w *= E.sa;                       // 🇿🇦 Mzansi flavour: boost South African items
       for (const g of item.g) w *= W[deckId + ":" + g] || 1;
       return clamp(w, 0.1, 6);
     },

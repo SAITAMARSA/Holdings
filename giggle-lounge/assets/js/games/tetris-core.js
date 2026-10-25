@@ -346,5 +346,5 @@
     rows.forEach((row, y) => row.split("").forEach((ch, x) => { if (ch !== ".") { g.fillStyle = byInitial[ch] || "#fff"; g.fillRect(x * cell + 0.5, y * cell + 0.5, cell - 1, cell - 1); } }));
   }
 
-  PP.Tetris = { STD, CHAOS, SHAPES, COLORS, NAMES, PTS, cellsOf, dims, newPiece, tryRotate, Board, PieceBag, Faller, Split, Turns, Halves, BoardView, drawMini, drawSnapshot, levelOf, tickMs, shade };
+  PP.Tetris = { block, STD, CHAOS, SHAPES, COLORS, NAMES, PTS, cellsOf, dims, newPiece, tryRotate, Board, PieceBag, Faller, Split, Turns, Halves, BoardView, drawMini, drawSnapshot, levelOf, tickMs, shade };
 })();
