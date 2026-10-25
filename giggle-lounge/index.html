@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="sunny">
+<html lang="en" data-theme="candy">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Giggle Lounge</title>
 <meta name="description" content="Silly games for two or more — on separate phones or the same couch. No downloads. Just a room code.">
-<meta name="theme-color" content="#FFD23F">
+<meta name="theme-color" content="#2A0A5E">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%F0%9F%A4%AA</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Lilita+One&display=swap">
 <link rel="stylesheet" href="assets/css/app.css">
 <script>
   /* apply the saved theme before first paint so there is no colour flash */
@@ -20,6 +20,7 @@
 </script>
 </head>
 <body>
+<div id="orbs" aria-hidden="true"></div>
 <header id="topbar"></header>
 <div id="online-banner" class="hide">Reconnecting… 📡</div>
 <main id="screen"><noscript>Giggle Lounge needs JavaScript. 🙈</noscript></main>
@@ -34,6 +35,7 @@
 <script src="assets/js/core/engine.js"></script>
 <script src="assets/js/core/widgets.js"></script>
 <script src="assets/js/core/match.js"></script>
+<script src="assets/js/core/fx.js"></script>
 <!-- decks -->
 <script src="assets/js/data/emoji.js"></script>
 <script src="assets/js/data/charades.js"></script>
@@ -47,6 +49,9 @@
 <!-- games -->
 <script src="assets/js/games/tetris-core.js"></script>
 <script src="assets/js/games/tetris.js"></script>
+<script src="assets/js/games/candy-core.js"></script>
+<script src="assets/js/games/candy-view.js"></script>
+<script src="assets/js/games/candy.js"></script>
 <script src="assets/js/games/emoji-charades.js"></script>
 <script src="assets/js/games/describe-it.js"></script>
 <script src="assets/js/games/gift-shop.js"></script>

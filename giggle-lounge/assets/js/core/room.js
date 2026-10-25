@@ -67,7 +67,7 @@
       this.code = r.code; this.pid = r.pid; this.token = r.token;
       LS.set("gl.seat." + r.code, { pid: r.pid, token: r.token });
       LS.set("gl.lastRoom", r.code);
-      this.lastSeq = 0; this.inGame = false;
+      this.lastSeq = 0; this.inGame = false; this._polledOnce = false;
       this.pausedBy = null; this.pausedMs = 0;
     }
     savedSeat(code) { return LS.get("gl.seat." + code); }
@@ -87,7 +87,10 @@
         const t0 = Date.now();
         this._abort = new AbortController();
         try {
-          const r = await api("room.php", { action: "poll", code: this.code, pid: this.pid, token: this.token, since: this.lastSeq, wait: PP.config.pollWait }, this._abort.signal);
+          // the very first poll must answer straight away (we need the player list now); after that, long-poll
+          const wait = this._polledOnce ? PP.config.pollWait : 0;
+          const r = await api("room.php", { action: "poll", code: this.code, pid: this.pid, token: this.token, since: this.lastSeq, wait }, this._abort.signal);
+          this._polledOnce = true;
           if (gen !== this._gen) return;
           this._clock(r, t0);
           this._apply(r);

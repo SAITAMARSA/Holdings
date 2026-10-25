@@ -157,10 +157,11 @@
       if (by && this.stats[by]) this.stats[by].pieces++;
       const full = this.board.fullRows();
       if (full.length) {
+        const info = full.map((i) => this.board.rows[i].c.slice());
         const n = this.board.clearRows(full);
         this.lines += n; this.score += PTS[Math.min(4, n)] * this.level; this.level = levelOf(this.lines);
         if (by && this.stats[by]) this.stats[by].lines += n;
-        fx.push({ t: "clear", n, by });
+        fx.push({ t: "clear", n, by, rows: full, info });
       }
       const before = this.pieces;
       if (!this.spawn()) {
@@ -214,9 +215,10 @@
       fx.push({ t: "lock" });
       const full = this.board.fullRows();
       if (full.length) {
+        const info = full.map((i) => this.board.rows[i].c.slice());
         const n = this.board.clearRows(full);
         this.lines += n; this.score += PTS[Math.min(4, n)] * this.level; this.level = levelOf(this.lines);
-        this.stats[ev.f].lines += n; fx.push({ t: "clear", n, by: ev.f });
+        this.stats[ev.f].lines += n; fx.push({ t: "clear", n, by: ev.f, rows: full, info });
       }
       this.advance();
       if (this.spawnBlocked()) {
@@ -247,9 +249,10 @@
         fx.push({ t: "lock", by: ev.f, lid: ev.d.lid });
         const full = this.board.fullRows();
         if (full.length) {
+          const info = full.map((i) => this.board.rows[i].c.slice());
           const n = this.board.clearRows(full);
           this.lines += n; this.score += PTS[Math.min(4, n)] * this.level; this.level = levelOf(this.lines);
-          this.stats[ev.f].lines += n; fx.push({ t: "clear", n, by: ev.f, rows: full });
+          this.stats[ev.f].lines += n; fx.push({ t: "clear", n, by: ev.f, rows: full, info });
         }
       } else if (ev.type === "over") { this.over = true; fx.push({ t: "over" }); }
       else if (ev.type === "relief") { this.board.relieve(6); this.reliefs++; fx.push({ t: "relief" }); }
@@ -267,17 +270,24 @@
     return "#" + [f(r), f(g), f(b)].map((v) => v.toString(16).padStart(2, "0")).join("");
   }
 
+  /* a glossy bevelled cube, like the reference: lit top + left faces, shaded right + bottom faces, a gel highlight */
   function block(g, x, y, s, color, alpha) {
     g.save();
     if (alpha != null) g.globalAlpha = alpha;
-    const pad = Math.max(1, s * 0.06), r = s * 0.22;
-    g.fillStyle = color;
-    g.strokeStyle = shade(color, -0.55); g.lineWidth = Math.max(1.5, s * 0.07);
-    g.beginPath(); g.roundRect ? g.roundRect(x + pad, y + pad, s - pad * 2, s - pad * 2, r) : g.rect(x + pad, y + pad, s - pad * 2, s - pad * 2);
-    g.fill(); g.stroke();
-    g.fillStyle = shade(color, 0.55); g.globalAlpha = (alpha == null ? 1 : alpha) * 0.7;
-    g.beginPath(); g.roundRect ? g.roundRect(x + pad + s * 0.1, y + pad + s * 0.1, (s - pad * 2) * 0.55, (s - pad * 2) * 0.18, s * 0.08) : g.rect(x + s * 0.15, y + s * 0.15, s * 0.4, s * 0.1);
-    g.fill();
+    const p = s * 0.05, w = s - p * 2, b = w * 0.2, x0 = x + p, y0 = y + p, x1 = x0 + w, y1 = y0 + w;
+    // outer cube
+    g.fillStyle = shade(color, -0.35); g.beginPath(); g.roundRect ? g.roundRect(x0, y0, w, w, s * 0.14) : g.rect(x0, y0, w, w); g.fill();
+    g.save(); g.beginPath(); g.roundRect ? g.roundRect(x0, y0, w, w, s * 0.14) : g.rect(x0, y0, w, w); g.clip();
+    g.fillStyle = shade(color, 0.55); g.beginPath(); g.moveTo(x0, y0); g.lineTo(x1, y0); g.lineTo(x1 - b, y0 + b); g.lineTo(x0 + b, y0 + b); g.closePath(); g.fill();           // top face
+    g.fillStyle = shade(color, 0.3); g.beginPath(); g.moveTo(x0, y0); g.lineTo(x0 + b, y0 + b); g.lineTo(x0 + b, y1 - b); g.lineTo(x0, y1); g.closePath(); g.fill();           // left face
+    g.fillStyle = shade(color, -0.2); g.beginPath(); g.moveTo(x1, y0); g.lineTo(x1, y1); g.lineTo(x1 - b, y1 - b); g.lineTo(x1 - b, y0 + b); g.closePath(); g.fill();         // right face
+    g.fillStyle = shade(color, -0.42); g.beginPath(); g.moveTo(x0, y1); g.lineTo(x1, y1); g.lineTo(x1 - b, y1 - b); g.lineTo(x0 + b, y1 - b); g.closePath(); g.fill();        // bottom face
+    const fg = g.createLinearGradient(x0 + b, y0 + b, x1 - b, y1 - b); fg.addColorStop(0, shade(color, 0.22)); fg.addColorStop(1, shade(color, -0.08));
+    g.fillStyle = fg; g.fillRect(x0 + b, y0 + b, w - b * 2, w - b * 2);                                                                                                     // front face
+    const gl = g.createLinearGradient(x0, y0, x0 + w * 0.8, y0 + w * 0.8); gl.addColorStop(0, "rgba(255,255,255,.75)"); gl.addColorStop(0.45, "rgba(255,255,255,.12)"); gl.addColorStop(1, "rgba(255,255,255,0)");
+    g.fillStyle = gl; g.beginPath(); g.moveTo(x0, y0); g.lineTo(x0 + w * 0.85, y0); g.lineTo(x0, y0 + w * 0.85); g.closePath(); g.fill();                                  // gel gloss
+    g.restore();
+    g.lineWidth = Math.max(1, s * 0.05); g.strokeStyle = "rgba(255,255,255,.55)"; g.beginPath(); g.roundRect ? g.roundRect(x0 + 0.5, y0 + 0.5, w - 1, w - 1, s * 0.14) : g.rect(x0, y0, w, w); g.stroke();
     g.restore();
   }
 
@@ -294,9 +304,12 @@
       o = o || {};
       const g = this.g, s = this.cell;
       g.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
-      g.fillStyle = "#1E1240"; g.fillRect(0, 0, this.w * s, this.h * s);
+      const bgG = g.createLinearGradient(0, 0, 0, this.h * s); bgG.addColorStop(0, "#14246B"); bgG.addColorStop(0.55, "#1A1370"); bgG.addColorStop(1, "#2B0F72");
+      g.fillStyle = bgG; g.fillRect(0, 0, this.w * s, this.h * s);
+      const vg = g.createRadialGradient(this.w * s / 2, this.h * s * 0.45, s, this.w * s / 2, this.h * s * 0.5, this.h * s * 0.75); vg.addColorStop(0, "rgba(90,200,255,.2)"); vg.addColorStop(1, "rgba(0,0,0,.28)");
+      g.fillStyle = vg; g.fillRect(0, 0, this.w * s, this.h * s);
       if (o.halves) o.halves.forEach((h) => { g.fillStyle = h.color; g.globalAlpha = h.mine ? 0.16 : 0.07; g.fillRect(h.x0 * s, 0, (h.x1 - h.x0 + 1) * s, this.h * s); g.globalAlpha = 1; });
-      g.strokeStyle = "rgba(255,255,255,.06)"; g.lineWidth = 1;
+      g.strokeStyle = "rgba(110,225,255,.22)"; g.lineWidth = 1;
       for (let x = 1; x < this.w; x++) { g.beginPath(); g.moveTo(x * s, 0); g.lineTo(x * s, this.h * s); g.stroke(); }
       for (let y = 1; y < this.h; y++) { g.beginPath(); g.moveTo(0, y * s); g.lineTo(this.w * s, y * s); g.stroke(); }
       if (o.halves) { g.setLineDash([6, 6]); g.strokeStyle = "rgba(255,255,255,.5)"; g.lineWidth = 2; const mx = (o.halves[0].x1 + 1) * s; g.beginPath(); g.moveTo(mx, 0); g.lineTo(mx, this.h * s); g.stroke(); g.setLineDash([]); }

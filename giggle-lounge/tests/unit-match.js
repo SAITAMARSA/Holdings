@@ -1,0 +1,15 @@
+global.window = {}; require(require('path').resolve(__dirname, '../assets/js/core/match.js')); const M = window.PP.match;
+let p=0,f=0; const t=(g,a,exp,al)=>{ const r=M(g,a,al); const ok=r===exp; ok?p++:f++; console.log((ok?'  PASS ':'  FAIL ')+JSON.stringify(g)+' vs '+JSON.stringify(a)+' → '+r+(ok?'':' (wanted '+exp+')')); };
+t('titanic','Titanic','ok'); t('TITANIC!!','Titanic','ok'); t('titanik','Titanic','ok'); t('the lion king','The Lion King','ok'); t('lion king','The Lion King','ok');
+t('Lion King movie','The Lion King','ok'); t('spiderman','Spider-Man','ok'); t('spider man','Spider-Man','ok'); t('harry potter','Harry Potter','ok'); t('Harry','Harry Potter','close');
+t('beauty beast','Beauty and the Beast','ok'); t('beauty and the beast','Beauty and the Beast','ok'); t('finding nemo','Finding Nemo','ok'); t('nemo','Finding Nemo','close');
+t('lets go','Let It Go','ok'); t('let it go','Let It Go','ok'); t('Let it goo','Let It Go','ok'); t('raining cats and dogs','Raining cats and dogs','ok'); t('cats and dogs raining','Raining cats and dogs','ok');
+t('pizza','Pizza','ok'); t('piza','Pizza','ok'); t('pizzaa','Pizza','ok'); t('hot dog','Hot dog','ok'); t('hotdog','Hot dog','ok');
+t('cheeseburger','Cheeseburger','ok'); t('cheese burger','Cheeseburger','ok'); t('sushi','Pizza','no'); t('dog','Hot dog','close');
+t('eiffel','Eiffel Tower','close'); t('eiffel tower','Eiffel Tower','ok'); t('eifel tower','Eiffel Tower','ok'); t('Eiffel Tour','Eiffel Tower','close');
+t('breaking a leg','Break a leg','close'); t('MJ','Thriller','no'); t('pokemon','Pikachu','no','x'.split('')); t('pika','Pikachu','ok',['pika','pikachu']);
+t('Star Wars: A New Hope','Star Wars','ok'); t('jaws','Jaws','ok'); t('jaw','Jaws','ok'); t('mission impossible','Mission Impossible','ok'); t('mission','Mission Impossible','close');
+t('  ','Pizza','no'); t('','Pizza','no'); t('élephant','Elephant in the room','close'); t('elephant in room','Elephant in the room','ok');
+console.log('\n'+p+' passed, '+f+' failed');
+const B = window.PP.bannedWords; console.log('banned for "The Lion King":', B('The Lion King').join(','), '| "Finding Nemo":', B('Finding Nemo').join(','), '| "Up":', B('Up').join(',')||'(none)');
+process.exit(f?1:0);

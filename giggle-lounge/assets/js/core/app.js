@@ -51,6 +51,13 @@
   }
   function inviteLink() { return location.origin + location.pathname.replace(/index\.html$/, "") + "?room=" + room.code; }
 
+  /* drifting candy-coloured glow orbs behind everything */
+  (function orbs() {
+    const box = document.getElementById("orbs"); if (!box) return;
+    const cols = ["#FF4DB8", "#FFD23F", "#4DD8FF", "#9B5CFF", "#3FD64F", "#FF8A3D"], r = PP.RNG.secure();
+    for (let i = 0; i < 11; i++) { const s = 60 + r.int(150), o = document.createElement("i"); o.style.cssText = "width:" + s + "px;height:" + s + "px;left:" + r.int(100) + "%;top:" + r.int(100) + "%;background:radial-gradient(circle at 35% 30%,#fff 0,transparent 20%)," + cols[i % cols.length] + ";animation-delay:-" + r.int(18) + "s;animation-duration:" + (14 + r.int(14)) + "s;opacity:" + (0.22 + r.next() * 0.3); box.appendChild(o); }
+  })();
+
   /* =====================================================================
    *  Top bar
    * ===================================================================== */
@@ -186,7 +193,7 @@
 
     PP.games.forEach((def) => tiles.appendChild(el("button.tile", { style: { "--tile": def.color }, onclick: () => openGameSheet(def) },
       el("span.t-emoji", def.emoji), el("span.t-name", def.name), el("span.t-tag", def.tagline),
-      el("span.t-meta", el("span", def.min === def.max ? def.min + " players" : def.min + "–" + def.max + " players"), ...def.tags.map((t) => el("span", t))))));
+      el("span.t-meta", el("span", def.min === def.max ? def.min + " players" : def.min + "–" + def.max + " players"), ...def.tags.slice(0, 2).map((t) => el("span", t))))));
 
     lobby = { whoBox, wifi, vibeBox };
     refreshLobby();

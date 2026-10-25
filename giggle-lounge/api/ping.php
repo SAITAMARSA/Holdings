@@ -17,4 +17,7 @@ $web = (strpos(realpath($dir) ?: '', realpath(dirname(__DIR__)) ?: '#') === 0);
 $checks['data_outside_web'] = ['ok' => !$web, 'warn' => $web, 'note' => $web
     ? 'data/ is inside the web folder — blocked by .htaccess on Apache, but better moved out (see README).'
     : 'data folder is outside the web root'];
+// ?hold=2 keeps this request open for 2s — check.html fires several at once to see whether the host runs PHP requests in parallel
+$hold = min(3.0, (float) param('hold', 0));
+if ($hold > 0) usleep((int) ($hold * 1000000));
 out(['ok' => true, 'now' => now_ms(), 'checks' => $checks, 'pollWaitMax' => POLL_WAIT_MAX]);

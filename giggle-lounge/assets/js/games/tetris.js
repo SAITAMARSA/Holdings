@@ -44,11 +44,12 @@
       const root = el("div.tt", roleBar, el("div.tt-main", board, panel), controls);
       mount(ctx.el, root);
       const view = new T.BoardView(canvas);
+      const fxp = new PP.fx.Particles(board);
       const fit = () => {
         const wrapW = Math.min(ctx.el.clientWidth || innerWidth, 640), panelW = 118;
         const availW = wrapW - panelW - 14, availH = Math.max(300, innerHeight - 350);
         const cell = Math.max(13, Math.min(34, Math.floor(Math.min(availW / Wc, availH / Hc))));
-        view.resize(cell, Wc, Hc);
+        view.resize(cell, Wc, Hc); fxp.resize(cell * Wc, cell * Hc);
       };
       fit();
       window.addEventListener("resize", fit); cleanups.push(() => window.removeEventListener("resize", fit));
@@ -64,11 +65,23 @@
         const p = el("div.tt-pop" + (cls ? "." + cls : ""), text);
         popLayer.appendChild(p); setTimeout(() => p.remove(), 1500);
       }
+      /* line clear: every block bursts into sparks of its own colour, a flash sweeps the row, the board shakes */
+      function explode(f) {
+        const cell = view.cell;
+        (f.rows || []).forEach((row, i) => {
+          const y = (row + 0.5) * cell;
+          fxp.beam(0, y, Wc * cell, y, { color: "#fff", width: cell * 0.95, life: 380 });
+          ((f.info && f.info[i]) || []).forEach((k, x) => { if (!k) return; fxp.burst((x + 0.5) * cell, y, { n: 3 + f.n * 2, colors: [T.COLORS[k] || "#fff", "#fff", T.shade(T.COLORS[k] || "#fff", 0.5)], size: cell * 0.3, speed: 230 + f.n * 70, life: 720, gravity: 640 }); });
+        });
+        if (f.rows && f.rows.length) { const mid = (f.rows.reduce((a, b) => a + b, 0) / f.rows.length + 0.5) * cell; fxp.ring(Wc * cell / 2, mid, { r1: Wc * cell * 0.7, width: 8, color: "#9AF3FF", life: 520 }); }
+        PP.fx.shake(board, 2 + f.n * 2.5, 360 + f.n * 60);
+      }
       function fxLive(fx, ev) {
         fx.forEach((f) => {
           if (f.t === "lock") sfx.lock();
           else if (f.t === "clear") {
             sfx.clear(); popup(pick(POP[Math.min(4, f.n)]) + (mode !== "versus" && roster.length > 1 ? " 🙌" : ""));
+            explode(f);
             if (f.n >= 3) PP.ui.confetti({ count: 60, y: 0.4 });
           } else if (f.t === "swap") { sfx.whoosh(); popup("SWITCH JOBS! 🔄", "big"); }
           else if (f.t === "relief") { sfx.pop(); popup("Poof! 🫧 more room", "big"); }

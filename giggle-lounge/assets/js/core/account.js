@@ -11,11 +11,12 @@
   };
 
   const THEMES = [
-    { id: "sunny", name: "Sunny Pop", emoji: "☀️", c: ["#FF5E3A", "#2D7DF6", "#FFD23F"] },
-    { id: "bubblegum", name: "Bubblegum", emoji: "🍬", c: ["#FF3D9A", "#7B4DFF", "#FFC93C"] },
-    { id: "ocean", name: "Ocean Zing", emoji: "🌊", c: ["#0099FF", "#00C896", "#FFB703"] },
-    { id: "lime", name: "Lime Fizz", emoji: "🍋", c: ["#27C26A", "#FF5CA8", "#FFE14D"] },
-    { id: "grape", name: "Grape Romance", emoji: "💜", c: ["#B13CFF", "#FF4FA3", "#FFD166"] },
+    { id: "candy", name: "Candy Night", emoji: "🍬", c: ["#3FD64F", "#FF5CA8", "#7A22C9"] },
+    { id: "bubblegum", name: "Bubblegum Pop", emoji: "🫧", c: ["#FF4D9E", "#7B4DFF", "#FFE14D"] },
+    { id: "ocean", name: "Ocean Zing", emoji: "🌊", c: ["#FF9F1C", "#1AA7EC", "#0A8CD8"] },
+    { id: "lime", name: "Lime Fizz", emoji: "🍋", c: ["#FF5CA8", "#27C26A", "#2FB864"] },
+    { id: "sunset", name: "Sunset Sorbet", emoji: "🌅", c: ["#3FD64F", "#FF6B3D", "#FF6B3D"] },
+    { id: "grape", name: "Grape Romance", emoji: "💜", c: ["#FF4FA3", "#B13CFF", "#8F2BD1"] },
   ];
 
   const A = (PP.account = {
@@ -34,16 +35,16 @@
 
     /* ---------- colours ---------- */
     themeModal() {
-      const cur = document.documentElement.getAttribute("data-theme") || "sunny";
+      const cur = document.documentElement.getAttribute("data-theme") || "candy";
       const grid = el("div.stack");
-      const paint = () => Array.from(grid.children).forEach((c) => c.classList.toggle("on", c.dataset.t === (document.documentElement.getAttribute("data-theme") || "sunny")));
+      const paint = () => Array.from(grid.children).forEach((c) => c.classList.toggle("on", c.dataset.t === (document.documentElement.getAttribute("data-theme") || "candy")));
       THEMES.forEach((t) => grid.appendChild(el("button.opt-card", { type: "button", dataset: { t: t.id }, onclick: () => {
         document.documentElement.setAttribute("data-theme", t.id);
         document.documentElement.style.removeProperty("--pri"); LS.set("gl.accent", null);
         LS.set("gl.theme", t.id); paint(); PP.sfx.pop();
-      } }, el("span.oc-emoji", t.emoji), el("span.oc-text", el("b", t.name), el("span.row", t.c.map((c) => el("span", { style: { width: "26px", height: "26px", borderRadius: "50%", background: c, border: "3px solid var(--ink)", display: "inline-block" } })))))));
+      } }, el("span.oc-emoji", t.emoji), el("span.oc-text", el("b", t.name), el("span.row", t.c.map((c) => el("span", { style: { width: "26px", height: "26px", borderRadius: "50%", background: c, border: "3px solid #fff", boxShadow: "0 2px 0 rgba(0,0,0,.25)", display: "inline-block" } })))))));
       paint();
-      const picker = el("input", { type: "color", value: LS.get("gl.accent", null) || "#FF5E3A", style: { width: "56px", height: "40px", border: "3px solid var(--ink)", borderRadius: "10px", padding: "0", background: "#fff" },
+      const picker = el("input", { type: "color", value: LS.get("gl.accent", null) || "#3FD64F", style: { width: "56px", height: "40px", border: "3px solid var(--ink)", borderRadius: "10px", padding: "0", background: "#fff" },
         oninput: () => { document.documentElement.style.setProperty("--pri", picker.value); LS.set("gl.accent", picker.value); } });
       modal("🎨 Pick your colours", el("div.stack", grid,
         el("div.row", el("b", "Or your own main colour:"), picker,

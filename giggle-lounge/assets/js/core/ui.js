@@ -17,7 +17,7 @@
       for (const k in attrs) {
         const v = attrs[k];
         if (v == null || v === false) continue;
-        if (k === "style" && typeof v === "object") Object.assign(node.style, v);
+        if (k === "style" && typeof v === "object") Object.keys(v).forEach((n) => (n.startsWith("--") ? node.style.setProperty(n, v[n]) : (node.style[n] = v[n])));
         else if (k === "dataset") Object.assign(node.dataset, v);
         else if (k.startsWith("on") && typeof v === "function") node.addEventListener(k.slice(2), v);
         else if (k === "class") node.className += " " + v;
