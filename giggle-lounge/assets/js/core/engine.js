@@ -38,10 +38,10 @@
     all(id) { return decks[id]; },
     totalPrompts() { return Object.keys(decks).reduce((n, k) => n + decks[k].length, 0); },
 
-    weight(deckId, item) {
+    weight(deckId, item, sa) {
       const W = prefs.w;
       let w = W["v:" + item.v] || 1;
-      if (item.g.indexOf("sa") >= 0) w *= E.sa;                       // 🇿🇦 Mzansi flavour: boost South African items
+      if (item.g.indexOf("sa") >= 0) w *= sa == null ? E.sa : sa ? 3 : 1;                       // 🇿🇦 Mzansi flavour: boost South African items
       for (const g of item.g) w *= W[deckId + ":" + g] || 1;
       return clamp(w, 0.1, 6);
     },
@@ -67,7 +67,7 @@
         }
         let idx;
         if (opts.noLearn || rng.chance(EXPLORE)) idx = rng.pick(pool);
-        else idx = rng.weighted(pool, pool.map((i) => E.weight(deckId, deck[i])));
+        else idx = rng.weighted(pool, pool.map((i) => E.weight(deckId, deck[i], opts.sa)));
         pick.push(idx);
         done.add(idx);
       }

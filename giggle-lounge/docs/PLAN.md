@@ -29,7 +29,7 @@ Design principles (from what makes party games work):
 ## The 20-game roadmap
 
 Built (10): Block Party (Tetris ×4 modes), Emoji Charades, Describe It (movies & more),
-Gift Shop, Hot Takes, Two Truths & a Fib, Pitch It, Draw & Guess, Vibe Check, Story Chain.
+Gift Shop, Hot Takes, Two Truths & a Fib, Pitch It, Draw & Guess, Vibe Check, Story Chain, Block Duo, Merge Buddies, Word Duo, Pop Party, Think Alike, Mind Meld (trust/puzzle set inspired by popular Play Store hits: Block Blast, 2048, Wordle, SameGame).
 
 Next (10): Just One, Desert Island, Telephone Draw, Caption This, Would You Rather
 (predict the room), Word Chain Rumble, Reaction Rumble (tap race), Trading Cards,

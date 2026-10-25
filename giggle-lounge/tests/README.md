@@ -12,6 +12,7 @@ PHP_CLI_SERVER_WORKERS=12 php -S 127.0.0.1:8099 &    # serve the folder
 node tests/e2e-games.js [charades|describe|gift|takes|truths|pitch|draw|vibe|story]   # 9 party games
 node tests/e2e-tetris.js                    # Block Party, all four modes
 node tests/e2e-candy.js [halves|split|turns|versus]
+node tests/e2e-trust.js [merge|word|pop|think|meld|block|mzansi]   # trust/puzzle games, silent mode, Mzansi content
 ```
 
 Environment: `GL_URL` (default `http://127.0.0.1:8099/`), `CHROME_PATH` (use an already-installed Chromium).

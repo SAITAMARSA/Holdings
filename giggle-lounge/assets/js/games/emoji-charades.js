@@ -4,7 +4,7 @@
   "use strict";
   const PP = window.PP, { el, mount } = PP.ui, W = PP.widgets, sfx = PP.sfx;
   const BUILD_MS = 90000, MAX_EMOJI = 12;
-  const CATS = { all: null, movies: "Movie", songs: "Song", food: "Food", places: "Place", phrases: "Phrase", disasters: "Everyday disaster" };
+  const CATS = { all: null, mzansi: null, movies: "Movie", songs: "Song", food: "Food", places: "Place", phrases: "Phrase", disasters: "Everyday disaster" };
 
   PP.registerGame({
     id: "emoji-charades", name: "Emoji Charades", emoji: "🎭", color: "#FFD23F",
@@ -12,14 +12,14 @@
     how: "One of you builds a secret thing out of emojis — a film, a song, a disaster — and everyone else races to guess it. Terrible emoji choices are the whole point.",
     min: 2, max: 8, tags: ["silly", "guessing", "creative"],
     options: [
-      { id: "cat", label: "What are we guessing?", kind: "choice", def: "all", choices: [{ v: "all", label: "🎲 Everything" }, { v: "movies", label: "🎬 Movies" }, { v: "songs", label: "🎵 Songs" }, { v: "food", label: "🍕 Food" }, { v: "places", label: "🌍 Places" }, { v: "phrases", label: "💬 Phrases" }, { v: "disasters", label: "🤦 Disasters" }] },
+      { id: "cat", label: "What are we guessing?", kind: "choice", def: "all", choices: [{ v: "all", label: "🎲 Everything" }, { v: "mzansi", label: "🇿🇦 Mzansi" }, { v: "movies", label: "🎬 Movies & TV" }, { v: "songs", label: "🎵 Songs" }, { v: "food", label: "🍕 Food" }, { v: "places", label: "🌍 Places" }, { v: "phrases", label: "💬 Phrases" }, { v: "disasters", label: "🤦 Disasters" }] },
       { id: "rounds", label: "How long?", kind: "choice", def: "2", choices: [{ v: "1", label: "Quick (1 turn each)" }, { v: "2", label: "Normal (2 each)" }, { v: "3", label: "Long (3 each)" }] },
     ],
 
     create(ctx) {
       const roster = ctx.rosterIds, me = ctx.me.id, n = roster.length;
       const total = Math.min(12, n * Number(ctx.settings.rounds || 2));
-      const want = CATS[ctx.settings.cat || "all"];
+      const catKey = ctx.settings.cat || "all", want = CATS[catKey];
       const deck = PP.engine.all("charades");
       const st = { r: -1, phase: "wait", giver: null, opts: [], secret: null, seq: [], guesses: [], solved: {}, order: [], scores: {}, hint: false, start: 0, queued: {} };
       roster.forEach((id) => (st.scores[id] = 0));
@@ -126,7 +126,7 @@
       }
       function startRound(r) {
         const giver = roster[r % n];
-        const opts = ctx.draw("charades", 3, { filter: (c) => !want || c.c === want, exclude: [] });
+        const opts = ctx.draw("charades", 3, { filter: (c) => catKey === "all" || (catKey === "mzansi" ? c.g.indexOf("sa") >= 0 : c.c === want), exclude: [] });
         ctx.send("round", { r, opts });
       }
 

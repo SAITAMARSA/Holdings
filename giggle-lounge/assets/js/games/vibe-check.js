@@ -58,9 +58,16 @@
         const mine = st.psy === me, timer = W.timer(ctx, st.start, DUR, { onEnd: () => { if (ctx.isHost()) ctx.send("reveal", { r: st.r }); else ctx.later(() => st.phase === "play" && ctx.send("reveal", { r: st.r }), 4000); } });
         if (mine) {
           const d = dial({ target: st.target }); d.set([]);
+          // silent mode: no words at all — the clue is up to three emoji
+          const picked = []; const shown = el("div.big-emoji", { style: { fontSize: "2.2rem", minHeight: "1.4em" } }, "👇 pick up to 3 emoji");
+          const emojiGrid = el("div.emoji-grid", ["😍", "😬", "🔥", "❄️", "🍕", "🥦", "🐢", "🐇", "🌶️", "🧊", "🎉", "😴", "💪", "🪶", "💎", "🗑️", "🌈", "⚡", "🐌", "🚀", "🧸", "🦔", "🥶", "🥵", "👍", "👎", "❤️", "💔", "☀️", "🌧️"].map((e) => el("button", { type: "button", onclick: () => { if (picked.length < 3) { picked.push(e); shown.textContent = picked.join(" "); sfx.tap(); } } }, e)));
+          const emojiClue = el("div.stack", shown, emojiGrid, el("div.row", { style: { justifyContent: "center" } },
+            el("button.btn.btn-sm.btn-ghost", { type: "button", onclick: () => { picked.length = 0; shown.textContent = "👇 pick up to 3 emoji"; } }, "🗑 Clear"),
+            el("button.btn", { type: "button", onclick: () => { if (picked.length) { ctx.send("clue", { r: st.r, txt: picked.join("") }); sfx.pop(); } } }, "Send clue")));
           const clue = el("input.in", { placeholder: "Type your clue (or just say it out loud!)", maxLength: 60 });
+          const wordClue = el("form.row", { style: { flexWrap: "nowrap" }, onsubmit: (e) => { e.preventDefault(); if (clue.value.trim()) { ctx.send("clue", { r: st.r, txt: clue.value.trim() }); sfx.pop(); } } }, el("div.grow", clue), el("button.btn", { type: "submit" }, "Send clue"));
           mount(ctx.el, el("div.stack", head(), timer.el, el("div.card.stack.center", el("div.note", "🔮 You're the psychic — only you can see the target!"), poles(), d,
-            el("form.row", { style: { flexWrap: "nowrap" }, onsubmit: (e) => { e.preventDefault(); if (clue.value.trim()) { ctx.send("clue", { r: st.r, txt: clue.value.trim() }); sfx.pop(); } } }, el("div.grow", clue), el("button.btn", { type: "submit" }, "Send clue")),
+            ctx.silent ? emojiClue : wordClue,
             ui.clue = el("div.note.center"), W.waiting(ctx, present().filter((id) => id !== me && st.guesses[id] == null).map((id) => (ctx.player(id) || {}).name), "Waiting for guesses…"))));
         } else {
           const d = dial(); const paint = () => d.set([{ v: myGuess, mine: true, color: "var(--pri)" }]); paint();
@@ -69,7 +76,7 @@
           const slider = el("input", { type: "range", min: 0, max: 100, value: myGuess, style: { width: "100%" }, oninput: () => { if (locked) return; myGuess = Number(slider.value); paint(); } });
           const lock = el("button.btn.btn-big", { onclick: () => { locked = true; sfx.pop(); ctx.send("guess", { r: st.r, v: myGuess }); render(); } }, "🔒 Lock in my guess");
           mount(ctx.el, el("div.stack", head(), timer.el, el("div.card.stack.center", poles(), d, locked ? el("div.note", "🔒 Locked in at " + myGuess) : [slider, lock],
-            ui.clue = el("div.note.center", st.clue ? "💬 Clue: " + st.clue : "Waiting for the psychic's clue… (they might say it out loud!)"),
+            ui.clue = el("div.note.center", st.clue ? "💬 Clue: " + st.clue : (ctx.silent ? "Waiting for the psychic's emoji clue… 🤫" : "Waiting for the psychic's clue… (they might say it out loud!)")),
             locked ? W.waiting(ctx, present().filter((id) => id !== st.psy && st.guesses[id] == null).map((id) => (ctx.player(id) || {}).name)) : null)));
         }
       }

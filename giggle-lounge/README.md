@@ -22,6 +22,16 @@ Made for couples reconnecting over a call, friends on a group chat, or two coupl
 | 🎨 | **Draw & Guess** | Strokes stream live to every phone. | 2–8 |
 | 🎯 | **Vibe Check** | Read their mind on a dial between two opposites. | 2–8 |
 | 📖 | **Story Chain** | One sentence each, with dice-dealt plot twists. | 2–8 |
+| 🧩 | **Block Duo** | Block-Blast for two: shared tray or your own trays, drag & drop. | 1–4 |
+| 🔢 | **Merge Buddies** | Co-op 2048. Split Brain: one of you only swipes ⬅️➡️, the other ⬆️⬇️. | 1–4 |
+| 🔤 | **Word Duo** | Co-op Wordle. Split Brain: you each type alternate letters. | 2–4 |
+| 🍓 | **Pop Party** | Pop fruity groups; swap turns or pop together. | 1–4 |
+| 🧠 | **Think Alike** | Secretly pick the same option as your partner. Silent by nature. | 2–8 |
+| 🫠 | **Mind Meld** | Start with different words, converge on the same one. Silent by nature. | 2–4 |
+
+### 🤫 Silent mode & 🇿🇦 Mzansi flavour
+- **Silent mode** (lobby pill, or per game): no talking, just emoji pokes and trust. Vibe Check swaps the spoken clue for a 3-emoji picker; games that can't work without words (Describe It) say so.
+- **Mzansi flavour** (lobby pill, on by default): South African soapies, Netflix/Showmax titles, food, places and slang get 3× the weight in the decks. Switch off for neutral prompts. Everything stays light and cosy — nothing scary.
 
 Plus: emoji **pokes** (🍅 splats on the target's screen), 6 colour themes + your own colour, a private
 **Our Room** for linked couples, a keepsake drawer, and a **Cozy Corner** placeholder that only unlocks when

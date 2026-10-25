@@ -81,7 +81,7 @@ function gc_rooms() {
 
 function new_room($code, $private = null) {
     return ['code' => $code, 'created' => now_ms(), 'private' => $private, 'seq' => 0, 'pc' => 0,
-            'players' => [], 'events' => [], 'meta' => ['settings' => ['vibe' => 'random']]];
+            'players' => [], 'events' => [], 'meta' => ['settings' => ['vibe' => 'random', 'silent' => false, 'sa' => true]]];
 }
 
 // A private room belongs to a linked couple; only their logged-in sessions may enter.
@@ -242,6 +242,8 @@ if ($action === 'send') {
         } elseif ($type === 'meta.set') {
             $vibe = (string) ($data['vibe'] ?? '');
             if (in_array($vibe, ['random', 'funny', 'silly'], true)) $r['meta']['settings']['vibe'] = $vibe;
+            if (isset($data['silent'])) $r['meta']['settings']['silent'] = (bool) $data['silent'];
+            if (isset($data['sa'])) $r['meta']['settings']['sa'] = (bool) $data['sa'];
             append_event($r, $pid, 'meta.set', $r['meta']['settings'], null, true);
         } elseif (strpos($type, 'game.') === 0 || strpos($type, 'meta.') === 0) {
             fail('reserved');

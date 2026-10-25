@@ -12,7 +12,7 @@
     how: "Take turns drawing a secret word (or an absurd scene!) while the others guess. Strokes appear live on everyone's screen. Stick-figure skills welcome.",
     min: 2, max: 8, tags: ["silly", "creative", "fast"],
     options: [
-      { id: "words", label: "What do you draw?", kind: "choice", def: "all", choices: [{ v: "all", label: "🎲 Mix" }, { v: "f", label: "🖍️ Everyday things" }, { v: "s", label: "🤪 Absurd scenes" }] },
+      { id: "words", label: "What do you draw?", kind: "choice", def: "all", choices: [{ v: "all", label: "🎲 Mix" }, { v: "sa", label: "🇿🇦 Mzansi" }, { v: "f", label: "🖍️ Everyday things" }, { v: "s", label: "🤪 Absurd scenes" }] },
       { id: "secs", label: "Time per drawing", kind: "choice", def: "80", choices: [{ v: "60", label: "60s" }, { v: "80", label: "80s" }, { v: "110", label: "110s" }] },
       { id: "rounds", label: "Turns each", kind: "choice", def: "2", choices: [{ v: "1", label: "1" }, { v: "2", label: "2" }, { v: "3", label: "3" }] },
     ],
@@ -129,7 +129,7 @@
           el("div.card", W.scoreboard(ctx, st.scores)), W.waiting(ctx, [], st.r + 1 >= total ? "Wrapping up…" : "Next drawing in a moment…")));
       }
 
-      function startRound(r) { ctx.send("round", { r, opts: ctx.draw("draw", 3, { filter: (w) => !kind || (kind === "s" ? w.v === "s" : w.v !== "s") }) }); }
+      function startRound(r) { ctx.send("round", { r, opts: ctx.draw("draw", 3, { filter: (w) => !kind || (kind === "s" ? w.v === "s" : kind === "sa" ? w.g.indexOf("sa") >= 0 : w.v !== "s") }) }); }
       function hostCheck() {
         if (!ctx.isHost()) return;
         if (st.phase === "wait" && st.r === -1 && !st.q.first) { st.q.first = 1; startRound(0); }

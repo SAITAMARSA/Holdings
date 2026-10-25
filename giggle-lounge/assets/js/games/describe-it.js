@@ -9,9 +9,9 @@
     id: "describe-it", name: "Describe It", emoji: "🎬", color: "#FF9ECF",
     tagline: "Describe the movie without saying its words. The dice add a silly rule.",
     how: "Take turns describing a card to the others — no saying any word that's on it! Every turn the dice hand you one ridiculous rule, like pirate voice. Guess out loud on your call, or type it in.",
-    min: 2, max: 8, tags: ["silly", "talky", "movies"],
+    min: 2, max: 8, tags: ["silly", "talky", "movies"], silent: "no",
     options: [
-      { id: "deck", label: "What's on the cards?", kind: "choice", def: "all", choices: [{ v: "all", label: "🎲 Mix" }, { v: "Movies", label: "🎬 Movies" }, { v: "Cartoons", label: "🐭 Cartoons" }, { v: "TV", label: "📺 TV" }, { v: "Things", label: "🎈 Things" }] },
+      { id: "deck", label: "What's on the cards?", kind: "choice", def: "all", choices: [{ v: "all", label: "🎲 Mix" }, { v: "Mzansi", label: "🇿🇦 Mzansi" }, { v: "Movies", label: "🎬 Movies" }, { v: "Cartoons", label: "🐭 Cartoons" }, { v: "TV", label: "📺 TV" }, { v: "Things", label: "🎈 Things" }] },
       { id: "secs", label: "Time per turn", kind: "choice", def: "60", choices: [{ v: "45", label: "45s" }, { v: "60", label: "60s" }, { v: "90", label: "90s" }] },
       { id: "turns", label: "Turns each", kind: "choice", def: "1", choices: [{ v: "1", label: "1" }, { v: "2", label: "2" }, { v: "3", label: "3" }] },
     ],

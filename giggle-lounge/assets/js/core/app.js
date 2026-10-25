@@ -156,7 +156,7 @@
     pokebar.classList.remove("hide");
     const whoBox = el("div.who");
     const wifi = el("span.badge");
-    const vibeBox = el("div.pills");
+    const vibeBox = el("div.pills"), talkBox = el("div.pills");
     const code = room.code;
     const shownCode = code.startsWith("OUR-") ? "OUR ROOM" : code;
     const link = inviteLink();
@@ -180,7 +180,8 @@
         el("div.card.stack",
           el("div", el("b", "Who's here"), el("div", { style: { marginTop: "8px" } }, whoBox)),
           el("div.row", wifi),
-          el("div", el("b", "Tonight's vibe "), el("small.muted", "(how the prompts feel)"), el("div", { style: { marginTop: "8px" } }, vibeBox)))),
+          el("div", el("b", "Tonight's vibe "), el("small.muted", "(how the prompts feel)"), el("div", { style: { marginTop: "8px" } }, vibeBox)),
+          el("div", el("b", "How are we playing? "), el("small.muted", "(change anytime)"), el("div", { style: { marginTop: "8px" } }, talkBox)))),
       el("div.sec-title", "🎮 Pick a game", el("small", "anyone can start one"),
         el("span.grow"), el("button.btn.btn-sm.btn-acc", { onclick: surprise }, "🎲 Surprise us")),
       tiles,
@@ -195,13 +196,13 @@
       el("span.t-emoji", def.emoji), el("span.t-name", def.name), el("span.t-tag", def.tagline),
       el("span.t-meta", el("span", def.min === def.max ? def.min + " players" : def.min + "–" + def.max + " players"), ...def.tags.slice(0, 2).map((t) => el("span", t))))));
 
-    lobby = { whoBox, wifi, vibeBox };
+    lobby = { whoBox, wifi, vibeBox, talkBox };
     refreshLobby();
   }
 
   function refreshLobby() {
     if (view !== "lobby" || !lobby) return;
-    const { whoBox, wifi, vibeBox } = lobby;
+    const { whoBox, wifi, vibeBox, talkBox } = lobby;
     const host = hostId();
     mount(whoBox, room.players.filter((p) => !p.left).map((p) => whoChip(p, p.id === host)));
     const t = togetherness();
@@ -212,6 +213,11 @@
       [["funny", "😂 Funny"], ["silly", "🤪 Silly"], ["random", "🎲 Random"]].map(([id, label]) =>
         el("button.pill" + (v === id ? ".on" : ""), { onclick: () => { sfx.tap(); room.send("meta.set", { vibe: id }); } }, label)),
       el("button.pill.soon", { title: "Romance arrives with Cozy Corner", disabled: true }, "💜 Romance (soon)"));
+    const st = room.meta.settings || {};
+    mount(talkBox,
+      el("button.pill" + (!st.silent ? ".on" : ""), { onclick: () => { sfx.tap(); room.send("meta.set", { silent: false }); } }, "🗣️ We can talk"),
+      el("button.pill" + (st.silent ? ".on" : ""), { onclick: () => { sfx.tap(); room.send("meta.set", { silent: true }); } }, "🤫 Silent mode"),
+      el("button.pill" + (st.sa !== false ? ".on" : ""), { title: "More South African flavour in the prompts", onclick: () => { sfx.tap(); room.send("meta.set", { sa: st.sa === false }); } }, "🇿🇦 Mzansi flavour"));
     const cozy = document.getElementById("cozy");
     if (cozy) mount(cozy, el("div.tiles", el("div.tile.locked",
       el("span.t-emoji", "💜"), el("span.t-name", "Cozy Corner"),
@@ -251,6 +257,7 @@
   function defaultSettings(def) {
     const s = {};
     (def.options || []).forEach((o) => { s[o.id] = o.def; });
+    if (def.silent !== "no") s.silent = !!(room.meta.settings || {}).silent;
     return s;
   }
 
@@ -277,6 +284,9 @@
       msg.textContent = text;
       startBtn.disabled = n < min;
     };
+    const silentCtl = def.silent === "no"
+      ? el("div.note", "🗣️ This one needs talking — it's all about saying things out loud!")
+      : (() => { const b = el("button.pill" + (settings.silent ? ".on" : ""), { type: "button", onclick: () => { settings.silent = !settings.silent; b.classList.toggle("on", settings.silent); sfx.tap(); } }, "🤫 Silent mode — no talking!"); return el("div", b, el("div.muted", { style: { fontSize: ".85rem", marginTop: "4px", color: "var(--ink-soft)" } }, "Play without a word. Just emoji reactions, and trust.")); })();
     const controls = (def.options || []).map((o) => {
       if (o.kind === "cards") {
         const wrap = el("div.stack");
@@ -296,7 +306,7 @@
     startBtn.onclick = () => { m.close(); startGame(def, settings); };
     const m = modal(def.emoji + " " + def.name, el("div.stack",
       el("p", def.how),
-      ...controls, msg, startBtn));
+      ...controls, silentCtl, msg, startBtn));
     check();
   }
 
@@ -323,6 +333,7 @@
    *  Game host
    * ===================================================================== */
   function stopGame() {
+    document.body.classList.remove("silent");
     if (!game) return;
     try { game.inst && game.inst.destroy && game.inst.destroy(); } catch (e) { console.error(e); }
     game.cleanups.forEach((f) => { try { f(); } catch (e) {} });
@@ -347,7 +358,11 @@
       el("button.btn.btn-sm.btn-ghost", { onclick: endForEveryone }, "🏠 Lobby"),
       el("h2", def.emoji + " " + def.name),
       el("button.btn.btn-sm.btn-acc", { onclick: () => room.send("sys.pause", {}), title: "Pause for everyone — no questions asked" }, "⏸ Need a sec"));
-    mount(screen, gamebar, playersbar, root);
+    const silent = !!(e.d.settings || {}).silent;
+    document.body.classList.toggle("silent", silent);
+    const banner = silent ? el("div.silent-banner", el("b", "🤫 SILENT MODE — don't say a word!"), el("span", "Gasps, sighs and emoji reactions only 😬 🙏 ❤️ 🔥 🤦")) : null;
+    mount(screen, gamebar, banner, playersbar, root);
+    if (silent) { sfx.whoosh(); PP.ui.toast("🤫 Shhh… silent mode!", 1800); }
 
     if (!roster.includes(room.pid)) {
       mount(root, el("div.card.center.stack", el("div", { style: { fontSize: "3rem" } }, "👀"), el("h3", "A game's already going!"), el("p.muted", "You'll hop in next round. Cheer them on with the buttons below! 📣")));
@@ -357,7 +372,7 @@
 
     const cleanups = [];
     const ctx = {
-      el: root, room, def, me: room.me(), settings: e.d.settings || {}, seed: e.d.seed, startT: e.t, rosterIds: roster,
+      el: root, room, def, me: room.me(), settings: e.d.settings || {}, silent, seed: e.d.seed, startT: e.t, rosterIds: roster,
       roster() { return roster.map((id) => room.player(id)).filter(Boolean); },
       player(id) { return room.player(id); },
       isHost() {
@@ -371,7 +386,7 @@
       paused() { return room.paused; },
       vibe() { return (room.meta.settings || {}).vibe || "random"; },
       rng(key) { return PP.RNG.fromSeed(e.d.seed, key); },
-      draw(deck, n, opts) { return PP.engine.draw(deck, n, Object.assign({ vibe: ctx.vibe() }, opts || {})); },
+      draw(deck, n, opts) { return PP.engine.draw(deck, n, Object.assign({ vibe: ctx.vibe(), sa: (room.meta.settings || {}).sa !== false }, opts || {})); },
       cleanup(fn) { cleanups.push(fn); },
       live(ev) { return room.now() - ev.t < 4000; },                       // false while replaying history
       // a timeout that waits out pauses

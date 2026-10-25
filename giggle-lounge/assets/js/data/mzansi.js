@@ -10,7 +10,7 @@
   const movie = mk("Movie", "f", "movie"), song = mk("Song", "f", "song"), food = mk("Food", "f", "food"), place = mk("Place", "f", "place"),
         phrase = mk("Phrase", "f", "phrase"), sit = mk("Everyday disaster", "s", "disaster");
   E.extendDeck("charades", [
-    movie("Blood & Water", ["blood and water"]), movie("Queen Sono"), movie("Kings of Joburg", ["kings of johannesburg", "kings of jo'burg"]), movie("Savage Beauty"), movie("Jiva", ["jiva!"]),
+    movie("Queen Sono"), movie("Kings of Joburg", ["kings of johannesburg", "kings of jo'burg"]), movie("Savage Beauty"), movie("Jiva", ["jiva!"]),
     movie("How to Ruin Christmas"), movie("The Gods Must Be Crazy", ["gods must be crazy"]), movie("Tsotsi"), movie("Sarafina", ["sarafina!"]), movie("Invictus"), movie("Chappie"), movie("Skeem Saam"),
     movie("Generations"), movie("Isidingo"), movie("Uzalo"), movie("The River"), movie("Muvhango"), movie("7de Laan", ["sewende laan"]), movie("Scandal", ["scandal!"]), movie("Gomora"), movie("Rhythm City"),
     movie("Idols South Africa", ["idols sa", "idols"]), movie("MasterChef South Africa", ["masterchef sa", "masterchef"]), movie("Top Billing"), movie("Emily in Paris"), movie("Heartstopper"), movie("Queer Eye"),
@@ -35,7 +35,7 @@
   const dz = (t, a) => ({ t, c: "Mzansi", v: "f", g: sa(["mzansi"]), a: a || [] });
   E.extendDeck("describe", [
     dz("Generations"), dz("Isidingo"), dz("Uzalo"), dz("Skeem Saam"), dz("The River"), dz("Muvhango"), dz("7de Laan"), dz("Scandal"), dz("Gomora"), dz("Rhythm City"), dz("Top Billing"),
-    dz("Idols South Africa", ["idols sa", "idols"]), dz("Blood & Water", ["blood and water"]), dz("Queen Sono"), dz("Kings of Joburg"), dz("Savage Beauty"), dz("Jiva"), dz("How to Ruin Christmas"),
+    dz("Idols South Africa", ["idols sa", "idols"]), dz("Queen Sono"), dz("Kings of Joburg"), dz("Savage Beauty"), dz("Jiva"), dz("How to Ruin Christmas"),
     dz("Braai"), dz("Biltong"), dz("Bunny chow"), dz("Boerewors roll"), dz("Koeksisters"), dz("Melktert"), dz("Vetkoek"), dz("Rusks"), dz("Rooibos tea"), dz("Gatsby"), dz("Potjiekos"), dz("Chakalaka"),
     dz("Vuvuzela"), dz("Bakkie"), dz("Minibus taxi", ["taxi", "kombi"]), dz("Spaza shop", ["spaza"]), dz("Load shedding"), dz("Braai tongs"), dz("Hadeda"), dz("Springbok", ["bokke"]), dz("Protea"), dz("Meerkat"),
     dz("Table Mountain"), dz("Kruger Park"), dz("Cable car"), dz("Robben Island"), dz("Sun City"), dz("Soweto"), dz("Durban beach"), dz("Cape Town wind", ["cape doctor"]), dz("Shweshwe"), dz("Traffic robot", ["robot"]),

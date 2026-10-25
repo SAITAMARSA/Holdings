@@ -82,7 +82,8 @@ const games = {
     ok('each player sees who they shop for + occasion + quirk + budget', (await A.textContent('.note')).length > 5, 'budget ' + bud);
     // 1) the shop disables anything you can't afford; 2) a basket holds at most 6 things
     const expensive = await A.$$eval('.gift-item', (e) => e.map((x, i) => [i, x.disabled]).filter((x) => x[1]).length);
-    ok('items that would bust the budget are greyed out', expensive > 0, expensive + ' of 60 disabled at budget ' + bud);
+    const maxCost = await A.evaluate(() => Math.max(...PP.GIFT_ITEMS.map((i) => i[2])));
+    ok('items that would bust the budget are greyed out', expensive > 0 || Number(bud.match(/\d+/)) >= maxCost, expensive + ' of 60 disabled at budget ' + bud);
     for (let i = 0; i < 8; i++) await A.click('.gift-item >> nth=11', { timeout: 1200 }).catch(() => {});   // "Coupon: One Free Hug" (1 coin)
     const chips = await A.$$eval('.cart .chip-btn', (e) => e.length), lbl = (await A.textContent('.timer-label')).trim(), m = /(\d+) \/ (\d+)/.exec(lbl);
     ok('basket stops at 6 items OR the budget — whichever comes first — and never overspends', chips === Math.min(6, Number(m[2])) && Number(m[1]) <= Number(m[2]), chips + ' items, ' + lbl);
